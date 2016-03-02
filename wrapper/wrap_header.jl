@@ -23,9 +23,7 @@ lib_file(hdr::ASCIIString) = "xcb"
 output_file(hdr::ASCIIString) = Pkg.dir("XCB", "src", "c_interface.jl")
 
 function wrap_cursor(name::ASCIIString, cursor)
-    exc = false
-    exc |= contains(name, "XCB")
-    return !exc
+    return true
 end
 
 const wc = wrap_c.init(;
