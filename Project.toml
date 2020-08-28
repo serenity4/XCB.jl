@@ -1,0 +1,19 @@
+name = "XCB"
+uuid = "16167f82-ea26-5cba-b1de-ed6fd5e30a10"
+version = "0.2.0"
+
+[deps]
+CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
+Clang = "40e3b903-d033-50b4-a0cc-940c62c95e31"
+Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+Xorg_libxcb_jll = "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b"
+Xorg_xcb_proto_jll = "c2e9c405-c068-5e7b-9b35-084fd074cae4"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

@@ -1,8 +1,11 @@
 module XCB
 
-const xcb = :libxcb
+include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 
-include("c_types.jl")
-include("c_interface.jl")
+using .Libxcb
+
+const xcb = Libxcb
+
+export xcb
 
 end # module
