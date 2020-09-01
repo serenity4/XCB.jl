@@ -2569,3 +2569,62 @@ end
 function xcb_generate_id(c)
     ccall((:xcb_generate_id, xcb), UInt32, (Ptr{xcb_connection_t},), c)
 end
+# Julia wrapper for header: xcb_keysyms.h
+# Automatically generated using Clang.jl
+
+
+function xcb_key_symbols_alloc(c)
+    ccall((:xcb_key_symbols_alloc, xcb_util_keysyms), Ptr{xcb_key_symbols_t}, (Ptr{xcb_connection_t},), c)
+end
+
+function xcb_key_symbols_free(syms)
+    ccall((:xcb_key_symbols_free, xcb_util_keysyms), Cvoid, (Ptr{xcb_key_symbols_t},), syms)
+end
+
+function xcb_key_symbols_get_keysym(syms, keycode, col)
+    ccall((:xcb_key_symbols_get_keysym, xcb_util_keysyms), xcb_keysym_t, (Ptr{xcb_key_symbols_t}, xcb_keycode_t, Cint), syms, keycode, col)
+end
+
+function xcb_key_symbols_get_keycode(syms, keysym)
+    ccall((:xcb_key_symbols_get_keycode, xcb_util_keysyms), Ptr{xcb_keycode_t}, (Ptr{xcb_key_symbols_t}, xcb_keysym_t), syms, keysym)
+end
+
+function xcb_key_press_lookup_keysym(syms, event, col)
+    ccall((:xcb_key_press_lookup_keysym, xcb_util_keysyms), xcb_keysym_t, (Ptr{xcb_key_symbols_t}, Ptr{xcb_key_press_event_t}, Cint), syms, event, col)
+end
+
+function xcb_key_release_lookup_keysym(syms, event, col)
+    ccall((:xcb_key_release_lookup_keysym, xcb_util_keysyms), xcb_keysym_t, (Ptr{xcb_key_symbols_t}, Ptr{xcb_key_release_event_t}, Cint), syms, event, col)
+end
+
+function xcb_refresh_keyboard_mapping(syms, event)
+    ccall((:xcb_refresh_keyboard_mapping, xcb_util_keysyms), Cint, (Ptr{xcb_key_symbols_t}, Ptr{xcb_mapping_notify_event_t}), syms, event)
+end
+
+function xcb_is_keypad_key(keysym)
+    ccall((:xcb_is_keypad_key, xcb_util_keysyms), Cint, (xcb_keysym_t,), keysym)
+end
+
+function xcb_is_private_keypad_key(keysym)
+    ccall((:xcb_is_private_keypad_key, xcb_util_keysyms), Cint, (xcb_keysym_t,), keysym)
+end
+
+function xcb_is_cursor_key(keysym)
+    ccall((:xcb_is_cursor_key, xcb_util_keysyms), Cint, (xcb_keysym_t,), keysym)
+end
+
+function xcb_is_pf_key(keysym)
+    ccall((:xcb_is_pf_key, xcb_util_keysyms), Cint, (xcb_keysym_t,), keysym)
+end
+
+function xcb_is_function_key(keysym)
+    ccall((:xcb_is_function_key, xcb_util_keysyms), Cint, (xcb_keysym_t,), keysym)
+end
+
+function xcb_is_misc_function_key(keysym)
+    ccall((:xcb_is_misc_function_key, xcb_util_keysyms), Cint, (xcb_keysym_t,), keysym)
+end
+
+function xcb_is_modifier_key(keysym)
+    ccall((:xcb_is_modifier_key, xcb_util_keysyms), Cint, (xcb_keysym_t,), keysym)
+end

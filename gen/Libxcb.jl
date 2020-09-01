@@ -1,9 +1,11 @@
 module Libxcb
 
 import Xorg_libxcb_jll
+import Xorg_xcb_util_keysyms_jll
 import Libdl
 
 const xcb = Libdl.find_library(Xorg_libxcb_jll.libxcb)
+const xcb_util_keysyms = Libdl.find_library(Xorg_xcb_util_keysyms_jll.libxcb_keysyms)
 
 using CEnum
 

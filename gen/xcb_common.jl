@@ -3439,3 +3439,5 @@ end
 const xcb_special_event = Cvoid
 const xcb_special_event_t = xcb_special_event
 const xcb_extension_t = Cvoid
+const _XCBKeySymbols = Cvoid
+const xcb_key_symbols_t = _XCBKeySymbols
