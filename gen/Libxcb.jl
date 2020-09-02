@@ -6,7 +6,6 @@ import Libdl
 
 const libxcb = Libdl.find_library(Xorg_libxcb_jll.libxcb)
 const libxcb_keysyms = Libdl.find_library(Xorg_xcb_util_keysyms_jll.libxcb_keysyms)
-const xcb_util_keysyms = Libdl.find_library(Xorg_xcb_util_keysyms_jll.libxcb_keysyms)
 
 using CEnum
 
