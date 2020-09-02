@@ -12,9 +12,9 @@ end
 """
 Initialize a connection to the X server.
 """
-function Connection(; display_number=nothing)
-    display_number = isnothing(display_number) ? C_NULL : pointer(":" * string(display_number))
-    connection = Connection(XCB.xcb_connect(display_number, C_NULL))
+function Connection(; display=nothing)
+    display = isnothing(display) ? C_NULL : display
+    connection = Connection(xcb.xcb_connect(display, C_NULL))
     check(connection)
 end
 
@@ -29,7 +29,7 @@ end
 end
 
 
-function Base.show(io::IO, setup::XCB.xcb_setup_t)
+function Base.show(io::IO, setup::xcb.xcb_setup_t)
     desc = ["Version"]
     vals = [VersionNumber(setup.protocol_major_version, setup.protocol_minor_version, setup.release_number)]
     println(io, "Setup")
@@ -43,7 +43,7 @@ end
 
 prettyprint(io, desc, vals) = (description = join.(zip(rpad.(desc, 20), vals), ": "); print(io, join("    " .* description, "\n")))
 
-function Base.show(io::IO, screen::XCB.xcb_screen_t)
+function Base.show(io::IO, screen::xcb.xcb_screen_t)
     desc = ["White pixel value", "Black pixel value", "Width", "Height"]
     vals = Any[format_bignumber(screen.white_pixel), format_bignumber(screen.black_pixel), "$(screen.width_in_pixels) pixels, $(screen.width_in_millimeters / 10) cm", "$(screen.height_in_pixels) pixels, $(screen.height_in_millimeters / 10) cm"]
     println(io, "Screen details")
@@ -57,19 +57,19 @@ function check_flush(code)
     end
 end
 
-flush(connection::Connection) = check_flush(XCB.xcb_flush(connection.h))
+Base.flush(connection::Connection) = check_flush(xcb.xcb_flush(connection.h))
 
 function check(connection::Connection)
-    code = XCB.xcb_connection_has_error(connection.h)
+    code = xcb.xcb_connection_has_error(connection.h)
     @assert connection.h != C_NULL
     if code ≠ 0
-        error("XCB connection not successful: $(XCB_CONN_ERROR_CODE(code))")
+        error("XCB connection not successful ($(XCB_CONN_ERROR_CODE(code)))")
     end
     connection
 end
 
 function Setup(connection::Connection)
-    stp = XCB.xcb_get_setup(connection.h)
+    stp = xcb.xcb_get_setup(connection.h)
     @assert stp != C_NULL
     Setup(stp, unsafe_load(stp))
 end
