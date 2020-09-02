@@ -4,7 +4,8 @@ import Xorg_libxcb_jll
 import Xorg_xcb_util_keysyms_jll
 import Libdl
 
-const xcb = Libdl.find_library(Xorg_libxcb_jll.libxcb)
+const libxcb = Libdl.find_library(Xorg_libxcb_jll.libxcb)
+const libxcb_keysyms = Libdl.find_library(Xorg_xcb_util_keysyms_jll.libxcb_keysyms)
 const xcb_util_keysyms = Libdl.find_library(Xorg_xcb_util_keysyms_jll.libxcb_keysyms)
 
 using CEnum
@@ -23,7 +24,7 @@ include(joinpath(@__DIR__, "..", "gen", "xcb_api.jl"))
 
 # export everything
 foreach(names(@__MODULE__, all=true)) do s
-   if startswith(string(s), r"(?:X|XCB|xcb)")
+   if startswith(string(s), r"(?:X|XCB|xcb)") && !startswith(string(s), "XCB_CONN_")
        @eval export $s
    end
 end
