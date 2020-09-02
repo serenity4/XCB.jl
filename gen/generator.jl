@@ -30,7 +30,7 @@ const wc = init(;
                         clang_includes=clang_includes,
                         clang_args=clang_extraargs,
                         header_wrapped=wrap_header,
-                        header_library=x -> "xcb",
+                        header_library=x -> "libxcb",
                         cursor_wrapped=wrap_cursor,
                         clang_diagnostics=true)
 
