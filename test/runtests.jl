@@ -1,5 +1,4 @@
 using XCB
-using Test
 
 function test()
     # ENV["DISPLAY"] = ":1.0"

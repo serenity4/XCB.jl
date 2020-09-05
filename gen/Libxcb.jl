@@ -18,9 +18,6 @@ include("xcb_api.jl")
 
 export Ctm, Ctime_t, Cclock_t
 
-include(joinpath(@__DIR__, "..", "gen", "xcb_common.jl"))
-include(joinpath(@__DIR__, "..", "gen", "xcb_api.jl"))
-
 # export everything
 foreach(names(@__MODULE__, all=true)) do s
    if startswith(string(s), r"(?:X|XCB|xcb)") && !startswith(string(s), "XCB_CONN_")

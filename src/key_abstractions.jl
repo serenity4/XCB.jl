@@ -11,9 +11,9 @@ end
 
 
 "State of the keyboard, with regards to numlock and caps states."
-@with_kw struct KeyContext
-    numlock::Bool = 0
-    caps::Bool = 0
+struct KeyContext
+    numlock::Bool
+    caps::Bool
 end
 
 Base.show(io::IO, keyctx::KeyContext) = print(io, "num_lock=", keyctx.numlock, ", caps=", keyctx.caps)

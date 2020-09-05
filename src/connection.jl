@@ -50,15 +50,6 @@ function Base.show(io::IO, screen::xcb.xcb_screen_t)
     prettyprint(io, desc, vals)
 end
 
-
-function check_flush(code)
-    if code <= 0
-        error("Error during flush ($code)")
-    end
-end
-
-Base.flush(connection::Connection) = check_flush(xcb.xcb_flush(connection.h))
-
 function check(connection::Connection)
     code = xcb.xcb_connection_has_error(connection.h)
     @assert connection.h != C_NULL
