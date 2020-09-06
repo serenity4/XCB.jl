@@ -6,10 +6,13 @@ include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 const xcb = Libxcb
 using .Libxcb
 
+include("observables.jl"
+)
 include("input_abstractions.jl")
 include("connection.jl")
 include("requests.jl")
 include("window.jl")
+include("context.jl")
 include("inputs.jl")
 include("flush.jl")
 include("events.jl")
@@ -36,6 +39,7 @@ export xcb,
        middle_click,
        right_click,
        scroll_up,
-       scroll_down
+       scroll_down,
+       GraphicsContext
 
 end # module
