@@ -2,18 +2,18 @@
     msg::AbstractString = ""
 end
 
-function run_window(window, process_event)
+function run_window(window, ctx, process_event)
     connection = window.conn
     try
         while true
             event = xcb_wait_for_event(connection.h)
-            process_event(connection, window, event)
+            process_event(connection, window, ctx, event)
         end
     catch e
         if e isa CloseWindow
             !isempty(e.msg) ? @info(e.msg) : nothing
         else
-            @error(exception=e)
+            @error(exception = e)
             Base.show_backtrace(stderr, catch_backtrace())
         end
     finally

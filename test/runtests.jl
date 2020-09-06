@@ -4,11 +4,11 @@ function test()
     # ENV["DISPLAY"] = ":1.0"
     # ENV["XAUTHORITY"] = "/run/user/1000/gdm/Xauthority"
 
-    function process_event(connection, window, event)
+    function process_event(connection, window, ctx, event)
         e_generic = unsafe_load(event)
         if e_generic.response_type == XCB.XCB_EXPOSE
             @info "Window exposed"
-            XCB.xcb_poly_fill_rectangle(connection.h, window.id, g, UInt32(1), r)
+            XCB.xcb_poly_fill_rectangle(connection.h, window.id, ctx, UInt32(1), r)
             flush(connection)
         elseif any(e_generic.response_type .== [XCB.XCB_KEY_PRESS, XCB.XCB_KEY_RELEASE])
             key_event = unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, event))
@@ -52,8 +52,8 @@ function test()
     mask = XCB.XCB_GC_FOREGROUND | XCB.XCB_GC_GRAPHICS_EXPOSURES
     value_list[1] = screen.black_pixel
     value_list[2] = 0
-    g = XCB.xcb_generate_id(connection.h)
-    XCB.xcb_create_gc(connection.h, g, window.id, mask, value_list)
+    ctx = XCB.xcb_generate_id(connection.h)
+    XCB.xcb_create_gc(connection.h, ctx, window.id, mask, value_list)
     
     XCB.xcb_map_window(connection.h, window.id)
     flush(connection)
@@ -65,7 +65,7 @@ function test()
     wm_delete_win = unsafe_load(wm_delete_reply).atom
     r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
     # event loop
-    run_window(window, process_event)
+    run_window(window, ctx, process_event)
 
 end
 
