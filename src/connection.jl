@@ -1,7 +1,12 @@
 
 abstract type Handle end
-struct Connection <: Handle
+mutable struct Connection <: Handle
     h
+    function Connection(h)
+        conn = new(h)
+        Base.finalizer(x -> xcb_disconnect(x.h), conn)
+        conn
+    end
 end
 
 struct Setup <: Handle
@@ -14,7 +19,7 @@ Initialize a connection to the X server.
 """
 function Connection(; display=nothing)
     display = isnothing(display) ? C_NULL : display
-    connection = Connection(xcb.xcb_connect(display, C_NULL))
+    connection = Connection(xcb_connect(display, C_NULL))
     check(connection)
 end
 
@@ -29,7 +34,7 @@ end
 end
 
 
-function Base.show(io::IO, setup::xcb.xcb_setup_t)
+function Base.show(io::IO, setup::xcb_setup_t)
     desc = ["Version"]
     vals = [VersionNumber(setup.protocol_major_version, setup.protocol_minor_version, setup.release_number)]
     println(io, "Setup")
@@ -43,7 +48,7 @@ end
 
 prettyprint(io, desc, vals) = (description = join.(zip(rpad.(desc, 20), vals), ": "); print(io, join("    " .* description, "\n")))
 
-function Base.show(io::IO, screen::xcb.xcb_screen_t)
+function Base.show(io::IO, screen::xcb_screen_t)
     desc = ["White pixel value", "Black pixel value", "Width", "Height"]
     vals = Any[format_bignumber(screen.white_pixel), format_bignumber(screen.black_pixel), "$(screen.width_in_pixels) pixels, $(screen.width_in_millimeters / 10) cm", "$(screen.height_in_pixels) pixels, $(screen.height_in_millimeters / 10) cm"]
     println(io, "Screen details")
@@ -51,7 +56,7 @@ function Base.show(io::IO, screen::xcb.xcb_screen_t)
 end
 
 function check(connection::Connection)
-    code = xcb.xcb_connection_has_error(connection.h)
+    code = xcb_connection_has_error(connection.h)
     @assert connection.h != C_NULL
     if code ≠ 0
         error("XCB connection not successful ($(XCB_CONN_ERROR_CODE(code)))")
@@ -60,7 +65,7 @@ function check(connection::Connection)
 end
 
 function Setup(connection::Connection)
-    stp = xcb.xcb_get_setup(connection.h)
+    stp = xcb_get_setup(connection.h)
     @assert stp != C_NULL
     Setup(stp, unsafe_load(stp))
 end

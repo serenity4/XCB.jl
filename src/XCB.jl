@@ -1,16 +1,41 @@
 module XCB
 
+using Observables
+
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 const xcb = Libxcb
-
-include("key_abstractions.jl")
-include("xcb_keys.jl")
-include("connection.jl")
-include("flush.jl")
-
 using .Libxcb
 
+include("input_abstractions.jl")
+include("connection.jl")
+include("requests.jl")
+include("window.jl")
+include("inputs.jl")
+include("flush.jl")
+include("events.jl")
 
-export xcb, KeyBinding, KeyContext, KeyModifierState, key, @key_str, Connection, Setup, check, check_flush, flush
+
+
+export xcb,
+       KeyCombination,
+       KeyContext,
+       KeyModifierState,
+       key,
+       @key_str,
+       Connection,
+       Setup,
+       check,
+       check_flush,
+       flush,
+       CloseWindow,
+       run_window,
+       Window,
+       Button,
+       ButtonState,
+       left_click,
+       middle_click,
+       right_click,
+       scroll_up,
+       scroll_down
 
 end # module

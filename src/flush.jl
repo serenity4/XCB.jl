@@ -4,4 +4,4 @@ function check_flush(code)
     end
 end
 
-Base.flush(connection::Connection) = check_flush(XCB.xcb_flush(connection.h))
+Base.flush(connection::Connection) = check_flush(xcb_flush(connection.h))
