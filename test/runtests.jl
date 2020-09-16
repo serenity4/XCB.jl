@@ -16,8 +16,8 @@ function test()
             keychar = getkey(connection, key_event)
             display(keychar)
             key = KeyCombination(connection, key_event)
-            ctx = KeyContext(key_event)
-            @info "Pressed key $keychar ; combination $key; context $ctx"
+            keyctx = KeyContext(key_event)
+            @info "Pressed key $keychar ; combination $key; context $keyctx"
             window.window_title[] = "Random title $(rand())"
             if key ∈ [key"q", key"ctrl+q", key"f4"]
                 throw(CloseWindow("Closing window ($key)"))
