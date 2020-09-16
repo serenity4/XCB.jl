@@ -7,7 +7,7 @@ function run_window(window, ctx, process_event)
     try
         t0 = time()
         while true
-            event = xcb_wait_for_event(connection.h)
+            event = xcb_wait_for_event(connection)
             process_event(connection, window, ctx, event, time() - t0)
         end
     catch e

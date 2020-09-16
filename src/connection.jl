@@ -1,10 +1,13 @@
 
 abstract type Handle end
+
+Base.unsafe_convert(::Type{<: Ptr}, handle::Handle) = handle.h
+
 mutable struct Connection <: Handle
     h
     function Connection(h)
         conn = new(h)
-        Base.finalizer(x -> xcb_disconnect(x.h), conn)
+        Base.finalizer(xcb_disconnect, conn)
         conn
     end
 end
@@ -56,7 +59,7 @@ function Base.show(io::IO, screen::xcb_screen_t)
 end
 
 function check(connection::Connection)
-    code = xcb_connection_has_error(connection.h)
+    code = xcb_connection_has_error(connection)
     @assert connection.h != C_NULL
     if code ≠ 0
         error("XCB connection not successful ($(XCB_CONN_ERROR_CODE(code)))")
@@ -65,7 +68,7 @@ function check(connection::Connection)
 end
 
 function Setup(connection::Connection)
-    stp = xcb_get_setup(connection.h)
+    stp = xcb_get_setup(connection)
     @assert stp != C_NULL
     Setup(stp, unsafe_load(stp))
 end

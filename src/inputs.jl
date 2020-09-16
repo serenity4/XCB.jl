@@ -1,5 +1,5 @@
 function Base.getkey(connection::Connection, key_event::Union{xcb_key_press_event_t,xcb_key_release_event_t})
-    keysymbols = xcb_key_symbols_alloc(connection.h)
+    keysymbols = xcb_key_symbols_alloc(connection)
     keysym = xcb_key_symbols_get_keysym(keysymbols, key_event.detail, 0)
     Char(keysym)
 end

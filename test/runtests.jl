@@ -5,11 +5,11 @@ function test()
     # ENV["XAUTHORITY"] = "/run/user/1000/gdm/Xauthority"
 
     r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
-    function process_event(connection, window, ctx, event)
+    function process_event(connection, window, ctx, event, t)
         e_generic = unsafe_load(event)
         if e_generic.response_type == XCB.XCB_EXPOSE
             @info "Window exposed"
-            XCB.xcb_poly_fill_rectangle(connection.h, window.id, ctx.id, UInt32(1), r)
+            XCB.xcb_poly_fill_rectangle(connection, window.id, ctx.id, UInt32(1), r)
             flush(connection)
         elseif any(e_generic.response_type .== [XCB.XCB_KEY_PRESS, XCB.XCB_KEY_RELEASE])
             key_event = unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, event))
@@ -41,7 +41,7 @@ function test()
     connection = Connection(display=nothing)
     setup = Setup(connection)
     println(setup.value)
-    iter = XCB.xcb_setup_roots_iterator(setup.h)
+    iter = XCB.xcb_setup_roots_iterator(setup)
     screen = unsafe_load(iter.data)
     println(screen)
     
@@ -55,13 +55,13 @@ function test()
     value_list[2] = 0
     ctx = GraphicsContext(connection, window, mask, value_list)
     
-    XCB.xcb_map_window(connection.h, window.id)
+    XCB.xcb_map_window(connection, window.id)
     flush(connection)
-    wm_delete_cookie = XCB.xcb_intern_atom(connection.h, 0, length("WM_DELETE_WINDOW"), pointer("WM_DELETE_WINDOW"))
-    wm_protocols_cookie = XCB.xcb_intern_atom(connection.h, 0, length("WM_PROTOCOLS"), pointer("WM_PROTOCOLS"))
-    wm_delete_reply = XCB.xcb_intern_atom_reply(connection.h, wm_delete_cookie, C_NULL)
-    wm_protocols_reply = XCB.xcb_intern_atom_reply(connection.h, wm_protocols_cookie, C_NULL)
-    XCB.xcb_change_property(connection.h, xcb.XCB_PROP_MODE_REPLACE, window.id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
+    wm_delete_cookie = XCB.xcb_intern_atom(connection, 0, length("WM_DELETE_WINDOW"), pointer("WM_DELETE_WINDOW"))
+    wm_protocols_cookie = XCB.xcb_intern_atom(connection, 0, length("WM_PROTOCOLS"), pointer("WM_PROTOCOLS"))
+    wm_delete_reply = XCB.xcb_intern_atom_reply(connection, wm_delete_cookie, C_NULL)
+    wm_protocols_reply = XCB.xcb_intern_atom_reply(connection, wm_protocols_cookie, C_NULL)
+    XCB.xcb_change_property(connection, xcb.XCB_PROP_MODE_REPLACE, window.id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
     wm_delete_win = unsafe_load(wm_delete_reply).atom
     # event loop
     run_window(window, ctx, process_event)
