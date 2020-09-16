@@ -5,9 +5,10 @@ end
 function run_window(window, ctx, process_event)
     connection = window.conn
     try
+        t0 = time()
         while true
             event = xcb_wait_for_event(connection.h)
-            process_event(connection, window, ctx, event)
+            process_event(connection, window, ctx, event, time() - t0)
         end
     catch e
         if e isa CloseWindow
