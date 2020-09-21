@@ -2,13 +2,13 @@
     msg::AbstractString = ""
 end
 
-function run_window(window, ctx, process_event)
+function run_window(window, ctx, process_event; states...)
     connection = window.conn
     try
         t0 = time()
         while true
             event = xcb_wait_for_event(connection)
-            process_event(connection, window, ctx, event, time() - t0)
+            process_event(connection, window, ctx, event, time() - t0; states...)
         end
     catch e
         if e isa CloseWindow
