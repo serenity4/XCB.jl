@@ -30,8 +30,7 @@ const wc = init(;
                         clang_includes=clang_includes,
                         clang_args=clang_extraargs,
                         header_wrapped=wrap_header,
-                        header_library=x -> "libxcb",
+                        header_library=x -> endswith(x, "xcb_keysyms.h") ? "libxcb_keysyms" : "libxcb",
                         cursor_wrapped=wrap_cursor,
                         clang_diagnostics=true)
-
 run(wc)
