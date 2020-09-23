@@ -1,5 +1,11 @@
 using XCB
 
+function resize_callback(window, width, height)
+    old_width, old_height = Int.((window.width, window.height))
+    width, height = Int.((width, height))
+    @info "Window size changed: $old_width, $old_height -> $width, $height"
+end
+
 function test()
     # ENV["DISPLAY"] = ":1.0"
     # ENV["XAUTHORITY"] = "/run/user/1000/gdm/Xauthority"
@@ -46,7 +52,7 @@ function test()
     println(screen)
     
     value_masks = |(XCB.XCB_CW_BACK_PIXEL, XCB.XCB_CW_EVENT_MASK)
-    value_list = [screen.black_pixel, |(XCB.XCB_EVENT_MASK_EXPOSURE, XCB.XCB_EVENT_MASK_KEY_PRESS, XCB.XCB_EVENT_MASK_KEY_RELEASE, XCB.XCB_EVENT_MASK_BUTTON_PRESS, XCB.XCB_EVENT_MASK_BUTTON_RELEASE)]
+    value_list = [screen.black_pixel, |(XCB.XCB_EVENT_MASK_EXPOSURE, XCB.XCB_EVENT_MASK_KEY_PRESS, XCB.XCB_EVENT_MASK_KEY_RELEASE, XCB.XCB_EVENT_MASK_BUTTON_PRESS, XCB.XCB_EVENT_MASK_BUTTON_RELEASE, XCB.XCB_EVENT_MASK_STRUCTURE_NOTIFY)]
     
     window = Window(connection, screen, value_masks, value_list; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB")
     println("Window ID: ", window.id)
@@ -64,7 +70,7 @@ function test()
     XCB.xcb_change_property(connection, xcb.XCB_PROP_MODE_REPLACE, window.id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
     wm_delete_win = unsafe_load(wm_delete_reply).atom
     # event loop
-    run_window(window, ctx, process_event)
+    run_window(window, ctx, process_event; resize_callback)
 
 end
 

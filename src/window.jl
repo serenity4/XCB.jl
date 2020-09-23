@@ -1,6 +1,8 @@
 mutable struct Window
     conn::Connection
     id
+    width
+    height
     parent_id
     visual_id
     class
@@ -22,7 +24,7 @@ mutable struct Window
             val_c = val * "\0"
             check_request(win.conn, xcb_change_property_checked(win.conn, XCB_PROP_MODE_REPLACE, win.id, XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, length(val_c) * 2, pointer(val_c^2)), raise=true)
         end
-        win = new(conn, id, parent_id, visual_id, class, depth, mask, value_list, window_title, icon_title)
+        win = new(conn, id, width, height, parent_id, visual_id, class, depth, mask, value_list, window_title, icon_title)
         xcb_create_window(
             win.conn,
             depth,
@@ -44,6 +46,10 @@ mutable struct Window
         win.icon_title[] = icon_title[]
         win
     end
+end
+
+function dimensions(win::Window)
+    getproperty.(Ref(unsafe_load(xcb_get_geometry_reply(win.conn, xcb_get_geometry(win.conn, win.id), C_NULL))), (:width, :height))
 end
 
 Window(conn, screen, mask, value_list; kwargs...) = Window(conn, screen.root, screen.root_visual, mask, value_list; kwargs...)

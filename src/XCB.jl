@@ -40,6 +40,7 @@ export xcb,
        right_click,
        scroll_up,
        scroll_down,
-       GraphicsContext
+       GraphicsContext,
+       dimensions
 
 end # module
