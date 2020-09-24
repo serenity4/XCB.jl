@@ -1,48 +1,53 @@
 using XCB
 
 function resize_callback(window, width, height)
-    old_width, old_height = Int.((window.width, window.height))
+    old_width, old_height = (window.width[], window.height[])
     width, height = Int.((width, height))
     @info "Window size changed: $old_width, $old_height -> $width, $height"
+end
+
+r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
+
+function process_event(win, ctx, event, t)
+    e_generic = unsafe_load(event)
+    if e_generic.response_type == XCB.XCB_EXPOSE
+        @info "Window exposed"
+    elseif any(e_generic.response_type .== [XCB.XCB_KEY_PRESS, XCB.XCB_KEY_RELEASE])
+        ctx.value_list[] = [rand(1:16_777_215), 0]
+        XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
+        flush(win.conn)
+        key_event = unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, event))
+        keychar = getkey(win.conn, key_event)
+        display(keychar)
+        key = KeyCombination(win.conn, key_event)
+        keyctx = KeyContext(key_event)
+        @info "Pressed key $keychar ; combination $key; context $keyctx"
+        win.window_title[] = "Random title $(rand())"
+        if key ∈ [key"q", key"ctrl+q", key"f4"]
+            throw(CloseWindow("Closing window ($key)"))
+        elseif key == key"s"
+            win.width[] += 1
+            win.height[] += 1
+        end
+    elseif e_generic.response_type == XCB.XCB_EVENT_MASK_BUTTON_PRESS
+        button_event = unsafe_load(convert(Ptr{XCB.xcb_button_press_event_t}, event))
+        click = Button(button_event)
+        state = ButtonState(button_event)
+        state_dict = Dict(state)
+        printed_state = keys(filter(x -> x.second, state_dict))
+        printed_state = isempty(printed_state) ? "" : "with $(join(printed_state, ", ")) button$(length(printed_state) > 1 ? "s" : "") held"
+        @info "$click at $(button_event.event_x), $(button_event.event_y) $(printed_state)"
+    # elseif e_generic.response_type == XCB.XCB_CLIENT_MESSAGE # close the window; never gets signaled
+    #     if unsafe_load(convert(Ptr{xcb.xcb_client_message_event_t}, event)).data.data32[1] == wm_delete_win # does nothing for now
+    #         throw(CloseWindow("Closing window"))
+    #     end
+    end
 end
 
 function test()
     # ENV["DISPLAY"] = ":1.0"
     # ENV["XAUTHORITY"] = "/run/user/1000/gdm/Xauthority"
 
-    r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
-    function process_event(connection, window, ctx, event, t)
-        e_generic = unsafe_load(event)
-        if e_generic.response_type == XCB.XCB_EXPOSE
-            @info "Window exposed"
-            XCB.xcb_poly_fill_rectangle(connection, window.id, ctx.id, UInt32(1), r)
-            flush(connection)
-        elseif any(e_generic.response_type .== [XCB.XCB_KEY_PRESS, XCB.XCB_KEY_RELEASE])
-            key_event = unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, event))
-            keychar = getkey(connection, key_event)
-            display(keychar)
-            key = KeyCombination(connection, key_event)
-            keyctx = KeyContext(key_event)
-            @info "Pressed key $keychar ; combination $key; context $keyctx"
-            window.window_title[] = "Random title $(rand())"
-            if key ∈ [key"q", key"ctrl+q", key"f4"]
-                throw(CloseWindow("Closing window ($key)"))
-            end
-        elseif e_generic.response_type == XCB.XCB_EVENT_MASK_BUTTON_PRESS
-            button_event = unsafe_load(convert(Ptr{XCB.xcb_button_press_event_t}, event))
-            click = Button(button_event)
-            state = ButtonState(button_event)
-            state_dict = Dict(state)
-            printed_state = keys(filter(x -> x.second, state_dict))
-            printed_state = isempty(printed_state) ? "" : "with $(join(printed_state, ", ")) button$(length(printed_state) > 1 ? "s" : "") held"
-            @info "$click at $(button_event.event_x), $(button_event.event_y) $(printed_state)"
-        elseif e_generic.response_type == XCB.XCB_CLIENT_MESSAGE
-            if unsafe_load(convert(Ptr{xcb.xcb_client_message_event_t}, event)).data.data8[1] == wm_delete_win # does nothing for now
-                @warn "HAAA"
-                throw(CloseWindow("Closing window"))
-            end
-        end
-    end
 
     connection = Connection(display=nothing)
     setup = Setup(connection)
@@ -61,16 +66,20 @@ function test()
     value_list[2] = 0
     ctx = GraphicsContext(connection, window, mask, value_list)
     
-    XCB.xcb_map_window(connection, window.id)
-    flush(connection)
-    wm_delete_cookie = XCB.xcb_intern_atom(connection, 0, length("WM_DELETE_WINDOW"), pointer("WM_DELETE_WINDOW"))
-    wm_protocols_cookie = XCB.xcb_intern_atom(connection, 0, length("WM_PROTOCOLS"), pointer("WM_PROTOCOLS"))
-    wm_delete_reply = XCB.xcb_intern_atom_reply(connection, wm_delete_cookie, C_NULL)
+    #= I tried to setup a property which sends an event upon window termination (e.g. closing it manually, or right-click etc), but it does not work!
+
+    wm_protocols_cookie = XCB.xcb_intern_atom(connection, 1, length("WM_PROTOCOLS"), "WM_PROTOCOLS")
     wm_protocols_reply = XCB.xcb_intern_atom_reply(connection, wm_protocols_cookie, C_NULL)
+    wm_delete_cookie = XCB.xcb_intern_atom(connection, 0, length("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW")
+    wm_delete_reply = XCB.xcb_intern_atom_reply(connection, wm_delete_cookie, C_NULL)
     XCB.xcb_change_property(connection, xcb.XCB_PROP_MODE_REPLACE, window.id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
     wm_delete_win = unsafe_load(wm_delete_reply).atom
+    
+    =#
+    
     # event loop
-    run_window(window, ctx, process_event; resize_callback)
+    # XCB.trigger(ctx.value_list)
+    run_window(window, process_event; ctx, resize_callback)
 
 end
 

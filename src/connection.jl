@@ -1,8 +1,14 @@
 
+"""
+Structures which contain a handle (opaque pointer) as primary data. Those structures are usually defined as mutable so that a finalizer can be registered. Any Handle structure is automatically converted to its handle data on `ccall`s, through `unsafe_convert`.
+"""
 abstract type Handle end
 
 Base.unsafe_convert(::Type{<: Ptr}, handle::Handle) = handle.h
 
+"""
+Connection to the X server.
+"""
 mutable struct Connection <: Handle
     h
     function Connection(h)
@@ -12,9 +18,12 @@ mutable struct Connection <: Handle
     end
 end
 
+"""
+Connection setup handle and data.
+"""
 struct Setup <: Handle
     h
-    value
+    value::xcb_setup_t
 end
 
 """
@@ -58,17 +67,16 @@ function Base.show(io::IO, screen::xcb_screen_t)
     prettyprint(io, desc, vals)
 end
 
+"""
+Check that the connection to the X server was successful. Throws an 
+"""
 function check(connection::Connection)
     code = xcb_connection_has_error(connection)
-    @assert connection.h != C_NULL
-    if code ≠ 0
-        error("XCB connection not successful ($(XCB_CONN_ERROR_CODE(code)))")
-    end
+    code ≠ 0 && throw(ConnectionError("XCB connection not successful ($(XCB_CONN_ERROR_CODE(code)))", code))
     connection
 end
 
 function Setup(connection::Connection)
     stp = xcb_get_setup(connection)
-    @assert stp != C_NULL
     Setup(stp, unsafe_load(stp))
 end

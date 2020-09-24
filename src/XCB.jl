@@ -6,9 +6,8 @@ include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 const xcb = Libxcb
 using .Libxcb
 
-include("observables.jl"
-)
 include("input_abstractions.jl")
+include("exceptions.jl")
 include("connection.jl")
 include("requests.jl")
 include("window.jl")

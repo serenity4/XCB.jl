@@ -1,8 +1,11 @@
+"""
+Window 
+"""
 mutable struct Window
     conn::Connection
     id
-    width
-    height
+    width::Observable
+    height::Observable
     parent_id
     visual_id
     class
@@ -11,7 +14,7 @@ mutable struct Window
     value_list
     window_title::Observable
     icon_title::Observable
-    function Window(conn, parent_id, visual_id, mask, value_list; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing)
+    function Window(conn, parent_id, visual_id, mask, value_list; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, map=true)
         id = XCB.xcb_generate_id(conn)
         icon_title = isnothing(icon_title) ? window_title : icon_title
         value_list_filled = zeros(UInt32, 32)
@@ -24,7 +27,7 @@ mutable struct Window
             val_c = val * "\0"
             check_request(win.conn, xcb_change_property_checked(win.conn, XCB_PROP_MODE_REPLACE, win.id, XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, length(val_c) * 2, pointer(val_c^2)), raise=true)
         end
-        win = new(conn, id, width, height, parent_id, visual_id, class, depth, mask, value_list, window_title, icon_title)
+        win = new(conn, id, Observable(width), Observable(height), parent_id, visual_id, class, depth, mask, value_list, window_title, icon_title)
         xcb_create_window(
             win.conn,
             depth,
@@ -40,10 +43,16 @@ mutable struct Window
             mask,
             value_list,
             )
+        onany(win.width, win.height) do nw, nh
+            check_request(win.conn, xcb_configure_window_checked(win.conn, win.id, XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, UInt32[nw, nh]))
+        end
         Base.finalizer(x -> xcb_destroy_window(win.conn, x.id), win)
-        xcb_change_window_attributes
         win.window_title[] = window_title[]
         win.icon_title[] = icon_title[]
+        if map
+            xcb_map_window(win.conn, win.id)
+            flush(win.conn)
+        end
         win
     end
 end
