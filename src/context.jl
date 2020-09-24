@@ -1,5 +1,3 @@
-trigger(obs) = obs[] = obs[]
-
 """
 Graphics context attached to a window. Used to register drawing commands on the window surface.
 """
@@ -20,7 +18,7 @@ mutable struct GraphicsContext
             check_request(gc.conn, xcb_change_gc_checked(gc.conn, gc.id, mask, list_filled))
         end
         check_request(gc.conn, xcb_create_gc_checked(gc.conn, gc.id, gc.window.id, 0, C_NULL))
-        trigger(gc.value_list)
+        Observables.notify!(gc.value_list)
         Base.finalizer(x -> check_request(gc.conn, xcb_free_gc_checked(gc.conn, gc.id)), gc)
         gc
     end
