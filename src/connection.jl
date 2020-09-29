@@ -80,3 +80,19 @@ function Setup(connection::Connection)
     stp = xcb_get_setup(connection)
     Setup(stp, unsafe_load(stp))
 end
+
+function check_flush(code)
+    if code <= 0
+        error("Error during flush ($code)")
+    end
+end
+
+Base.flush(connection::Connection) = check_flush(xcb_flush(connection))
+
+function check_request(conn, request; raise=true)
+    errcode_ptr = xcb_request_check(conn, request)
+    if errcode_ptr != C_NULL
+        errcode = Base.unsafe_load(errcode_ptr).error_code
+        raise ? throw(RequestError("Request unsuccessful: (error code " * string(errcode) * ")")) : @warn("Error " * string(errcode) * " thrown during request")
+    end
+end

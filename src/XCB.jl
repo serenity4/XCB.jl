@@ -9,11 +9,9 @@ using .Libxcb
 include("input_abstractions.jl")
 include("exceptions.jl")
 include("connection.jl")
-include("requests.jl")
 include("window.jl")
 include("context.jl")
 include("inputs.jl")
-include("flush.jl")
 include("events.jl")
 
 
