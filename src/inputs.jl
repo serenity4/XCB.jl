@@ -23,8 +23,6 @@ end
 
 function ButtonState(button_event::Union{xcb_button_press_event_t, xcb_button_release_event_t})
     state = button_event.state
-    @show(UInt32(state))
-    println(UInt32[XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY])
     ButtonState((state .| [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY] .== state)...)
 end
 
