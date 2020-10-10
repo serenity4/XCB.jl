@@ -68,7 +68,7 @@ function Base.show(io::IO, screen::xcb_screen_t)
 end
 
 """
-Check that the connection to the X server was successful. Throws an 
+Check that the connection to the X server was successful. Throws a ConnectionError if the connection failed.
 """
 function check(connection::Connection)
     code = xcb_connection_has_error(connection)

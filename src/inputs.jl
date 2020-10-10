@@ -25,5 +25,3 @@ function ButtonState(button_event::Union{xcb_button_press_event_t, xcb_button_re
     state = button_event.state
     ButtonState((state .| [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY] .== state)...)
 end
-
-Base.Dict(button_state::ButtonState) = Dict((string(k) => getproperty(button_state, k)) for k ∈ fieldnames(ButtonState))
