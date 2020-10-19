@@ -18,7 +18,6 @@ function process_event(win, ctx, event, t)
         flush(win.conn)
         key_event = unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, event))
         keychar = getkey(win.conn, key_event)
-        display(keychar)
         key = KeyCombination(win.conn, key_event)
         keyctx = KeyContext(key_event)
         @info "Pressed key $keychar ; combination $key; context $keyctx"
@@ -66,7 +65,7 @@ function test()
     value_list[2] = 0
     ctx = GraphicsContext(connection, window, mask, value_list)
     
-    #= I tried to setup a property which sends an event upon window termination (e.g. closing it manually, or right-click etc), but it does not work!
+#=    # I tried to setup a property which sends an event upon window termination (e.g. closing it manually, or right-click etc), but it does not work!
 
     wm_protocols_cookie = XCB.xcb_intern_atom(connection, 1, length("WM_PROTOCOLS"), "WM_PROTOCOLS")
     wm_protocols_reply = XCB.xcb_intern_atom_reply(connection, wm_protocols_cookie, C_NULL)
@@ -74,12 +73,9 @@ function test()
     wm_delete_reply = XCB.xcb_intern_atom_reply(connection, wm_delete_cookie, C_NULL)
     XCB.xcb_change_property(connection, xcb.XCB_PROP_MODE_REPLACE, window.id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
     wm_delete_win = unsafe_load(wm_delete_reply).atom
-    
-    =#
-    
-    # event loop
-    # XCB.trigger(ctx.value_list)
-    run_window(window, process_event; ctx, resize_callback)
+     =#
+
+    sub = run_window(window, process_event; ctx, resize_callback)
 
 end
 

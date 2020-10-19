@@ -1,6 +1,7 @@
 module XCB
 
 using Observables
+using Rocket
 
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 const xcb = Libxcb
