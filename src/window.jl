@@ -46,7 +46,7 @@ mutable struct Window
         onany(win.width, win.height) do nw, nh
             check_request(win.conn, xcb_configure_window_checked(win.conn, win.id, XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT, UInt32[nw, nh]))
         end
-        Base.finalizer(x -> xcb_destroy_window(win.conn, x.id), win)
+        Base.finalizer(x -> check_request(x.conn, xcb_destroy_window_checked(x.conn, x.id)), win)
         win.window_title[] = window_title[]
         win.icon_title[] = icon_title[]
         if map
@@ -58,7 +58,10 @@ mutable struct Window
 end
 
 function dimensions(win::Window)
-    getproperty.(Ref(unsafe_load(xcb_get_geometry_reply(win.conn, xcb_get_geometry(win.conn, win.id), C_NULL))), (:width, :height))
+    geometry_cookie = xcb_get_geometry(win.conn, win.id)
+    geometry_reply = xcb_get_geometry_reply(win.conn, geometry_cookie, C_NULL)
+    geometry_reply == C_NULL && throw(InvalidWindow())
+    getproperty.(Ref(unsafe_load(geometry_reply)), (:width, :height))
 end
 
 Window(conn, screen, mask, value_list; kwargs...) = Window(conn, screen.root, screen.root_visual, mask, value_list; kwargs...)

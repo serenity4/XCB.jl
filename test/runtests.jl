@@ -65,7 +65,7 @@ function test()
     value_list[2] = 0
     ctx = GraphicsContext(connection, window, mask, value_list)
     
-#=    # I tried to setup a property which sends an event upon window termination (e.g. closing it manually, or right-click etc), but it does not work!
+#=    # I tried to setup a property which sends an event upon window termination (e.g. closing it manually, or right-click etc), but it does not work! in that case xcb_wait_for_event returns C_NULL so for now the event loop closes upon such event and logs an error
 
     wm_protocols_cookie = XCB.xcb_intern_atom(connection, 1, length("WM_PROTOCOLS"), "WM_PROTOCOLS")
     wm_protocols_reply = XCB.xcb_intern_atom_reply(connection, wm_protocols_cookie, C_NULL)
@@ -75,8 +75,20 @@ function test()
     wm_delete_win = unsafe_load(wm_delete_reply).atom
      =#
 
-    sub = run_window(window, process_event; ctx, resize_callback)
+    # async = !isempty(ARGS) && ARGS[1] == "--async"
+    #  async = true
+     async = false
 
+     sub = run_window(window, process_event; ctx, resize_callback, async)
+     if async # window should run in parallel
+        sleep(1)
+        println(1)
+        println(2)
+        println(3)
+        println(4)
+        println(5)
+        sleep(5)
+    end
 end
 
 test()

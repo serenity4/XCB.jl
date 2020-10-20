@@ -13,3 +13,5 @@ end
 struct RequestError <: Exception
     msg
 end
+
+struct InvalidWindow <: Exception end
