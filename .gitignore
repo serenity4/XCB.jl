@@ -1,3 +1,7 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
+/gen/ctypes.jl
+/gen/LibTemplate.jl
+/Manifest.toml
+/.vscode
