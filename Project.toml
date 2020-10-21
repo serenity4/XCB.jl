@@ -11,7 +11,7 @@ Xorg_libxcb_jll = "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b"
 Xorg_xcb_util_keysyms_jll = "975044d2-76e6-5fbe-bf08-97ce7c6574c7"
 
 [compat]
-julia = "1"
+julia = "1.5"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

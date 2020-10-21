@@ -9,7 +9,9 @@ The resize callback will be provided the window, along with new width and height
 
 At some point, the window may become invalid, but the X server has no way of communicating it. Therefore, it is necessary to mitigate invalid requests or events which may oringinate from an invalid window. In synchronous mode, if the event is `C_NULL`, then the window is assumed invalid.
 
-The window is properly finalized upon termination. Termination can be caused through a `CloseWindow` exception, which indicates a successful termination, or upon any other error which will be propagated.
+By default, the event loop is run synchronously; however, asynchronous support is possible by setting `async` to true. While in asynchronous mode, the execution regularly polls for window events, sleeping `sleep_time` seconds between each poll (or not sleeping at all if `sleep_time` is zero); in synchronous mode, the execution waits for events, causing the CPU to be idle between events (but not allowing task switch).
+
+The window is properly finalized upon termination. Termination can be caused through a `CloseWindow` exception, which indicates a successful termination, or upon any other error which will be safely wrapped and propagated.
 """
 function run_window(window, event_callback; ctx=nothing, resize_callback=(win, x, y) -> (), async=false, sleep_time=1e-4, kwargs...)
     function wrap_process_event(window, ctx, event, t; kwargs...)
