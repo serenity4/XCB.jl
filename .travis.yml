@@ -11,3 +11,5 @@ julia:
   - nightly
 notifications:
   email: false
+before_script:
+  - echo $DISPLAY

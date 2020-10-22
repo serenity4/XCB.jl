@@ -44,7 +44,7 @@ function process_event(win, ctx, event, t)
 end
 
 function test()
-    ENV["DISPLAY"] = ":1.0"
+    # ENV["DISPLAY"] = ":1.0"
     # ENV["XAUTHORITY"] = "/run/user/1000/gdm/Xauthority"
 
 
