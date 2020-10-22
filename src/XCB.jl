@@ -1,8 +1,16 @@
 module XCB
 
-using Reexport
 using Parameters
-@reexport using WindowAbstractions
+using WindowAbstractions
+import WindowAbstractions: on_close,
+                           on_invalid,
+                           set_title,
+                           set_icon_title,
+                           set_extent,
+                           extent,
+                           terminate,
+                           map_window,
+                           unmap_window
 
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 const xcb = Libxcb
@@ -27,8 +35,6 @@ export xcb,
        check,
        check_flush,
        flush,
-       CloseWindow,
-       run_window,
        XCBWindow,
        Button,
        ButtonState,
@@ -37,7 +43,6 @@ export xcb,
        right_click,
        scroll_up,
        scroll_down,
-       GraphicsContext,
-       dimensions
+       GraphicsContext
 
 end # module

@@ -1,5 +1,3 @@
-using XCB: xcb_configure_notify_event_t, xcb_generic_event_t, XCB_CONFIGURE_NOTIFY, xcb_wait_for_event, xcb_poll_for_event
-
 """
 Run an event loop on the target `window`, calling `event_callback` at each event, with an optional graphics context `ctx` and resize callback `resize_callback`.
 
@@ -13,57 +11,29 @@ By default, the event loop is run synchronously; however, asynchronous support i
 
 The window is properly finalized upon termination. Termination can be caused through a `CloseWindow` exception, which indicates a successful termination, or upon any other error which will be safely wrapped and propagated.
 """
-function run_window(window, event_callback; ctx=nothing, resize_callback=(win, x, y) -> (), async=false, sleep_time=1e-4, kwargs...)
-    function wrap_process_event(window, ctx, event, t; kwargs...)
+function run_window(window, event_callback; ctx=nothing, resize_callback=(win, x, y) -> (), kwargs...)
+    function wrap_process_event(window, ctx, event; kwargs...)
         event == C_NULL && throw(InvalidWindow(window))
         e_generic = unsafe_load(event)
-        if e_generic.response_type == XCB_CONFIGURE_NOTIFY
-            cne = unsafe_load(convert(Ptr{xcb_configure_notify_event_t}, event))
+        if e_generic.response_type == XCB.XCB_CONFIGURE_NOTIFY
+            cne = unsafe_load(convert(Ptr{XCB.xcb_configure_notify_event_t}, event))
             resize_callback(window, cne.width, cne.height)
         end
         event_callback(window, ctx, event, time() - t0; kwargs...)
     end
-    obs = window_event_observable(window; async, sleep_time)
     t0 = time()
-    subscribe!(
-        obs,
-        lambda(
-            on_next = event -> wrap_process_event(window, ctx, event, time() - t0; kwargs...),
-            on_error = e -> begin terminate(window); rethrow(e) end,
-            on_complete = () -> terminate(window),
-        )
-    )
-end
-
-window_next!(actor, connection::Connection) = next!(actor, xcb_wait_for_event(connection))
-function window_next!(actor, connection::Connection, sleep_time)
-    event = xcb_poll_for_event(connection)
-    event ≠ C_NULL && next!(actor, event)
-    sleep_time == 0 ? yield() : sleep(sleep_time) # allow task switching between events
-end
-
-"""
-Create an observable which emits XCB events, either synchronously or asynchronously.
-"""
-function window_event_observable(window::XCBWindow; async=false, sleep_time=1e-4)
-    connection = window.conn
-    _window_next! = async ? actor -> window_next!(actor, connection, sleep_time) : actor -> window_next!(actor, connection)
-    make(Ptr{xcb_generic_event_t}) do actor
-        task = @async begin
-            try
-                while true; _window_next!(actor); end
-            catch e
-                if e isa CloseWindow
-                    !isempty(e.msg) ? @info(e.msg) : nothing
-                    complete!(actor)
-                elseif e isa InvalidWindow
-                    @error("Invalid window state, destroying window")
-                    complete!(actor)
-                else
-                    error!(actor, e)
-                end
-            end
+    try
+        while true
+            event = XCB.xcb_wait_for_event(window.conn)
+            wrap_process_event(window, ctx, event; kwargs...)
         end
-        !async && wait(task)
+    catch e
+        if e isa CloseWindow
+            on_close(e)
+        elseif e isa InvalidWindow
+            on_invalid(e)
+        else
+            rethrow(e)
+        end
     end
 end

@@ -1,5 +1,5 @@
 using XCB
-using Rocket
+using WindowAbstractions
 
 include("events.jl")
 
@@ -23,7 +23,7 @@ function process_event(win, ctx, event, t)
         @info "Pressed key $keychar ; combination $key; context $keyctx"
         XCB.set_title(win, "Random title $(rand())")
         if key ∈ [key"q", key"ctrl+q", key"f4"]
-            throw(CloseWindow("Closing window ($key)"))
+            throw(CloseWindow(win, string(key)))
         elseif key == key"s"
             curr_extent = XCB.extent(win)
             XCB.set_extent(win, curr_extent .+ 1)
@@ -38,7 +38,7 @@ function process_event(win, ctx, event, t)
         @info "$click at $(button_event.event_x), $(button_event.event_y) $(printed_state)"
     # elseif e_generic.response_type == XCB.XCB_CLIENT_MESSAGE # close the window; never gets signaled
     #     if unsafe_load(convert(Ptr{xcb.xcb_client_message_event_t}, event)).data.data32[1] == wm_delete_win # does nothing for now
-    #         throw(CloseWindow("Closing window"))
+    #         throw(CloseWindow(win, "Closing window"))
     #     end
     end
 end
@@ -75,20 +75,7 @@ function test()
     wm_delete_win = unsafe_load(wm_delete_reply).atom
      =#
 
-    # async = !isempty(ARGS) && ARGS[1] == "--async"
-    #  async = true
-     async = false
-
-     sub = run_window(window, process_event; ctx, resize_callback, async)
-     if async # window should run in parallel
-        sleep(1)
-        println(1)
-        println(2)
-        println(3)
-        println(4)
-        println(5)
-        sleep(5)
-    end
+     run_window(window, process_event; ctx, resize_callback)
 end
 
 test()
