@@ -1,7 +1,8 @@
 module XCB
 
-using Observables
-using Rocket
+using Reexport
+using Parameters
+@reexport using WindowAbstractions
 
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 const xcb = Libxcb
@@ -13,8 +14,6 @@ include("connection.jl")
 include("window.jl")
 include("context.jl")
 include("inputs.jl")
-include("events.jl")
-
 
 
 export xcb,
@@ -30,7 +29,7 @@ export xcb,
        flush,
        CloseWindow,
        run_window,
-       Window,
+       XCBWindow,
        Button,
        ButtonState,
        left_click,

@@ -1,9 +1,10 @@
 using XCB
+using Rocket
+
+include("events.jl")
 
 function resize_callback(window, width, height)
-    old_width, old_height = (window.width[], window.height[])
-    width, height = Int.((width, height))
-    @info "Window size changed: $old_width, $old_height -> $width, $height"
+    @info "Window size changed: $width, $height"
 end
 
 r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
@@ -13,20 +14,19 @@ function process_event(win, ctx, event, t)
     if e_generic.response_type == XCB.XCB_EXPOSE
         @info "Window exposed"
     elseif any(e_generic.response_type .== [XCB.XCB_KEY_PRESS, XCB.XCB_KEY_RELEASE])
-        ctx.value_list[] = [rand(1:16_777_215), 0]
-        XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
-        flush(win.conn)
+        XCB.change_graphics_context!(ctx, ctx.mask, [rand(1:16_777_215), 0])
+        XCB.@flush XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
         key_event = unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, event))
         keychar = getkey(win.conn, key_event)
         key = KeyCombination(win.conn, key_event)
         keyctx = KeyContext(key_event)
         @info "Pressed key $keychar ; combination $key; context $keyctx"
-        win.window_title[] = "Random title $(rand())"
+        XCB.set_title(win, "Random title $(rand())")
         if key ∈ [key"q", key"ctrl+q", key"f4"]
             throw(CloseWindow("Closing window ($key)"))
         elseif key == key"s"
-            win.width[] += 1
-            win.height[] += 1
+            curr_extent = XCB.extent(win)
+            XCB.set_extent(win, curr_extent .+ 1)
         end
     elseif e_generic.response_type == XCB.XCB_EVENT_MASK_BUTTON_PRESS
         button_event = unsafe_load(convert(Ptr{XCB.xcb_button_press_event_t}, event))
@@ -44,7 +44,7 @@ function process_event(win, ctx, event, t)
 end
 
 function test()
-    # ENV["DISPLAY"] = ":1.0"
+    ENV["DISPLAY"] = ":1.0"
     # ENV["XAUTHORITY"] = "/run/user/1000/gdm/Xauthority"
 
 
@@ -58,7 +58,7 @@ function test()
     value_masks = |(XCB.XCB_CW_BACK_PIXEL, XCB.XCB_CW_EVENT_MASK)
     value_list = [screen.black_pixel, |(XCB.XCB_EVENT_MASK_EXPOSURE, XCB.XCB_EVENT_MASK_KEY_PRESS, XCB.XCB_EVENT_MASK_KEY_RELEASE, XCB.XCB_EVENT_MASK_BUTTON_PRESS, XCB.XCB_EVENT_MASK_BUTTON_RELEASE, XCB.XCB_EVENT_MASK_STRUCTURE_NOTIFY)]
     
-    window = Window(connection, screen, value_masks, value_list; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB")
+    window = XCBWindow(connection, screen, value_masks, value_list; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB")
     println("Window ID: ", window.id)
     mask = |(XCB.XCB_GC_FOREGROUND, XCB.XCB_GC_GRAPHICS_EXPOSURES)
     value_list[1] = screen.black_pixel

@@ -1,4 +1,4 @@
-close_null_event(window) = begin @error("NULL event received on window $(window.id), destroying window"); throw(CloseWindow("")) end
+using XCB: xcb_configure_notify_event_t, xcb_generic_event_t, XCB_CONFIGURE_NOTIFY, xcb_wait_for_event, xcb_poll_for_event
 
 """
 Run an event loop on the target `window`, calling `event_callback` at each event, with an optional graphics context `ctx` and resize callback `resize_callback`.
@@ -15,16 +15,11 @@ The window is properly finalized upon termination. Termination can be caused thr
 """
 function run_window(window, event_callback; ctx=nothing, resize_callback=(win, x, y) -> (), async=false, sleep_time=1e-4, kwargs...)
     function wrap_process_event(window, ctx, event, t; kwargs...)
-        event == C_NULL && throw(InvalidWindow())
+        event == C_NULL && throw(InvalidWindow(window))
         e_generic = unsafe_load(event)
         if e_generic.response_type == XCB_CONFIGURE_NOTIFY
-            cfg_event = unsafe_load(convert(Ptr{xcb_configure_notify_event_t}, event))
-            width, height = dimensions(window)
-            if (width, height) ≠ (window.width[], window.height[])
-                resize_callback(window, width, height)
-                window.width.val = width
-                window.height.val = height
-            end
+            cne = unsafe_load(convert(Ptr{xcb_configure_notify_event_t}, event))
+            resize_callback(window, cne.width, cne.height)
         end
         event_callback(window, ctx, event, time() - t0; kwargs...)
     end
@@ -34,8 +29,8 @@ function run_window(window, event_callback; ctx=nothing, resize_callback=(win, x
         obs,
         lambda(
             on_next = event -> wrap_process_event(window, ctx, event, time() - t0; kwargs...),
-            on_error = e -> begin finalize(window); rethrow(e) end,
-            on_complete = () -> finalize(window),
+            on_error = e -> begin terminate(window); rethrow(e) end,
+            on_complete = () -> terminate(window),
         )
     )
 end
@@ -50,7 +45,7 @@ end
 """
 Create an observable which emits XCB events, either synchronously or asynchronously.
 """
-function window_event_observable(window::Window; async=false, sleep_time=1e-4)
+function window_event_observable(window::XCBWindow; async=false, sleep_time=1e-4)
     connection = window.conn
     _window_next! = async ? actor -> window_next!(actor, connection, sleep_time) : actor -> window_next!(actor, connection)
     make(Ptr{xcb_generic_event_t}) do actor

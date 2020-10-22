@@ -1,6 +1,3 @@
-using Parameters
-
-
 "Provide information about key modifier state (shift, control, alt and the OS key)."
 @with_kw struct KeyModifierState
     shift::Bool = 0
