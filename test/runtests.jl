@@ -17,6 +17,7 @@ function on_key_pressed(details::EventDetails)
     key = details.data.kc
     ctx = win.ctx
     set_title(win, "Random title $(rand())")
+    println("Pressed $key")
     if key ∈ [key"q", key"ctrl+q", key"f4"]
         throw(CloseWindow(details.window_handler, win))
     elseif key == key"s"
@@ -63,6 +64,7 @@ function test()
                  on_mouse_button_pressed = on_button_pressed,
                  on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
                  on_key_pressed,
+                 on_key_released = x -> println("Released $(x.data.kc)"),
                  on_pointer_enter = x -> @info("Entering window at $(x.location)"),
                  on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
                  on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
@@ -73,7 +75,7 @@ function test()
              ),
          ),
      )
-     run(event_loop, Synchronous(); warn_unknown=true)
+     run(event_loop, Asynchronous(); warn_unknown=true, poll=true)
 end
 
 test()
