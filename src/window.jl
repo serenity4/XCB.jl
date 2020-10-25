@@ -10,6 +10,8 @@ mutable struct XCBWindow <: AbstractWindow
     depth
     mask
     value_list
+    ctx
+    delete_request
     function XCBWindow(conn, parent_id, visual_id, mask, value_list; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, map=true)
         id = XCB.xcb_generate_id(conn)
         icon_title = isnothing(icon_title) ? window_title : icon_title
@@ -33,11 +35,24 @@ mutable struct XCBWindow <: AbstractWindow
         )
         set_title(win, window_title)
         set_icon_title(win, icon_title)
-        Base.finalizer(x -> @check(xcb_destroy_window(x.conn, x.id)), win)
+        set_delete_request!(win) # to close window on X11 requests
         map && map_window(win)
-        win
+        Base.finalizer(x -> @check(xcb_destroy_window(x.conn, x.id)), win)
     end
 end
+
+attach_graphics_context!(window::XCBWindow, ctx) = setproperty!(window, :ctx, ctx)
+
+function set_delete_request!(window::XCBWindow)
+    @unpack conn, id = window
+    wm_protocols_cookie = xcb_intern_atom(conn, 1, length("WM_PROTOCOLS"), "WM_PROTOCOLS")
+    wm_protocols_reply = xcb_intern_atom_reply(conn, wm_protocols_cookie, C_NULL)
+    wm_delete_cookie = xcb_intern_atom(conn, 0, length("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW")
+    wm_delete_reply = xcb_intern_atom_reply(conn, wm_delete_cookie, C_NULL)
+    @check xcb_change_property(conn, XCB_PROP_MODE_REPLACE, id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
+    window.delete_request = unsafe_load(wm_delete_reply).atom
+end
+
 XCBWindow(conn, screen, mask, value_list; kwargs...) = XCBWindow(conn, screen.root, screen.root_visual, mask, value_list; kwargs...)
 
 function extent(win::XCBWindow)
@@ -65,5 +80,3 @@ function set_icon_title(win::XCBWindow, title)
     title_c = title * "\0"
     @flush @check xcb_change_property(win.conn, XCB_PROP_MODE_REPLACE, win.id, XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, length(title_c) * 2, pointer(title_c^2))
 end
-
-terminate(win::XCBWindow) = finalize(win)
