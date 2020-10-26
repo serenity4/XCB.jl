@@ -1,5 +1,6 @@
 using XCB
 using WindowAbstractions
+using Test
 
 include("events.jl")
 
@@ -32,7 +33,7 @@ end
 r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
 
 function test()
-    # ENV["DISPLAY"] = ":1.0"
+    ENV["DISPLAY"] = ":1.0"
 
     connection = Connection(display=nothing)
     setup = Setup(connection)
@@ -55,27 +56,56 @@ function test()
     ctx_2 = GraphicsContext(connection, window_2, mask, value_list)
     attach_graphics_context!(window_2, ctx_2)
 
-     handler = XWindowHandler(connection, [window, window_2])
-     event_loop = EventLoop(
-         window_handler=handler,
-         callbacks=Dict(
-             :window_1 => WindowCallbacks(;
-                 on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
-                 on_mouse_button_pressed = on_button_pressed,
-                 on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
-                 on_key_pressed,
-                 on_key_released = x -> println("Released $(x.data.kc)"),
-                 on_pointer_enter = x -> @info("Entering window at $(x.location)"),
-                 on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
-                 on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
-                 on_expose = x -> @info("Window exposed"),
-             ),
-             :window_2 => WindowCallbacks(;
+    a = Channel{Int}(100)
+
+    handler = XWindowHandler(connection, [window, window_2])
+    event_loop = EventLoop(
+        window_handler=handler,
+        callbacks=Dict(
+            :window_1 => WindowCallbacks(;
+                on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
+                on_mouse_button_pressed = on_button_pressed,
+                on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
                 on_key_pressed,
-             ),
-         ),
-     )
-     run(event_loop, Asynchronous(); warn_unknown=true, poll=true)
+                on_key_released = x -> println("Released $(x.data.kc)"),
+                on_pointer_enter = x -> @info("Entering window at $(x.location)"),
+                on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
+                on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
+                on_expose = x -> @info("Window exposed"),
+            ),
+            :window_2 => WindowCallbacks(;
+            on_key_pressed,
+            ),
+        ),
+    )
+
+    event_loop_2 = EventLoop(
+        window_handler=handler,
+        callbacks=Dict(
+            :window_1 => WindowCallbacks(;
+                on_resize = x -> put!(a, 1),
+                on_mouse_button_pressed = x -> put!(a, 2),
+                on_mouse_button_released = x -> put!(a, 3),
+                on_key_pressed = x -> begin x.data.kc == key"p" && put!(a, 4); on_key_pressed(x) end,
+                on_key_released = x -> x.data.kc == key"p" && put!(a, 5),
+                on_pointer_enter = x -> put!(a, 6),
+                on_pointer_leave = x -> put!(a, 7),
+                on_pointer_move = x -> put!(a, 8),
+                on_expose = x -> put!(a, 9),
+            ),
+            :window_2 => WindowCallbacks(;
+            on_mouse_button_pressed = x -> put!(a, 10),
+            on_key_pressed,
+            ),
+        ),
+    )
+    run(event_loop_2, Synchronous(); warn_unknown=true, poll=true)
+    @test take!(a) == 1
+    @test take!(a) == 1
+    @test take!(a) == 1
+    @test take!(a) == 9
+    XCB.@flush XCB.@check XCB.xcb_send_event
+    @test isempty(a)
 end
 
 test()

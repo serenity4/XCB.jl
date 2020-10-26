@@ -34,6 +34,7 @@ include("window.jl")
 include("window_handler.jl")
 include("context.jl")
 include("inputs.jl")
+include("testing.jl")
 
 
 export xcb,
