@@ -1,3 +1,5 @@
+module Libxkb
+
 import xkbcommon_jll
 
 using CEnum
@@ -14,4 +16,6 @@ foreach(names(@__MODULE__, all=true)) do s
     if startswith(string(s), r"(?:X|XKB|xkb)")
         @eval export $s
     end
+end
+
 end

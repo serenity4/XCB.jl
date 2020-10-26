@@ -6,7 +6,7 @@ import xkbcommon_jll
 xcb_include_dir = joinpath(Xorg_libxcb_jll.artifact_dir, "include", "xcb")
 xcb_util_keysims_dir = joinpath(Xorg_xcb_util_keysyms_jll.artifact_dir, "include", "xcb")
 xkb_include_dir = joinpath(xkbcommon_jll.artifact_dir, "include", "xkbcommon")
-xkb_headers = joinpath.(Ref(xkb_include_dir), ["xkbcommon.h"])
+xkb_headers = joinpath.(Ref(xkb_include_dir), ["xkbcommon.h", "xkbcommon-x11.h"])
 xcb_headers =  [joinpath(xcb_include_dir, "xcb.h"), joinpath(xcb_util_keysims_dir, "xcb_keysyms.h")]
 
 # Set up include paths

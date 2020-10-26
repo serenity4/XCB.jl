@@ -91,3 +91,11 @@ end
     XKB_CONSUMED_MODE_GTK = 1
 end
 
+
+const XKB_X11_MIN_MAJOR_XKB_VERSION = 1
+const XKB_X11_MIN_MINOR_XKB_VERSION = 0
+
+@cenum xkb_x11_setup_xkb_extension_flags::UInt32 begin
+    XKB_X11_SETUP_XKB_EXTENSION_NO_FLAGS = 0
+end
+
