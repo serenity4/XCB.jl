@@ -41,8 +41,10 @@ import WindowAbstractions: set_title,
                            EventDetails
 
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
+include(joinpath(@__DIR__, "..", "gen", "Libxkb.jl"))
 const xcb = Libxcb
 using .Libxcb
+import .Libxkb
 
 include("exceptions.jl")
 include("connection.jl")
