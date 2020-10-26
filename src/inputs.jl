@@ -12,6 +12,7 @@ button(xcb_button::XCBButtonCode{Val(5)}) = ButtonScrollDown()
 function get_key(connection::Connection, key_event::Union{xcb_key_press_event_t,xcb_key_release_event_t})
     keysymbols = xcb_key_symbols_alloc(connection)
     keysym = xcb_key_symbols_get_keysym(keysymbols, key_event.detail, 0)
+    @show keysym Char(keysym)
     Char(keysym)
 end
 
@@ -29,7 +30,7 @@ end
 
 MouseState(mouse_event::Union{xcb_button_press_event_t, xcb_button_release_event_t}) = MouseState((mouse_event.state .| [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY] .== mouse_event.state)...)
 
-_xcb_translate_state(s::MouseState) = &.(Int[s.left, s.middle, s.right, s.scroll_up, s.scroll_down, s.any] .* [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY])
+_xcb_translate_state(s::MouseState) = .&(UInt[s.left, s.middle, s.right, s.scroll_up, s.scroll_down, s.any] .* [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY]...)
 
 _xcb_translate_event(::Type{ButtonPressed}) = XCB_BUTTON_PRESS
 _xcb_translate_event(::Type{ButtonReleased}) = XCB_BUTTON_RELEASE

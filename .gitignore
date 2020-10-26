@@ -3,5 +3,7 @@
 *.jl.mem
 /gen/ctypes.jl
 /gen/LibTemplate.jl
-/Manifest.toml
+Manifest.toml
+/docs/build
+/docs/site/
 /.vscode
