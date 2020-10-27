@@ -49,9 +49,10 @@ using .Libxkb
 include("exceptions.jl")
 include("connection.jl")
 include("window.jl")
+include("inputs.jl")
+include("xkb.jl")
 include("window_handler.jl")
 include("context.jl")
-include("inputs.jl")
 include("testing.jl")
 
 
@@ -67,6 +68,12 @@ export xcb,
        XWindowHandler,
        get_window,
        get_window_symbol,
-       event_details
+       event_details_xkb,
+       @check,
+       @flush,
+       keymap_info,
+       key_info,
+       name_from_keycode,
+       name_from_keysym
 
 end # module

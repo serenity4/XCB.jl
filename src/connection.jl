@@ -122,9 +122,7 @@ The connection is taken to be the first argument of `expr`. `expr` can be a call
 ```
 julia> @macroexpand @flush xcb_unmap_window(win.conn, win.id)
 quote
-    #= /home/belmant/.julia/dev/XCB/src/window.jl:94 =#
     xcb_unmap_window(win.conn, win.id)
-    #= /home/belmant/.julia/dev/XCB/src/window.jl:95 =#
     (flush)(win.conn)
 end
 ```
@@ -149,21 +147,32 @@ TODO: `@macroexpand` example
 """
 macro check(request)
     conn = request.args[2]
-    request_fun = request.args[1]
+    request_fun = string(request.args[1])
+    module_prefix = string(@__MODULE__) * "."
+    has_module_prefix = startswith(request_fun, module_prefix)
+    has_module_prefix && (request_fun = request_fun[5:end])
     
-    if endswith(string(request_fun), "_unchecked")
-        request_fun_checked = Symbol(replace(string(request_fun), "_unchecked" => ""))
-    elseif !endswith(string(request_fun), "_checked")
-        if isdefined(@__MODULE__, Symbol(string(request_fun) * "_unchecked"))
+    if endswith(request_fun, "_unchecked")
+        request_fun_checked = replace(request_fun, "_unchecked" => "")
+    elseif !endswith(request_fun, "_checked")
+        if isdefined(@__MODULE__, Symbol(request_fun * "_unchecked"))
             request_fun_checked = request_fun
         else
-            request_fun_checked = Symbol(string(request_fun) * "_checked")
+            request_fun_checked = request_fun * "_checked"
         end
+    else
+        request_fun_checked = request_fun
     end
-    if isdefined(@__MODULE__, request_fun_checked)
-        request.args[1] = request_fun_checked
+    if has_module_prefix
+        request_fun_checked = module_prefix * request_fun_checked
+        check_request_fun = Meta.parse(module_prefix * "check_request")
+    else
+        check_request_fun = :check_request
+    end
+    if isdefined(@__MODULE__, Symbol(replace(request_fun_checked, module_prefix => "")))
+        request.args[1] = Meta.parse(request_fun_checked)
     else
         throw(ArgumentError("Function $request_fun does not have a checked version available."))
     end
-    :($(esc(check_request))($(esc(conn)), $(esc(request))))
+    :($(esc(check_request_fun))($(esc(conn)), $(esc(request))))
 end
