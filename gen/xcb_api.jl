@@ -1,4 +1,4 @@
-# Julia wrapper for header: xcb.h
+# Julia wrapper for header: xkb.h
 # Automatically generated using Clang.jl
 
 
@@ -2568,6 +2568,2002 @@ end
 
 function xcb_generate_id(c)
     ccall((:xcb_generate_id, libxcb), UInt32, (Ptr{xcb_connection_t},), c)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map(R)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map, libxcb_xkb), Ptr{xcb_xkb_get_kbd_by_name_replies_types_map_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), R)
+end
+
+function xcb_xkb_device_spec_next(i)
+    ccall((:xcb_xkb_device_spec_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_device_spec_iterator_t},), i)
+end
+
+function xcb_xkb_device_spec_end(i)
+    ccall((:xcb_xkb_device_spec_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_device_spec_iterator_t,), i)
+end
+
+function xcb_xkb_led_class_spec_next(i)
+    ccall((:xcb_xkb_led_class_spec_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_led_class_spec_iterator_t},), i)
+end
+
+function xcb_xkb_led_class_spec_end(i)
+    ccall((:xcb_xkb_led_class_spec_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_led_class_spec_iterator_t,), i)
+end
+
+function xcb_xkb_bell_class_spec_next(i)
+    ccall((:xcb_xkb_bell_class_spec_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_bell_class_spec_iterator_t},), i)
+end
+
+function xcb_xkb_bell_class_spec_end(i)
+    ccall((:xcb_xkb_bell_class_spec_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_bell_class_spec_iterator_t,), i)
+end
+
+function xcb_xkb_id_spec_next(i)
+    ccall((:xcb_xkb_id_spec_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_id_spec_iterator_t},), i)
+end
+
+function xcb_xkb_id_spec_end(i)
+    ccall((:xcb_xkb_id_spec_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_id_spec_iterator_t,), i)
+end
+
+function xcb_xkb_indicator_map_next(i)
+    ccall((:xcb_xkb_indicator_map_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_indicator_map_iterator_t},), i)
+end
+
+function xcb_xkb_indicator_map_end(i)
+    ccall((:xcb_xkb_indicator_map_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_indicator_map_iterator_t,), i)
+end
+
+function xcb_xkb_mod_def_next(i)
+    ccall((:xcb_xkb_mod_def_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_mod_def_iterator_t},), i)
+end
+
+function xcb_xkb_mod_def_end(i)
+    ccall((:xcb_xkb_mod_def_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_mod_def_iterator_t,), i)
+end
+
+function xcb_xkb_key_name_next(i)
+    ccall((:xcb_xkb_key_name_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_key_name_iterator_t},), i)
+end
+
+function xcb_xkb_key_name_end(i)
+    ccall((:xcb_xkb_key_name_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_key_name_iterator_t,), i)
+end
+
+function xcb_xkb_key_alias_next(i)
+    ccall((:xcb_xkb_key_alias_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_key_alias_iterator_t},), i)
+end
+
+function xcb_xkb_key_alias_end(i)
+    ccall((:xcb_xkb_key_alias_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_key_alias_iterator_t,), i)
+end
+
+function xcb_xkb_counted_string_16_sizeof(_buffer)
+    ccall((:xcb_xkb_counted_string_16_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_counted_string_16_string(R)
+    ccall((:xcb_xkb_counted_string_16_string, libxcb_xkb), Cstring, (Ptr{xcb_xkb_counted_string_16_t},), R)
+end
+
+function xcb_xkb_counted_string_16_string_length(R)
+    ccall((:xcb_xkb_counted_string_16_string_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_counted_string_16_t},), R)
+end
+
+function xcb_xkb_counted_string_16_string_end(R)
+    ccall((:xcb_xkb_counted_string_16_string_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_counted_string_16_t},), R)
+end
+
+function xcb_xkb_counted_string_16_alignment_pad(R)
+    ccall((:xcb_xkb_counted_string_16_alignment_pad, libxcb_xkb), Ptr{Cvoid}, (Ptr{xcb_xkb_counted_string_16_t},), R)
+end
+
+function xcb_xkb_counted_string_16_alignment_pad_length(R)
+    ccall((:xcb_xkb_counted_string_16_alignment_pad_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_counted_string_16_t},), R)
+end
+
+function xcb_xkb_counted_string_16_alignment_pad_end(R)
+    ccall((:xcb_xkb_counted_string_16_alignment_pad_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_counted_string_16_t},), R)
+end
+
+function xcb_xkb_counted_string_16_next(i)
+    ccall((:xcb_xkb_counted_string_16_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_counted_string_16_iterator_t},), i)
+end
+
+function xcb_xkb_counted_string_16_end(i)
+    ccall((:xcb_xkb_counted_string_16_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_counted_string_16_iterator_t,), i)
+end
+
+function xcb_xkb_kt_map_entry_next(i)
+    ccall((:xcb_xkb_kt_map_entry_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_kt_map_entry_iterator_t},), i)
+end
+
+function xcb_xkb_kt_map_entry_end(i)
+    ccall((:xcb_xkb_kt_map_entry_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_kt_map_entry_iterator_t,), i)
+end
+
+function xcb_xkb_key_type_sizeof(_buffer)
+    ccall((:xcb_xkb_key_type_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_key_type_map(R)
+    ccall((:xcb_xkb_key_type_map, libxcb_xkb), Ptr{xcb_xkb_kt_map_entry_t}, (Ptr{xcb_xkb_key_type_t},), R)
+end
+
+function xcb_xkb_key_type_map_length(R)
+    ccall((:xcb_xkb_key_type_map_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_key_type_t},), R)
+end
+
+function xcb_xkb_key_type_map_iterator(R)
+    ccall((:xcb_xkb_key_type_map_iterator, libxcb_xkb), xcb_xkb_kt_map_entry_iterator_t, (Ptr{xcb_xkb_key_type_t},), R)
+end
+
+function xcb_xkb_key_type_preserve(R)
+    ccall((:xcb_xkb_key_type_preserve, libxcb_xkb), Ptr{xcb_xkb_mod_def_t}, (Ptr{xcb_xkb_key_type_t},), R)
+end
+
+function xcb_xkb_key_type_preserve_length(R)
+    ccall((:xcb_xkb_key_type_preserve_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_key_type_t},), R)
+end
+
+function xcb_xkb_key_type_preserve_iterator(R)
+    ccall((:xcb_xkb_key_type_preserve_iterator, libxcb_xkb), xcb_xkb_mod_def_iterator_t, (Ptr{xcb_xkb_key_type_t},), R)
+end
+
+function xcb_xkb_key_type_next(i)
+    ccall((:xcb_xkb_key_type_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_key_type_iterator_t},), i)
+end
+
+function xcb_xkb_key_type_end(i)
+    ccall((:xcb_xkb_key_type_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_key_type_iterator_t,), i)
+end
+
+function xcb_xkb_key_sym_map_sizeof(_buffer)
+    ccall((:xcb_xkb_key_sym_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_key_sym_map_syms(R)
+    ccall((:xcb_xkb_key_sym_map_syms, libxcb_xkb), Ptr{xcb_keysym_t}, (Ptr{xcb_xkb_key_sym_map_t},), R)
+end
+
+function xcb_xkb_key_sym_map_syms_length(R)
+    ccall((:xcb_xkb_key_sym_map_syms_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_key_sym_map_t},), R)
+end
+
+function xcb_xkb_key_sym_map_syms_end(R)
+    ccall((:xcb_xkb_key_sym_map_syms_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_key_sym_map_t},), R)
+end
+
+function xcb_xkb_key_sym_map_next(i)
+    ccall((:xcb_xkb_key_sym_map_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_key_sym_map_iterator_t},), i)
+end
+
+function xcb_xkb_key_sym_map_end(i)
+    ccall((:xcb_xkb_key_sym_map_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_key_sym_map_iterator_t,), i)
+end
+
+function xcb_xkb_common_behavior_next(i)
+    ccall((:xcb_xkb_common_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_common_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_common_behavior_end(i)
+    ccall((:xcb_xkb_common_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_common_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_default_behavior_next(i)
+    ccall((:xcb_xkb_default_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_default_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_default_behavior_end(i)
+    ccall((:xcb_xkb_default_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_default_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_lock_behavior_next(i)
+    ccall((:xcb_xkb_lock_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_lock_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_lock_behavior_end(i)
+    ccall((:xcb_xkb_lock_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_lock_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_radio_group_behavior_next(i)
+    ccall((:xcb_xkb_radio_group_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_radio_group_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_radio_group_behavior_end(i)
+    ccall((:xcb_xkb_radio_group_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_radio_group_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_overlay_behavior_next(i)
+    ccall((:xcb_xkb_overlay_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_overlay_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_overlay_behavior_end(i)
+    ccall((:xcb_xkb_overlay_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_overlay_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_permament_lock_behavior_next(i)
+    ccall((:xcb_xkb_permament_lock_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_permament_lock_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_permament_lock_behavior_end(i)
+    ccall((:xcb_xkb_permament_lock_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_permament_lock_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_permament_radio_group_behavior_next(i)
+    ccall((:xcb_xkb_permament_radio_group_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_permament_radio_group_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_permament_radio_group_behavior_end(i)
+    ccall((:xcb_xkb_permament_radio_group_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_permament_radio_group_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_permament_overlay_behavior_next(i)
+    ccall((:xcb_xkb_permament_overlay_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_permament_overlay_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_permament_overlay_behavior_end(i)
+    ccall((:xcb_xkb_permament_overlay_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_permament_overlay_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_behavior_next(i)
+    ccall((:xcb_xkb_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_behavior_end(i)
+    ccall((:xcb_xkb_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_set_behavior_next(i)
+    ccall((:xcb_xkb_set_behavior_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_set_behavior_iterator_t},), i)
+end
+
+function xcb_xkb_set_behavior_end(i)
+    ccall((:xcb_xkb_set_behavior_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_set_behavior_iterator_t,), i)
+end
+
+function xcb_xkb_set_explicit_next(i)
+    ccall((:xcb_xkb_set_explicit_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_set_explicit_iterator_t},), i)
+end
+
+function xcb_xkb_set_explicit_end(i)
+    ccall((:xcb_xkb_set_explicit_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_set_explicit_iterator_t,), i)
+end
+
+function xcb_xkb_key_mod_map_next(i)
+    ccall((:xcb_xkb_key_mod_map_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_key_mod_map_iterator_t},), i)
+end
+
+function xcb_xkb_key_mod_map_end(i)
+    ccall((:xcb_xkb_key_mod_map_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_key_mod_map_iterator_t,), i)
+end
+
+function xcb_xkb_key_v_mod_map_next(i)
+    ccall((:xcb_xkb_key_v_mod_map_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_key_v_mod_map_iterator_t},), i)
+end
+
+function xcb_xkb_key_v_mod_map_end(i)
+    ccall((:xcb_xkb_key_v_mod_map_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_key_v_mod_map_iterator_t,), i)
+end
+
+function xcb_xkb_kt_set_map_entry_next(i)
+    ccall((:xcb_xkb_kt_set_map_entry_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_kt_set_map_entry_iterator_t},), i)
+end
+
+function xcb_xkb_kt_set_map_entry_end(i)
+    ccall((:xcb_xkb_kt_set_map_entry_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_kt_set_map_entry_iterator_t,), i)
+end
+
+function xcb_xkb_set_key_type_sizeof(_buffer)
+    ccall((:xcb_xkb_set_key_type_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_set_key_type_entries(R)
+    ccall((:xcb_xkb_set_key_type_entries, libxcb_xkb), Ptr{xcb_xkb_kt_set_map_entry_t}, (Ptr{xcb_xkb_set_key_type_t},), R)
+end
+
+function xcb_xkb_set_key_type_entries_length(R)
+    ccall((:xcb_xkb_set_key_type_entries_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_key_type_t},), R)
+end
+
+function xcb_xkb_set_key_type_entries_iterator(R)
+    ccall((:xcb_xkb_set_key_type_entries_iterator, libxcb_xkb), xcb_xkb_kt_set_map_entry_iterator_t, (Ptr{xcb_xkb_set_key_type_t},), R)
+end
+
+function xcb_xkb_set_key_type_preserve_entries(R)
+    ccall((:xcb_xkb_set_key_type_preserve_entries, libxcb_xkb), Ptr{xcb_xkb_kt_set_map_entry_t}, (Ptr{xcb_xkb_set_key_type_t},), R)
+end
+
+function xcb_xkb_set_key_type_preserve_entries_length(R)
+    ccall((:xcb_xkb_set_key_type_preserve_entries_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_key_type_t},), R)
+end
+
+function xcb_xkb_set_key_type_preserve_entries_iterator(R)
+    ccall((:xcb_xkb_set_key_type_preserve_entries_iterator, libxcb_xkb), xcb_xkb_kt_set_map_entry_iterator_t, (Ptr{xcb_xkb_set_key_type_t},), R)
+end
+
+function xcb_xkb_set_key_type_next(i)
+    ccall((:xcb_xkb_set_key_type_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_set_key_type_iterator_t},), i)
+end
+
+function xcb_xkb_set_key_type_end(i)
+    ccall((:xcb_xkb_set_key_type_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_set_key_type_iterator_t,), i)
+end
+
+function xcb_xkb_string8_next(i)
+    ccall((:xcb_xkb_string8_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_string8_iterator_t},), i)
+end
+
+function xcb_xkb_string8_end(i)
+    ccall((:xcb_xkb_string8_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_string8_iterator_t,), i)
+end
+
+function xcb_xkb_outline_sizeof(_buffer)
+    ccall((:xcb_xkb_outline_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_outline_points(R)
+    ccall((:xcb_xkb_outline_points, libxcb_xkb), Ptr{xcb_point_t}, (Ptr{xcb_xkb_outline_t},), R)
+end
+
+function xcb_xkb_outline_points_length(R)
+    ccall((:xcb_xkb_outline_points_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_outline_t},), R)
+end
+
+function xcb_xkb_outline_points_iterator(R)
+    ccall((:xcb_xkb_outline_points_iterator, libxcb_xkb), xcb_point_iterator_t, (Ptr{xcb_xkb_outline_t},), R)
+end
+
+function xcb_xkb_outline_next(i)
+    ccall((:xcb_xkb_outline_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_outline_iterator_t},), i)
+end
+
+function xcb_xkb_outline_end(i)
+    ccall((:xcb_xkb_outline_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_outline_iterator_t,), i)
+end
+
+function xcb_xkb_shape_sizeof(_buffer)
+    ccall((:xcb_xkb_shape_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_shape_outlines_length(R)
+    ccall((:xcb_xkb_shape_outlines_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_shape_t},), R)
+end
+
+function xcb_xkb_shape_outlines_iterator(R)
+    ccall((:xcb_xkb_shape_outlines_iterator, libxcb_xkb), xcb_xkb_outline_iterator_t, (Ptr{xcb_xkb_shape_t},), R)
+end
+
+function xcb_xkb_shape_next(i)
+    ccall((:xcb_xkb_shape_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_shape_iterator_t},), i)
+end
+
+function xcb_xkb_shape_end(i)
+    ccall((:xcb_xkb_shape_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_shape_iterator_t,), i)
+end
+
+function xcb_xkb_key_next(i)
+    ccall((:xcb_xkb_key_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_key_iterator_t},), i)
+end
+
+function xcb_xkb_key_end(i)
+    ccall((:xcb_xkb_key_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_key_iterator_t,), i)
+end
+
+function xcb_xkb_overlay_key_next(i)
+    ccall((:xcb_xkb_overlay_key_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_overlay_key_iterator_t},), i)
+end
+
+function xcb_xkb_overlay_key_end(i)
+    ccall((:xcb_xkb_overlay_key_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_overlay_key_iterator_t,), i)
+end
+
+function xcb_xkb_overlay_row_sizeof(_buffer)
+    ccall((:xcb_xkb_overlay_row_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_overlay_row_keys(R)
+    ccall((:xcb_xkb_overlay_row_keys, libxcb_xkb), Ptr{xcb_xkb_overlay_key_t}, (Ptr{xcb_xkb_overlay_row_t},), R)
+end
+
+function xcb_xkb_overlay_row_keys_length(R)
+    ccall((:xcb_xkb_overlay_row_keys_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_overlay_row_t},), R)
+end
+
+function xcb_xkb_overlay_row_keys_iterator(R)
+    ccall((:xcb_xkb_overlay_row_keys_iterator, libxcb_xkb), xcb_xkb_overlay_key_iterator_t, (Ptr{xcb_xkb_overlay_row_t},), R)
+end
+
+function xcb_xkb_overlay_row_next(i)
+    ccall((:xcb_xkb_overlay_row_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_overlay_row_iterator_t},), i)
+end
+
+function xcb_xkb_overlay_row_end(i)
+    ccall((:xcb_xkb_overlay_row_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_overlay_row_iterator_t,), i)
+end
+
+function xcb_xkb_overlay_sizeof(_buffer)
+    ccall((:xcb_xkb_overlay_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_overlay_rows_length(R)
+    ccall((:xcb_xkb_overlay_rows_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_overlay_t},), R)
+end
+
+function xcb_xkb_overlay_rows_iterator(R)
+    ccall((:xcb_xkb_overlay_rows_iterator, libxcb_xkb), xcb_xkb_overlay_row_iterator_t, (Ptr{xcb_xkb_overlay_t},), R)
+end
+
+function xcb_xkb_overlay_next(i)
+    ccall((:xcb_xkb_overlay_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_overlay_iterator_t},), i)
+end
+
+function xcb_xkb_overlay_end(i)
+    ccall((:xcb_xkb_overlay_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_overlay_iterator_t,), i)
+end
+
+function xcb_xkb_row_sizeof(_buffer)
+    ccall((:xcb_xkb_row_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_row_keys(R)
+    ccall((:xcb_xkb_row_keys, libxcb_xkb), Ptr{xcb_xkb_key_t}, (Ptr{xcb_xkb_row_t},), R)
+end
+
+function xcb_xkb_row_keys_length(R)
+    ccall((:xcb_xkb_row_keys_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_row_t},), R)
+end
+
+function xcb_xkb_row_keys_iterator(R)
+    ccall((:xcb_xkb_row_keys_iterator, libxcb_xkb), xcb_xkb_key_iterator_t, (Ptr{xcb_xkb_row_t},), R)
+end
+
+function xcb_xkb_row_next(i)
+    ccall((:xcb_xkb_row_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_row_iterator_t},), i)
+end
+
+function xcb_xkb_row_end(i)
+    ccall((:xcb_xkb_row_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_row_iterator_t,), i)
+end
+
+function xcb_xkb_listing_sizeof(_buffer)
+    ccall((:xcb_xkb_listing_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_listing_string(R)
+    ccall((:xcb_xkb_listing_string, libxcb_xkb), Ptr{xcb_xkb_string8_t}, (Ptr{xcb_xkb_listing_t},), R)
+end
+
+function xcb_xkb_listing_string_length(R)
+    ccall((:xcb_xkb_listing_string_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_listing_t},), R)
+end
+
+function xcb_xkb_listing_string_end(R)
+    ccall((:xcb_xkb_listing_string_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_listing_t},), R)
+end
+
+function xcb_xkb_listing_next(i)
+    ccall((:xcb_xkb_listing_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_listing_iterator_t},), i)
+end
+
+function xcb_xkb_listing_end(i)
+    ccall((:xcb_xkb_listing_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_listing_iterator_t,), i)
+end
+
+function xcb_xkb_device_led_info_sizeof(_buffer)
+    ccall((:xcb_xkb_device_led_info_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_device_led_info_names(R)
+    ccall((:xcb_xkb_device_led_info_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_device_led_info_t},), R)
+end
+
+function xcb_xkb_device_led_info_names_length(R)
+    ccall((:xcb_xkb_device_led_info_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_device_led_info_t},), R)
+end
+
+function xcb_xkb_device_led_info_names_end(R)
+    ccall((:xcb_xkb_device_led_info_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_device_led_info_t},), R)
+end
+
+function xcb_xkb_device_led_info_maps(R)
+    ccall((:xcb_xkb_device_led_info_maps, libxcb_xkb), Ptr{xcb_xkb_indicator_map_t}, (Ptr{xcb_xkb_device_led_info_t},), R)
+end
+
+function xcb_xkb_device_led_info_maps_length(R)
+    ccall((:xcb_xkb_device_led_info_maps_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_device_led_info_t},), R)
+end
+
+function xcb_xkb_device_led_info_maps_iterator(R)
+    ccall((:xcb_xkb_device_led_info_maps_iterator, libxcb_xkb), xcb_xkb_indicator_map_iterator_t, (Ptr{xcb_xkb_device_led_info_t},), R)
+end
+
+function xcb_xkb_device_led_info_next(i)
+    ccall((:xcb_xkb_device_led_info_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_device_led_info_iterator_t},), i)
+end
+
+function xcb_xkb_device_led_info_end(i)
+    ccall((:xcb_xkb_device_led_info_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_device_led_info_iterator_t,), i)
+end
+
+function xcb_xkb_sa_no_action_next(i)
+    ccall((:xcb_xkb_sa_no_action_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_no_action_iterator_t},), i)
+end
+
+function xcb_xkb_sa_no_action_end(i)
+    ccall((:xcb_xkb_sa_no_action_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_no_action_iterator_t,), i)
+end
+
+function xcb_xkb_sa_set_mods_next(i)
+    ccall((:xcb_xkb_sa_set_mods_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_set_mods_iterator_t},), i)
+end
+
+function xcb_xkb_sa_set_mods_end(i)
+    ccall((:xcb_xkb_sa_set_mods_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_set_mods_iterator_t,), i)
+end
+
+function xcb_xkb_sa_latch_mods_next(i)
+    ccall((:xcb_xkb_sa_latch_mods_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_latch_mods_iterator_t},), i)
+end
+
+function xcb_xkb_sa_latch_mods_end(i)
+    ccall((:xcb_xkb_sa_latch_mods_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_latch_mods_iterator_t,), i)
+end
+
+function xcb_xkb_sa_lock_mods_next(i)
+    ccall((:xcb_xkb_sa_lock_mods_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_lock_mods_iterator_t},), i)
+end
+
+function xcb_xkb_sa_lock_mods_end(i)
+    ccall((:xcb_xkb_sa_lock_mods_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_lock_mods_iterator_t,), i)
+end
+
+function xcb_xkb_sa_set_group_next(i)
+    ccall((:xcb_xkb_sa_set_group_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_set_group_iterator_t},), i)
+end
+
+function xcb_xkb_sa_set_group_end(i)
+    ccall((:xcb_xkb_sa_set_group_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_set_group_iterator_t,), i)
+end
+
+function xcb_xkb_sa_latch_group_next(i)
+    ccall((:xcb_xkb_sa_latch_group_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_latch_group_iterator_t},), i)
+end
+
+function xcb_xkb_sa_latch_group_end(i)
+    ccall((:xcb_xkb_sa_latch_group_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_latch_group_iterator_t,), i)
+end
+
+function xcb_xkb_sa_lock_group_next(i)
+    ccall((:xcb_xkb_sa_lock_group_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_lock_group_iterator_t},), i)
+end
+
+function xcb_xkb_sa_lock_group_end(i)
+    ccall((:xcb_xkb_sa_lock_group_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_lock_group_iterator_t,), i)
+end
+
+function xcb_xkb_sa_move_ptr_next(i)
+    ccall((:xcb_xkb_sa_move_ptr_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_move_ptr_iterator_t},), i)
+end
+
+function xcb_xkb_sa_move_ptr_end(i)
+    ccall((:xcb_xkb_sa_move_ptr_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_move_ptr_iterator_t,), i)
+end
+
+function xcb_xkb_sa_ptr_btn_next(i)
+    ccall((:xcb_xkb_sa_ptr_btn_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_ptr_btn_iterator_t},), i)
+end
+
+function xcb_xkb_sa_ptr_btn_end(i)
+    ccall((:xcb_xkb_sa_ptr_btn_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_ptr_btn_iterator_t,), i)
+end
+
+function xcb_xkb_sa_lock_ptr_btn_next(i)
+    ccall((:xcb_xkb_sa_lock_ptr_btn_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_lock_ptr_btn_iterator_t},), i)
+end
+
+function xcb_xkb_sa_lock_ptr_btn_end(i)
+    ccall((:xcb_xkb_sa_lock_ptr_btn_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_lock_ptr_btn_iterator_t,), i)
+end
+
+function xcb_xkb_sa_set_ptr_dflt_next(i)
+    ccall((:xcb_xkb_sa_set_ptr_dflt_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_set_ptr_dflt_iterator_t},), i)
+end
+
+function xcb_xkb_sa_set_ptr_dflt_end(i)
+    ccall((:xcb_xkb_sa_set_ptr_dflt_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_set_ptr_dflt_iterator_t,), i)
+end
+
+function xcb_xkb_sa_iso_lock_next(i)
+    ccall((:xcb_xkb_sa_iso_lock_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_iso_lock_iterator_t},), i)
+end
+
+function xcb_xkb_sa_iso_lock_end(i)
+    ccall((:xcb_xkb_sa_iso_lock_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_iso_lock_iterator_t,), i)
+end
+
+function xcb_xkb_sa_terminate_next(i)
+    ccall((:xcb_xkb_sa_terminate_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_terminate_iterator_t},), i)
+end
+
+function xcb_xkb_sa_terminate_end(i)
+    ccall((:xcb_xkb_sa_terminate_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_terminate_iterator_t,), i)
+end
+
+function xcb_xkb_sa_switch_screen_next(i)
+    ccall((:xcb_xkb_sa_switch_screen_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_switch_screen_iterator_t},), i)
+end
+
+function xcb_xkb_sa_switch_screen_end(i)
+    ccall((:xcb_xkb_sa_switch_screen_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_switch_screen_iterator_t,), i)
+end
+
+function xcb_xkb_sa_set_controls_next(i)
+    ccall((:xcb_xkb_sa_set_controls_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_set_controls_iterator_t},), i)
+end
+
+function xcb_xkb_sa_set_controls_end(i)
+    ccall((:xcb_xkb_sa_set_controls_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_set_controls_iterator_t,), i)
+end
+
+function xcb_xkb_sa_lock_controls_next(i)
+    ccall((:xcb_xkb_sa_lock_controls_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_lock_controls_iterator_t},), i)
+end
+
+function xcb_xkb_sa_lock_controls_end(i)
+    ccall((:xcb_xkb_sa_lock_controls_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_lock_controls_iterator_t,), i)
+end
+
+function xcb_xkb_sa_action_message_next(i)
+    ccall((:xcb_xkb_sa_action_message_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_action_message_iterator_t},), i)
+end
+
+function xcb_xkb_sa_action_message_end(i)
+    ccall((:xcb_xkb_sa_action_message_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_action_message_iterator_t,), i)
+end
+
+function xcb_xkb_sa_redirect_key_next(i)
+    ccall((:xcb_xkb_sa_redirect_key_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_redirect_key_iterator_t},), i)
+end
+
+function xcb_xkb_sa_redirect_key_end(i)
+    ccall((:xcb_xkb_sa_redirect_key_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_redirect_key_iterator_t,), i)
+end
+
+function xcb_xkb_sa_device_btn_next(i)
+    ccall((:xcb_xkb_sa_device_btn_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_device_btn_iterator_t},), i)
+end
+
+function xcb_xkb_sa_device_btn_end(i)
+    ccall((:xcb_xkb_sa_device_btn_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_device_btn_iterator_t,), i)
+end
+
+function xcb_xkb_sa_lock_device_btn_next(i)
+    ccall((:xcb_xkb_sa_lock_device_btn_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_lock_device_btn_iterator_t},), i)
+end
+
+function xcb_xkb_sa_lock_device_btn_end(i)
+    ccall((:xcb_xkb_sa_lock_device_btn_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_lock_device_btn_iterator_t,), i)
+end
+
+function xcb_xkb_sa_device_valuator_next(i)
+    ccall((:xcb_xkb_sa_device_valuator_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sa_device_valuator_iterator_t},), i)
+end
+
+function xcb_xkb_sa_device_valuator_end(i)
+    ccall((:xcb_xkb_sa_device_valuator_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sa_device_valuator_iterator_t,), i)
+end
+
+function xcb_xkb_si_action_next(i)
+    ccall((:xcb_xkb_si_action_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_si_action_iterator_t},), i)
+end
+
+function xcb_xkb_si_action_end(i)
+    ccall((:xcb_xkb_si_action_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_si_action_iterator_t,), i)
+end
+
+function xcb_xkb_sym_interpret_next(i)
+    ccall((:xcb_xkb_sym_interpret_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_sym_interpret_iterator_t},), i)
+end
+
+function xcb_xkb_sym_interpret_end(i)
+    ccall((:xcb_xkb_sym_interpret_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_sym_interpret_iterator_t,), i)
+end
+
+function xcb_xkb_action_next(i)
+    ccall((:xcb_xkb_action_next, libxcb_xkb), Cvoid, (Ptr{xcb_xkb_action_iterator_t},), i)
+end
+
+function xcb_xkb_action_end(i)
+    ccall((:xcb_xkb_action_end, libxcb_xkb), xcb_generic_iterator_t, (xcb_xkb_action_iterator_t,), i)
+end
+
+function xcb_xkb_use_extension(c, wantedMajor, wantedMinor)
+    ccall((:xcb_xkb_use_extension, libxcb_xkb), xcb_xkb_use_extension_cookie_t, (Ptr{xcb_connection_t}, UInt16, UInt16), c, wantedMajor, wantedMinor)
+end
+
+function xcb_xkb_use_extension_unchecked(c, wantedMajor, wantedMinor)
+    ccall((:xcb_xkb_use_extension_unchecked, libxcb_xkb), xcb_xkb_use_extension_cookie_t, (Ptr{xcb_connection_t}, UInt16, UInt16), c, wantedMajor, wantedMinor)
+end
+
+function xcb_xkb_use_extension_reply(c, cookie, e)
+    ccall((:xcb_xkb_use_extension_reply, libxcb_xkb), Ptr{xcb_xkb_use_extension_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_use_extension_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_select_events_details_serialize(_buffer, affectWhich, clear, selectAll, _aux)
+    ccall((:xcb_xkb_select_events_details_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt16, UInt16, UInt16, Ptr{xcb_xkb_select_events_details_t}), _buffer, affectWhich, clear, selectAll, _aux)
+end
+
+function xcb_xkb_select_events_details_unpack(_buffer, affectWhich, clear, selectAll, _aux)
+    ccall((:xcb_xkb_select_events_details_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt16, UInt16, UInt16, Ptr{xcb_xkb_select_events_details_t}), _buffer, affectWhich, clear, selectAll, _aux)
+end
+
+function xcb_xkb_select_events_details_sizeof(_buffer, affectWhich, clear, selectAll)
+    ccall((:xcb_xkb_select_events_details_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt16, UInt16, UInt16), _buffer, affectWhich, clear, selectAll)
+end
+
+function xcb_xkb_select_events_sizeof(_buffer)
+    ccall((:xcb_xkb_select_events_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_select_events_checked(c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+    ccall((:xcb_xkb_select_events_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt16, UInt16, UInt16, Ptr{Cvoid}), c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+end
+
+function xcb_xkb_select_events(c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+    ccall((:xcb_xkb_select_events, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt16, UInt16, UInt16, Ptr{Cvoid}), c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+end
+
+function xcb_xkb_select_events_aux_checked(c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+    ccall((:xcb_xkb_select_events_aux_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt16, UInt16, UInt16, Ptr{xcb_xkb_select_events_details_t}), c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+end
+
+function xcb_xkb_select_events_aux(c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+    ccall((:xcb_xkb_select_events_aux, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt16, UInt16, UInt16, Ptr{xcb_xkb_select_events_details_t}), c, deviceSpec, affectWhich, clear, selectAll, affectMap, map, details)
+end
+
+function xcb_xkb_select_events_details(R)
+    ccall((:xcb_xkb_select_events_details, libxcb_xkb), Ptr{Cvoid}, (Ptr{xcb_xkb_select_events_request_t},), R)
+end
+
+function xcb_xkb_bell_checked(c, deviceSpec, bellClass, bellID, percent, forceSound, eventOnly, pitch, duration, name, window)
+    ccall((:xcb_xkb_bell_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, xcb_xkb_bell_class_spec_t, xcb_xkb_id_spec_t, Int8, UInt8, UInt8, Int16, Int16, xcb_atom_t, xcb_window_t), c, deviceSpec, bellClass, bellID, percent, forceSound, eventOnly, pitch, duration, name, window)
+end
+
+function xcb_xkb_bell(c, deviceSpec, bellClass, bellID, percent, forceSound, eventOnly, pitch, duration, name, window)
+    ccall((:xcb_xkb_bell, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, xcb_xkb_bell_class_spec_t, xcb_xkb_id_spec_t, Int8, UInt8, UInt8, Int16, Int16, xcb_atom_t, xcb_window_t), c, deviceSpec, bellClass, bellID, percent, forceSound, eventOnly, pitch, duration, name, window)
+end
+
+function xcb_xkb_get_state(c, deviceSpec)
+    ccall((:xcb_xkb_get_state, libxcb_xkb), xcb_xkb_get_state_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t), c, deviceSpec)
+end
+
+function xcb_xkb_get_state_unchecked(c, deviceSpec)
+    ccall((:xcb_xkb_get_state_unchecked, libxcb_xkb), xcb_xkb_get_state_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t), c, deviceSpec)
+end
+
+function xcb_xkb_get_state_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_state_reply, libxcb_xkb), Ptr{xcb_xkb_get_state_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_state_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_latch_lock_state_checked(c, deviceSpec, affectModLocks, modLocks, lockGroup, groupLock, affectModLatches, latchGroup, groupLatch)
+    ccall((:xcb_xkb_latch_lock_state_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt16), c, deviceSpec, affectModLocks, modLocks, lockGroup, groupLock, affectModLatches, latchGroup, groupLatch)
+end
+
+function xcb_xkb_latch_lock_state(c, deviceSpec, affectModLocks, modLocks, lockGroup, groupLock, affectModLatches, latchGroup, groupLatch)
+    ccall((:xcb_xkb_latch_lock_state, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt16), c, deviceSpec, affectModLocks, modLocks, lockGroup, groupLock, affectModLatches, latchGroup, groupLatch)
+end
+
+function xcb_xkb_get_controls(c, deviceSpec)
+    ccall((:xcb_xkb_get_controls, libxcb_xkb), xcb_xkb_get_controls_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t), c, deviceSpec)
+end
+
+function xcb_xkb_get_controls_unchecked(c, deviceSpec)
+    ccall((:xcb_xkb_get_controls_unchecked, libxcb_xkb), xcb_xkb_get_controls_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t), c, deviceSpec)
+end
+
+function xcb_xkb_get_controls_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_controls_reply, libxcb_xkb), Ptr{xcb_xkb_get_controls_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_controls_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_set_controls_checked(c, deviceSpec, affectInternalRealMods, internalRealMods, affectIgnoreLockRealMods, ignoreLockRealMods, affectInternalVirtualMods, internalVirtualMods, affectIgnoreLockVirtualMods, ignoreLockVirtualMods, mouseKeysDfltBtn, groupsWrap, accessXOptions, affectEnabledControls, enabledControls, changeControls, repeatDelay, repeatInterval, slowKeysDelay, debounceDelay, mouseKeysDelay, mouseKeysInterval, mouseKeysTimeToMax, mouseKeysMaxSpeed, mouseKeysCurve, accessXTimeout, accessXTimeoutMask, accessXTimeoutValues, accessXTimeoutOptionsMask, accessXTimeoutOptionsValues, perKeyRepeat)
+    ccall((:xcb_xkb_set_controls_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt8, UInt8, UInt16, UInt16, UInt16, UInt16, UInt8, UInt8, UInt16, UInt32, UInt32, UInt32, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, Int16, UInt16, UInt32, UInt32, UInt16, UInt16, Ptr{UInt8}), c, deviceSpec, affectInternalRealMods, internalRealMods, affectIgnoreLockRealMods, ignoreLockRealMods, affectInternalVirtualMods, internalVirtualMods, affectIgnoreLockVirtualMods, ignoreLockVirtualMods, mouseKeysDfltBtn, groupsWrap, accessXOptions, affectEnabledControls, enabledControls, changeControls, repeatDelay, repeatInterval, slowKeysDelay, debounceDelay, mouseKeysDelay, mouseKeysInterval, mouseKeysTimeToMax, mouseKeysMaxSpeed, mouseKeysCurve, accessXTimeout, accessXTimeoutMask, accessXTimeoutValues, accessXTimeoutOptionsMask, accessXTimeoutOptionsValues, perKeyRepeat)
+end
+
+function xcb_xkb_set_controls(c, deviceSpec, affectInternalRealMods, internalRealMods, affectIgnoreLockRealMods, ignoreLockRealMods, affectInternalVirtualMods, internalVirtualMods, affectIgnoreLockVirtualMods, ignoreLockVirtualMods, mouseKeysDfltBtn, groupsWrap, accessXOptions, affectEnabledControls, enabledControls, changeControls, repeatDelay, repeatInterval, slowKeysDelay, debounceDelay, mouseKeysDelay, mouseKeysInterval, mouseKeysTimeToMax, mouseKeysMaxSpeed, mouseKeysCurve, accessXTimeout, accessXTimeoutMask, accessXTimeoutValues, accessXTimeoutOptionsMask, accessXTimeoutOptionsValues, perKeyRepeat)
+    ccall((:xcb_xkb_set_controls, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt8, UInt8, UInt16, UInt16, UInt16, UInt16, UInt8, UInt8, UInt16, UInt32, UInt32, UInt32, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, UInt16, Int16, UInt16, UInt32, UInt32, UInt16, UInt16, Ptr{UInt8}), c, deviceSpec, affectInternalRealMods, internalRealMods, affectIgnoreLockRealMods, ignoreLockRealMods, affectInternalVirtualMods, internalVirtualMods, affectIgnoreLockVirtualMods, ignoreLockVirtualMods, mouseKeysDfltBtn, groupsWrap, accessXOptions, affectEnabledControls, enabledControls, changeControls, repeatDelay, repeatInterval, slowKeysDelay, debounceDelay, mouseKeysDelay, mouseKeysInterval, mouseKeysTimeToMax, mouseKeysMaxSpeed, mouseKeysCurve, accessXTimeout, accessXTimeoutMask, accessXTimeoutValues, accessXTimeoutOptionsMask, accessXTimeoutOptionsValues, perKeyRepeat)
+end
+
+function xcb_xkb_get_map_map_types_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_map_map_types_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_types_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_map_map_types_rtrn_iterator, libxcb_xkb), xcb_xkb_key_type_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_syms_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_map_map_syms_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_syms_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_map_map_syms_rtrn_iterator, libxcb_xkb), xcb_xkb_key_sym_map_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_acts_rtrn_count(S)
+    ccall((:xcb_xkb_get_map_map_acts_rtrn_count, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_get_map_map_t},), S)
+end
+
+function xcb_xkb_get_map_map_acts_rtrn_count_length(R, S)
+    ccall((:xcb_xkb_get_map_map_acts_rtrn_count_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_acts_rtrn_count_end(R, S)
+    ccall((:xcb_xkb_get_map_map_acts_rtrn_count_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_acts_rtrn_acts(S)
+    ccall((:xcb_xkb_get_map_map_acts_rtrn_acts, libxcb_xkb), Ptr{xcb_xkb_action_t}, (Ptr{xcb_xkb_get_map_map_t},), S)
+end
+
+function xcb_xkb_get_map_map_acts_rtrn_acts_length(R, S)
+    ccall((:xcb_xkb_get_map_map_acts_rtrn_acts_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_acts_rtrn_acts_iterator(R, S)
+    ccall((:xcb_xkb_get_map_map_acts_rtrn_acts_iterator, libxcb_xkb), xcb_xkb_action_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_behaviors_rtrn(S)
+    ccall((:xcb_xkb_get_map_map_behaviors_rtrn, libxcb_xkb), Ptr{xcb_xkb_set_behavior_t}, (Ptr{xcb_xkb_get_map_map_t},), S)
+end
+
+function xcb_xkb_get_map_map_behaviors_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_map_map_behaviors_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_behaviors_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_map_map_behaviors_rtrn_iterator, libxcb_xkb), xcb_xkb_set_behavior_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_vmods_rtrn(S)
+    ccall((:xcb_xkb_get_map_map_vmods_rtrn, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_get_map_map_t},), S)
+end
+
+function xcb_xkb_get_map_map_vmods_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_map_map_vmods_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_vmods_rtrn_end(R, S)
+    ccall((:xcb_xkb_get_map_map_vmods_rtrn_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_explicit_rtrn(S)
+    ccall((:xcb_xkb_get_map_map_explicit_rtrn, libxcb_xkb), Ptr{xcb_xkb_set_explicit_t}, (Ptr{xcb_xkb_get_map_map_t},), S)
+end
+
+function xcb_xkb_get_map_map_explicit_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_map_map_explicit_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_explicit_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_map_map_explicit_rtrn_iterator, libxcb_xkb), xcb_xkb_set_explicit_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_modmap_rtrn(S)
+    ccall((:xcb_xkb_get_map_map_modmap_rtrn, libxcb_xkb), Ptr{xcb_xkb_key_mod_map_t}, (Ptr{xcb_xkb_get_map_map_t},), S)
+end
+
+function xcb_xkb_get_map_map_modmap_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_map_map_modmap_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_modmap_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_map_map_modmap_rtrn_iterator, libxcb_xkb), xcb_xkb_key_mod_map_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_vmodmap_rtrn(S)
+    ccall((:xcb_xkb_get_map_map_vmodmap_rtrn, libxcb_xkb), Ptr{xcb_xkb_key_v_mod_map_t}, (Ptr{xcb_xkb_get_map_map_t},), S)
+end
+
+function xcb_xkb_get_map_map_vmodmap_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_map_map_vmodmap_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_vmodmap_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_map_map_vmodmap_rtrn_iterator, libxcb_xkb), xcb_xkb_key_v_mod_map_iterator_t, (Ptr{xcb_xkb_get_map_reply_t}, Ptr{xcb_xkb_get_map_map_t}), R, S)
+end
+
+function xcb_xkb_get_map_map_serialize(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+    ccall((:xcb_xkb_get_map_map_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16, Ptr{xcb_xkb_get_map_map_t}), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+end
+
+function xcb_xkb_get_map_map_unpack(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+    ccall((:xcb_xkb_get_map_map_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16, Ptr{xcb_xkb_get_map_map_t}), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+end
+
+function xcb_xkb_get_map_map_sizeof(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present)
+    ccall((:xcb_xkb_get_map_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present)
+end
+
+function xcb_xkb_get_map_sizeof(_buffer)
+    ccall((:xcb_xkb_get_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_get_map(c, deviceSpec, full, partial, firstType, nTypes, firstKeySym, nKeySyms, firstKeyAction, nKeyActions, firstKeyBehavior, nKeyBehaviors, virtualMods, firstKeyExplicit, nKeyExplicit, firstModMapKey, nModMapKeys, firstVModMapKey, nVModMapKeys)
+    ccall((:xcb_xkb_get_map, libxcb_xkb), xcb_xkb_get_map_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt8, UInt8, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8), c, deviceSpec, full, partial, firstType, nTypes, firstKeySym, nKeySyms, firstKeyAction, nKeyActions, firstKeyBehavior, nKeyBehaviors, virtualMods, firstKeyExplicit, nKeyExplicit, firstModMapKey, nModMapKeys, firstVModMapKey, nVModMapKeys)
+end
+
+function xcb_xkb_get_map_unchecked(c, deviceSpec, full, partial, firstType, nTypes, firstKeySym, nKeySyms, firstKeyAction, nKeyActions, firstKeyBehavior, nKeyBehaviors, virtualMods, firstKeyExplicit, nKeyExplicit, firstModMapKey, nModMapKeys, firstVModMapKey, nVModMapKeys)
+    ccall((:xcb_xkb_get_map_unchecked, libxcb_xkb), xcb_xkb_get_map_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt8, UInt8, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8, xcb_keycode_t, UInt8), c, deviceSpec, full, partial, firstType, nTypes, firstKeySym, nKeySyms, firstKeyAction, nKeyActions, firstKeyBehavior, nKeyBehaviors, virtualMods, firstKeyExplicit, nKeyExplicit, firstModMapKey, nModMapKeys, firstVModMapKey, nVModMapKeys)
+end
+
+function xcb_xkb_get_map_map(R)
+    ccall((:xcb_xkb_get_map_map, libxcb_xkb), Ptr{Cvoid}, (Ptr{xcb_xkb_get_map_reply_t},), R)
+end
+
+function xcb_xkb_get_map_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_map_reply, libxcb_xkb), Ptr{xcb_xkb_get_map_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_map_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_set_map_values_types_length(R, S)
+    ccall((:xcb_xkb_set_map_values_types_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_types_iterator(R, S)
+    ccall((:xcb_xkb_set_map_values_types_iterator, libxcb_xkb), xcb_xkb_set_key_type_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_syms_length(R, S)
+    ccall((:xcb_xkb_set_map_values_syms_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_syms_iterator(R, S)
+    ccall((:xcb_xkb_set_map_values_syms_iterator, libxcb_xkb), xcb_xkb_key_sym_map_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_actions_count(S)
+    ccall((:xcb_xkb_set_map_values_actions_count, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_set_map_values_t},), S)
+end
+
+function xcb_xkb_set_map_values_actions_count_length(R, S)
+    ccall((:xcb_xkb_set_map_values_actions_count_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_actions_count_end(R, S)
+    ccall((:xcb_xkb_set_map_values_actions_count_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_actions(S)
+    ccall((:xcb_xkb_set_map_values_actions, libxcb_xkb), Ptr{xcb_xkb_action_t}, (Ptr{xcb_xkb_set_map_values_t},), S)
+end
+
+function xcb_xkb_set_map_values_actions_length(R, S)
+    ccall((:xcb_xkb_set_map_values_actions_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_actions_iterator(R, S)
+    ccall((:xcb_xkb_set_map_values_actions_iterator, libxcb_xkb), xcb_xkb_action_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_behaviors(S)
+    ccall((:xcb_xkb_set_map_values_behaviors, libxcb_xkb), Ptr{xcb_xkb_set_behavior_t}, (Ptr{xcb_xkb_set_map_values_t},), S)
+end
+
+function xcb_xkb_set_map_values_behaviors_length(R, S)
+    ccall((:xcb_xkb_set_map_values_behaviors_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_behaviors_iterator(R, S)
+    ccall((:xcb_xkb_set_map_values_behaviors_iterator, libxcb_xkb), xcb_xkb_set_behavior_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_vmods(S)
+    ccall((:xcb_xkb_set_map_values_vmods, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_set_map_values_t},), S)
+end
+
+function xcb_xkb_set_map_values_vmods_length(R, S)
+    ccall((:xcb_xkb_set_map_values_vmods_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_vmods_end(R, S)
+    ccall((:xcb_xkb_set_map_values_vmods_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_explicit(S)
+    ccall((:xcb_xkb_set_map_values_explicit, libxcb_xkb), Ptr{xcb_xkb_set_explicit_t}, (Ptr{xcb_xkb_set_map_values_t},), S)
+end
+
+function xcb_xkb_set_map_values_explicit_length(R, S)
+    ccall((:xcb_xkb_set_map_values_explicit_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_explicit_iterator(R, S)
+    ccall((:xcb_xkb_set_map_values_explicit_iterator, libxcb_xkb), xcb_xkb_set_explicit_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_modmap(S)
+    ccall((:xcb_xkb_set_map_values_modmap, libxcb_xkb), Ptr{xcb_xkb_key_mod_map_t}, (Ptr{xcb_xkb_set_map_values_t},), S)
+end
+
+function xcb_xkb_set_map_values_modmap_length(R, S)
+    ccall((:xcb_xkb_set_map_values_modmap_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_modmap_iterator(R, S)
+    ccall((:xcb_xkb_set_map_values_modmap_iterator, libxcb_xkb), xcb_xkb_key_mod_map_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_vmodmap(S)
+    ccall((:xcb_xkb_set_map_values_vmodmap, libxcb_xkb), Ptr{xcb_xkb_key_v_mod_map_t}, (Ptr{xcb_xkb_set_map_values_t},), S)
+end
+
+function xcb_xkb_set_map_values_vmodmap_length(R, S)
+    ccall((:xcb_xkb_set_map_values_vmodmap_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_vmodmap_iterator(R, S)
+    ccall((:xcb_xkb_set_map_values_vmodmap_iterator, libxcb_xkb), xcb_xkb_key_v_mod_map_iterator_t, (Ptr{xcb_xkb_set_map_request_t}, Ptr{xcb_xkb_set_map_values_t}), R, S)
+end
+
+function xcb_xkb_set_map_values_serialize(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+    ccall((:xcb_xkb_set_map_values_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16, Ptr{xcb_xkb_set_map_values_t}), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+end
+
+function xcb_xkb_set_map_values_unpack(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+    ccall((:xcb_xkb_set_map_values_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16, Ptr{xcb_xkb_set_map_values_t}), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+end
+
+function xcb_xkb_set_map_values_sizeof(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present)
+    ccall((:xcb_xkb_set_map_values_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present)
+end
+
+function xcb_xkb_set_map_sizeof(_buffer)
+    ccall((:xcb_xkb_set_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_set_map_checked(c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+    ccall((:xcb_xkb_set_map_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, xcb_keycode_t, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{Cvoid}), c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+end
+
+function xcb_xkb_set_map(c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+    ccall((:xcb_xkb_set_map, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, xcb_keycode_t, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{Cvoid}), c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+end
+
+function xcb_xkb_set_map_aux_checked(c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+    ccall((:xcb_xkb_set_map_aux_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, xcb_keycode_t, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{xcb_xkb_set_map_values_t}), c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+end
+
+function xcb_xkb_set_map_aux(c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+    ccall((:xcb_xkb_set_map_aux, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, xcb_keycode_t, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt16, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{xcb_xkb_set_map_values_t}), c, deviceSpec, present, flags, minKeyCode, maxKeyCode, firstType, nTypes, firstKeySym, nKeySyms, totalSyms, firstKeyAction, nKeyActions, totalActions, firstKeyBehavior, nKeyBehaviors, totalKeyBehaviors, firstKeyExplicit, nKeyExplicit, totalKeyExplicit, firstModMapKey, nModMapKeys, totalModMapKeys, firstVModMapKey, nVModMapKeys, totalVModMapKeys, virtualMods, values)
+end
+
+function xcb_xkb_set_map_values(R)
+    ccall((:xcb_xkb_set_map_values, libxcb_xkb), Ptr{Cvoid}, (Ptr{xcb_xkb_set_map_request_t},), R)
+end
+
+function xcb_xkb_get_compat_map_sizeof(_buffer)
+    ccall((:xcb_xkb_get_compat_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_get_compat_map(c, deviceSpec, groups, getAllSI, firstSI, nSI)
+    ccall((:xcb_xkb_get_compat_map, libxcb_xkb), xcb_xkb_get_compat_map_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt16, UInt16), c, deviceSpec, groups, getAllSI, firstSI, nSI)
+end
+
+function xcb_xkb_get_compat_map_unchecked(c, deviceSpec, groups, getAllSI, firstSI, nSI)
+    ccall((:xcb_xkb_get_compat_map_unchecked, libxcb_xkb), xcb_xkb_get_compat_map_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt16, UInt16), c, deviceSpec, groups, getAllSI, firstSI, nSI)
+end
+
+function xcb_xkb_get_compat_map_si_rtrn(R)
+    ccall((:xcb_xkb_get_compat_map_si_rtrn, libxcb_xkb), Ptr{xcb_xkb_sym_interpret_t}, (Ptr{xcb_xkb_get_compat_map_reply_t},), R)
+end
+
+function xcb_xkb_get_compat_map_si_rtrn_length(R)
+    ccall((:xcb_xkb_get_compat_map_si_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_compat_map_reply_t},), R)
+end
+
+function xcb_xkb_get_compat_map_si_rtrn_iterator(R)
+    ccall((:xcb_xkb_get_compat_map_si_rtrn_iterator, libxcb_xkb), xcb_xkb_sym_interpret_iterator_t, (Ptr{xcb_xkb_get_compat_map_reply_t},), R)
+end
+
+function xcb_xkb_get_compat_map_group_rtrn(R)
+    ccall((:xcb_xkb_get_compat_map_group_rtrn, libxcb_xkb), Ptr{xcb_xkb_mod_def_t}, (Ptr{xcb_xkb_get_compat_map_reply_t},), R)
+end
+
+function xcb_xkb_get_compat_map_group_rtrn_length(R)
+    ccall((:xcb_xkb_get_compat_map_group_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_compat_map_reply_t},), R)
+end
+
+function xcb_xkb_get_compat_map_group_rtrn_iterator(R)
+    ccall((:xcb_xkb_get_compat_map_group_rtrn_iterator, libxcb_xkb), xcb_xkb_mod_def_iterator_t, (Ptr{xcb_xkb_get_compat_map_reply_t},), R)
+end
+
+function xcb_xkb_get_compat_map_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_compat_map_reply, libxcb_xkb), Ptr{xcb_xkb_get_compat_map_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_compat_map_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_set_compat_map_sizeof(_buffer)
+    ccall((:xcb_xkb_set_compat_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_set_compat_map_checked(c, deviceSpec, recomputeActions, truncateSI, groups, firstSI, nSI, si, groupMaps)
+    ccall((:xcb_xkb_set_compat_map_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt8, UInt16, UInt16, Ptr{xcb_xkb_sym_interpret_t}, Ptr{xcb_xkb_mod_def_t}), c, deviceSpec, recomputeActions, truncateSI, groups, firstSI, nSI, si, groupMaps)
+end
+
+function xcb_xkb_set_compat_map(c, deviceSpec, recomputeActions, truncateSI, groups, firstSI, nSI, si, groupMaps)
+    ccall((:xcb_xkb_set_compat_map, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt8, UInt16, UInt16, Ptr{xcb_xkb_sym_interpret_t}, Ptr{xcb_xkb_mod_def_t}), c, deviceSpec, recomputeActions, truncateSI, groups, firstSI, nSI, si, groupMaps)
+end
+
+function xcb_xkb_set_compat_map_si(R)
+    ccall((:xcb_xkb_set_compat_map_si, libxcb_xkb), Ptr{xcb_xkb_sym_interpret_t}, (Ptr{xcb_xkb_set_compat_map_request_t},), R)
+end
+
+function xcb_xkb_set_compat_map_si_length(R)
+    ccall((:xcb_xkb_set_compat_map_si_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_compat_map_request_t},), R)
+end
+
+function xcb_xkb_set_compat_map_si_iterator(R)
+    ccall((:xcb_xkb_set_compat_map_si_iterator, libxcb_xkb), xcb_xkb_sym_interpret_iterator_t, (Ptr{xcb_xkb_set_compat_map_request_t},), R)
+end
+
+function xcb_xkb_set_compat_map_group_maps(R)
+    ccall((:xcb_xkb_set_compat_map_group_maps, libxcb_xkb), Ptr{xcb_xkb_mod_def_t}, (Ptr{xcb_xkb_set_compat_map_request_t},), R)
+end
+
+function xcb_xkb_set_compat_map_group_maps_length(R)
+    ccall((:xcb_xkb_set_compat_map_group_maps_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_compat_map_request_t},), R)
+end
+
+function xcb_xkb_set_compat_map_group_maps_iterator(R)
+    ccall((:xcb_xkb_set_compat_map_group_maps_iterator, libxcb_xkb), xcb_xkb_mod_def_iterator_t, (Ptr{xcb_xkb_set_compat_map_request_t},), R)
+end
+
+function xcb_xkb_get_indicator_state(c, deviceSpec)
+    ccall((:xcb_xkb_get_indicator_state, libxcb_xkb), xcb_xkb_get_indicator_state_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t), c, deviceSpec)
+end
+
+function xcb_xkb_get_indicator_state_unchecked(c, deviceSpec)
+    ccall((:xcb_xkb_get_indicator_state_unchecked, libxcb_xkb), xcb_xkb_get_indicator_state_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t), c, deviceSpec)
+end
+
+function xcb_xkb_get_indicator_state_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_indicator_state_reply, libxcb_xkb), Ptr{xcb_xkb_get_indicator_state_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_indicator_state_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_get_indicator_map_sizeof(_buffer)
+    ccall((:xcb_xkb_get_indicator_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_get_indicator_map(c, deviceSpec, which)
+    ccall((:xcb_xkb_get_indicator_map, libxcb_xkb), xcb_xkb_get_indicator_map_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32), c, deviceSpec, which)
+end
+
+function xcb_xkb_get_indicator_map_unchecked(c, deviceSpec, which)
+    ccall((:xcb_xkb_get_indicator_map_unchecked, libxcb_xkb), xcb_xkb_get_indicator_map_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32), c, deviceSpec, which)
+end
+
+function xcb_xkb_get_indicator_map_maps(R)
+    ccall((:xcb_xkb_get_indicator_map_maps, libxcb_xkb), Ptr{xcb_xkb_indicator_map_t}, (Ptr{xcb_xkb_get_indicator_map_reply_t},), R)
+end
+
+function xcb_xkb_get_indicator_map_maps_length(R)
+    ccall((:xcb_xkb_get_indicator_map_maps_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_indicator_map_reply_t},), R)
+end
+
+function xcb_xkb_get_indicator_map_maps_iterator(R)
+    ccall((:xcb_xkb_get_indicator_map_maps_iterator, libxcb_xkb), xcb_xkb_indicator_map_iterator_t, (Ptr{xcb_xkb_get_indicator_map_reply_t},), R)
+end
+
+function xcb_xkb_get_indicator_map_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_indicator_map_reply, libxcb_xkb), Ptr{xcb_xkb_get_indicator_map_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_indicator_map_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_set_indicator_map_sizeof(_buffer)
+    ccall((:xcb_xkb_set_indicator_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_set_indicator_map_checked(c, deviceSpec, which, maps)
+    ccall((:xcb_xkb_set_indicator_map_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32, Ptr{xcb_xkb_indicator_map_t}), c, deviceSpec, which, maps)
+end
+
+function xcb_xkb_set_indicator_map(c, deviceSpec, which, maps)
+    ccall((:xcb_xkb_set_indicator_map, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32, Ptr{xcb_xkb_indicator_map_t}), c, deviceSpec, which, maps)
+end
+
+function xcb_xkb_set_indicator_map_maps(R)
+    ccall((:xcb_xkb_set_indicator_map_maps, libxcb_xkb), Ptr{xcb_xkb_indicator_map_t}, (Ptr{xcb_xkb_set_indicator_map_request_t},), R)
+end
+
+function xcb_xkb_set_indicator_map_maps_length(R)
+    ccall((:xcb_xkb_set_indicator_map_maps_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_indicator_map_request_t},), R)
+end
+
+function xcb_xkb_set_indicator_map_maps_iterator(R)
+    ccall((:xcb_xkb_set_indicator_map_maps_iterator, libxcb_xkb), xcb_xkb_indicator_map_iterator_t, (Ptr{xcb_xkb_set_indicator_map_request_t},), R)
+end
+
+function xcb_xkb_get_named_indicator(c, deviceSpec, ledClass, ledID, indicator)
+    ccall((:xcb_xkb_get_named_indicator, libxcb_xkb), xcb_xkb_get_named_indicator_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, xcb_xkb_led_class_spec_t, xcb_xkb_id_spec_t, xcb_atom_t), c, deviceSpec, ledClass, ledID, indicator)
+end
+
+function xcb_xkb_get_named_indicator_unchecked(c, deviceSpec, ledClass, ledID, indicator)
+    ccall((:xcb_xkb_get_named_indicator_unchecked, libxcb_xkb), xcb_xkb_get_named_indicator_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, xcb_xkb_led_class_spec_t, xcb_xkb_id_spec_t, xcb_atom_t), c, deviceSpec, ledClass, ledID, indicator)
+end
+
+function xcb_xkb_get_named_indicator_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_named_indicator_reply, libxcb_xkb), Ptr{xcb_xkb_get_named_indicator_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_named_indicator_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_set_named_indicator_checked(c, deviceSpec, ledClass, ledID, indicator, setState, on, setMap, createMap, map_flags, map_whichGroups, map_groups, map_whichMods, map_realMods, map_vmods, map_ctrls)
+    ccall((:xcb_xkb_set_named_indicator_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, xcb_xkb_led_class_spec_t, xcb_xkb_id_spec_t, xcb_atom_t, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt16, UInt32), c, deviceSpec, ledClass, ledID, indicator, setState, on, setMap, createMap, map_flags, map_whichGroups, map_groups, map_whichMods, map_realMods, map_vmods, map_ctrls)
+end
+
+function xcb_xkb_set_named_indicator(c, deviceSpec, ledClass, ledID, indicator, setState, on, setMap, createMap, map_flags, map_whichGroups, map_groups, map_whichMods, map_realMods, map_vmods, map_ctrls)
+    ccall((:xcb_xkb_set_named_indicator, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, xcb_xkb_led_class_spec_t, xcb_xkb_id_spec_t, xcb_atom_t, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt8, UInt16, UInt32), c, deviceSpec, ledClass, ledID, indicator, setState, on, setMap, createMap, map_flags, map_whichGroups, map_groups, map_whichMods, map_realMods, map_vmods, map_ctrls)
+end
+
+function xcb_xkb_get_names_value_list_type_names(S)
+    ccall((:xcb_xkb_get_names_value_list_type_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_type_names_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_type_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_type_names_end(R, S)
+    ccall((:xcb_xkb_get_names_value_list_type_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_n_levels_per_type(S)
+    ccall((:xcb_xkb_get_names_value_list_n_levels_per_type, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_n_levels_per_type_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_n_levels_per_type_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_n_levels_per_type_end(R, S)
+    ccall((:xcb_xkb_get_names_value_list_n_levels_per_type_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_kt_level_names(S)
+    ccall((:xcb_xkb_get_names_value_list_kt_level_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_kt_level_names_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_kt_level_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_kt_level_names_end(R, S)
+    ccall((:xcb_xkb_get_names_value_list_kt_level_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_indicator_names(S)
+    ccall((:xcb_xkb_get_names_value_list_indicator_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_indicator_names_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_indicator_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_indicator_names_end(R, S)
+    ccall((:xcb_xkb_get_names_value_list_indicator_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_virtual_mod_names(S)
+    ccall((:xcb_xkb_get_names_value_list_virtual_mod_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_virtual_mod_names_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_virtual_mod_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_virtual_mod_names_end(R, S)
+    ccall((:xcb_xkb_get_names_value_list_virtual_mod_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_groups(S)
+    ccall((:xcb_xkb_get_names_value_list_groups, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_groups_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_groups_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_groups_end(R, S)
+    ccall((:xcb_xkb_get_names_value_list_groups_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_key_names(S)
+    ccall((:xcb_xkb_get_names_value_list_key_names, libxcb_xkb), Ptr{xcb_xkb_key_name_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_key_names_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_key_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_key_names_iterator(R, S)
+    ccall((:xcb_xkb_get_names_value_list_key_names_iterator, libxcb_xkb), xcb_xkb_key_name_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_key_aliases(S)
+    ccall((:xcb_xkb_get_names_value_list_key_aliases, libxcb_xkb), Ptr{xcb_xkb_key_alias_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_key_aliases_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_key_aliases_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_key_aliases_iterator(R, S)
+    ccall((:xcb_xkb_get_names_value_list_key_aliases_iterator, libxcb_xkb), xcb_xkb_key_alias_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_radio_group_names(S)
+    ccall((:xcb_xkb_get_names_value_list_radio_group_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_names_value_list_t},), S)
+end
+
+function xcb_xkb_get_names_value_list_radio_group_names_length(R, S)
+    ccall((:xcb_xkb_get_names_value_list_radio_group_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_radio_group_names_end(R, S)
+    ccall((:xcb_xkb_get_names_value_list_radio_group_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_names_reply_t}, Ptr{xcb_xkb_get_names_value_list_t}), R, S)
+end
+
+function xcb_xkb_get_names_value_list_serialize(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+    ccall((:xcb_xkb_get_names_value_list_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32, Ptr{xcb_xkb_get_names_value_list_t}), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+end
+
+function xcb_xkb_get_names_value_list_unpack(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+    ccall((:xcb_xkb_get_names_value_list_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32, Ptr{xcb_xkb_get_names_value_list_t}), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+end
+
+function xcb_xkb_get_names_value_list_sizeof(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which)
+    ccall((:xcb_xkb_get_names_value_list_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which)
+end
+
+function xcb_xkb_get_names_sizeof(_buffer)
+    ccall((:xcb_xkb_get_names_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_get_names(c, deviceSpec, which)
+    ccall((:xcb_xkb_get_names, libxcb_xkb), xcb_xkb_get_names_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32), c, deviceSpec, which)
+end
+
+function xcb_xkb_get_names_unchecked(c, deviceSpec, which)
+    ccall((:xcb_xkb_get_names_unchecked, libxcb_xkb), xcb_xkb_get_names_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32), c, deviceSpec, which)
+end
+
+function xcb_xkb_get_names_value_list(R)
+    ccall((:xcb_xkb_get_names_value_list, libxcb_xkb), Ptr{Cvoid}, (Ptr{xcb_xkb_get_names_reply_t},), R)
+end
+
+function xcb_xkb_get_names_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_names_reply, libxcb_xkb), Ptr{xcb_xkb_get_names_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_names_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_set_names_values_type_names(S)
+    ccall((:xcb_xkb_set_names_values_type_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_type_names_length(R, S)
+    ccall((:xcb_xkb_set_names_values_type_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_type_names_end(R, S)
+    ccall((:xcb_xkb_set_names_values_type_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_n_levels_per_type(S)
+    ccall((:xcb_xkb_set_names_values_n_levels_per_type, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_n_levels_per_type_length(R, S)
+    ccall((:xcb_xkb_set_names_values_n_levels_per_type_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_n_levels_per_type_end(R, S)
+    ccall((:xcb_xkb_set_names_values_n_levels_per_type_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_kt_level_names(S)
+    ccall((:xcb_xkb_set_names_values_kt_level_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_kt_level_names_length(R, S)
+    ccall((:xcb_xkb_set_names_values_kt_level_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_kt_level_names_end(R, S)
+    ccall((:xcb_xkb_set_names_values_kt_level_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_indicator_names(S)
+    ccall((:xcb_xkb_set_names_values_indicator_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_indicator_names_length(R, S)
+    ccall((:xcb_xkb_set_names_values_indicator_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_indicator_names_end(R, S)
+    ccall((:xcb_xkb_set_names_values_indicator_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_virtual_mod_names(S)
+    ccall((:xcb_xkb_set_names_values_virtual_mod_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_virtual_mod_names_length(R, S)
+    ccall((:xcb_xkb_set_names_values_virtual_mod_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_virtual_mod_names_end(R, S)
+    ccall((:xcb_xkb_set_names_values_virtual_mod_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_groups(S)
+    ccall((:xcb_xkb_set_names_values_groups, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_groups_length(R, S)
+    ccall((:xcb_xkb_set_names_values_groups_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_groups_end(R, S)
+    ccall((:xcb_xkb_set_names_values_groups_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_key_names(S)
+    ccall((:xcb_xkb_set_names_values_key_names, libxcb_xkb), Ptr{xcb_xkb_key_name_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_key_names_length(R, S)
+    ccall((:xcb_xkb_set_names_values_key_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_key_names_iterator(R, S)
+    ccall((:xcb_xkb_set_names_values_key_names_iterator, libxcb_xkb), xcb_xkb_key_name_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_key_aliases(S)
+    ccall((:xcb_xkb_set_names_values_key_aliases, libxcb_xkb), Ptr{xcb_xkb_key_alias_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_key_aliases_length(R, S)
+    ccall((:xcb_xkb_set_names_values_key_aliases_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_key_aliases_iterator(R, S)
+    ccall((:xcb_xkb_set_names_values_key_aliases_iterator, libxcb_xkb), xcb_xkb_key_alias_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_radio_group_names(S)
+    ccall((:xcb_xkb_set_names_values_radio_group_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_set_names_values_t},), S)
+end
+
+function xcb_xkb_set_names_values_radio_group_names_length(R, S)
+    ccall((:xcb_xkb_set_names_values_radio_group_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_radio_group_names_end(R, S)
+    ccall((:xcb_xkb_set_names_values_radio_group_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_set_names_request_t}, Ptr{xcb_xkb_set_names_values_t}), R, S)
+end
+
+function xcb_xkb_set_names_values_serialize(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+    ccall((:xcb_xkb_set_names_values_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32, Ptr{xcb_xkb_set_names_values_t}), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+end
+
+function xcb_xkb_set_names_values_unpack(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+    ccall((:xcb_xkb_set_names_values_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32, Ptr{xcb_xkb_set_names_values_t}), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+end
+
+function xcb_xkb_set_names_values_sizeof(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which)
+    ccall((:xcb_xkb_set_names_values_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which)
+end
+
+function xcb_xkb_set_names_sizeof(_buffer)
+    ccall((:xcb_xkb_set_names_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_set_names_checked(c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+    ccall((:xcb_xkb_set_names_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt32, UInt8, UInt8, UInt8, UInt8, UInt32, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{Cvoid}), c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+end
+
+function xcb_xkb_set_names(c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+    ccall((:xcb_xkb_set_names, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt32, UInt8, UInt8, UInt8, UInt8, UInt32, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{Cvoid}), c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+end
+
+function xcb_xkb_set_names_aux_checked(c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+    ccall((:xcb_xkb_set_names_aux_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt32, UInt8, UInt8, UInt8, UInt8, UInt32, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{xcb_xkb_set_names_values_t}), c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+end
+
+function xcb_xkb_set_names_aux(c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+    ccall((:xcb_xkb_set_names_aux, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt32, UInt8, UInt8, UInt8, UInt8, UInt32, UInt8, UInt8, xcb_keycode_t, UInt8, UInt8, UInt16, Ptr{xcb_xkb_set_names_values_t}), c, deviceSpec, virtualMods, which, firstType, nTypes, firstKTLevelt, nKTLevels, indicators, groupNames, nRadioGroups, firstKey, nKeys, nKeyAliases, totalKTLevelNames, values)
+end
+
+function xcb_xkb_set_names_values(R)
+    ccall((:xcb_xkb_set_names_values, libxcb_xkb), Ptr{Cvoid}, (Ptr{xcb_xkb_set_names_request_t},), R)
+end
+
+function xcb_xkb_per_client_flags(c, deviceSpec, change, value, ctrlsToChange, autoCtrls, autoCtrlsValues)
+    ccall((:xcb_xkb_per_client_flags, libxcb_xkb), xcb_xkb_per_client_flags_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32, UInt32, UInt32, UInt32, UInt32), c, deviceSpec, change, value, ctrlsToChange, autoCtrls, autoCtrlsValues)
+end
+
+function xcb_xkb_per_client_flags_unchecked(c, deviceSpec, change, value, ctrlsToChange, autoCtrls, autoCtrlsValues)
+    ccall((:xcb_xkb_per_client_flags_unchecked, libxcb_xkb), xcb_xkb_per_client_flags_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt32, UInt32, UInt32, UInt32, UInt32), c, deviceSpec, change, value, ctrlsToChange, autoCtrls, autoCtrlsValues)
+end
+
+function xcb_xkb_per_client_flags_reply(c, cookie, e)
+    ccall((:xcb_xkb_per_client_flags_reply, libxcb_xkb), Ptr{xcb_xkb_per_client_flags_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_per_client_flags_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_list_components_sizeof(_buffer)
+    ccall((:xcb_xkb_list_components_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_list_components(c, deviceSpec, maxNames)
+    ccall((:xcb_xkb_list_components, libxcb_xkb), xcb_xkb_list_components_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16), c, deviceSpec, maxNames)
+end
+
+function xcb_xkb_list_components_unchecked(c, deviceSpec, maxNames)
+    ccall((:xcb_xkb_list_components_unchecked, libxcb_xkb), xcb_xkb_list_components_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16), c, deviceSpec, maxNames)
+end
+
+function xcb_xkb_list_components_keymaps_length(R)
+    ccall((:xcb_xkb_list_components_keymaps_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_keymaps_iterator(R)
+    ccall((:xcb_xkb_list_components_keymaps_iterator, libxcb_xkb), xcb_xkb_listing_iterator_t, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_keycodes_length(R)
+    ccall((:xcb_xkb_list_components_keycodes_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_keycodes_iterator(R)
+    ccall((:xcb_xkb_list_components_keycodes_iterator, libxcb_xkb), xcb_xkb_listing_iterator_t, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_types_length(R)
+    ccall((:xcb_xkb_list_components_types_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_types_iterator(R)
+    ccall((:xcb_xkb_list_components_types_iterator, libxcb_xkb), xcb_xkb_listing_iterator_t, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_compat_maps_length(R)
+    ccall((:xcb_xkb_list_components_compat_maps_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_compat_maps_iterator(R)
+    ccall((:xcb_xkb_list_components_compat_maps_iterator, libxcb_xkb), xcb_xkb_listing_iterator_t, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_symbols_length(R)
+    ccall((:xcb_xkb_list_components_symbols_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_symbols_iterator(R)
+    ccall((:xcb_xkb_list_components_symbols_iterator, libxcb_xkb), xcb_xkb_listing_iterator_t, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_geometries_length(R)
+    ccall((:xcb_xkb_list_components_geometries_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_geometries_iterator(R)
+    ccall((:xcb_xkb_list_components_geometries_iterator, libxcb_xkb), xcb_xkb_listing_iterator_t, (Ptr{xcb_xkb_list_components_reply_t},), R)
+end
+
+function xcb_xkb_list_components_reply(c, cookie, e)
+    ccall((:xcb_xkb_list_components_reply, libxcb_xkb), Ptr{xcb_xkb_list_components_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_list_components_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_types_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_types_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_types_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_types_rtrn_iterator, libxcb_xkb), xcb_xkb_key_type_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_syms_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_syms_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_syms_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_syms_rtrn_iterator, libxcb_xkb), xcb_xkb_key_sym_map_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_count(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_count, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_count_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_count_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_count_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_count_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_acts(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_acts, libxcb_xkb), Ptr{xcb_xkb_action_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_acts_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_acts_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_acts_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_acts_rtrn_acts_iterator, libxcb_xkb), xcb_xkb_action_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_behaviors_rtrn(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_behaviors_rtrn, libxcb_xkb), Ptr{xcb_xkb_set_behavior_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_behaviors_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_behaviors_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_behaviors_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_behaviors_rtrn_iterator, libxcb_xkb), xcb_xkb_set_behavior_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_vmods_rtrn(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_vmods_rtrn, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_vmods_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_vmods_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_vmods_rtrn_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_vmods_rtrn_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_explicit_rtrn(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_explicit_rtrn, libxcb_xkb), Ptr{xcb_xkb_set_explicit_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_explicit_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_explicit_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_explicit_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_explicit_rtrn_iterator, libxcb_xkb), xcb_xkb_set_explicit_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_modmap_rtrn(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_modmap_rtrn, libxcb_xkb), Ptr{xcb_xkb_key_mod_map_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_modmap_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_modmap_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_modmap_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_modmap_rtrn_iterator, libxcb_xkb), xcb_xkb_key_mod_map_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_vmodmap_rtrn(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_vmodmap_rtrn, libxcb_xkb), Ptr{xcb_xkb_key_v_mod_map_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_vmodmap_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_vmodmap_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_vmodmap_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_vmodmap_rtrn_iterator, libxcb_xkb), xcb_xkb_key_v_mod_map_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_serialize(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16, Ptr{xcb_xkb_get_kbd_by_name_replies_types_map_t}), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_unpack(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16, Ptr{xcb_xkb_get_kbd_by_name_replies_types_map_t}), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present, _aux)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_types_map_sizeof(_buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_types_map_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt8, UInt8, UInt16, UInt8, UInt16, UInt8, UInt8, UInt8, UInt16), _buffer, nTypes, nKeySyms, nKeyActions, totalActions, totalKeyBehaviors, virtualMods, totalKeyExplicit, totalModMapKeys, totalVModMapKeys, present)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_type_names(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_type_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_type_names_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_type_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_type_names_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_type_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_n_levels_per_type(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_n_levels_per_type, libxcb_xkb), Ptr{UInt8}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_n_levels_per_type_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_n_levels_per_type_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_n_levels_per_type_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_n_levels_per_type_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_kt_level_names(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_kt_level_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_kt_level_names_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_kt_level_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_kt_level_names_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_kt_level_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_indicator_names(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_indicator_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_indicator_names_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_indicator_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_indicator_names_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_indicator_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_virtual_mod_names(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_virtual_mod_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_virtual_mod_names_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_virtual_mod_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_virtual_mod_names_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_virtual_mod_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_groups(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_groups, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_groups_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_groups_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_groups_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_groups_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_names(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_names, libxcb_xkb), Ptr{xcb_xkb_key_name_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_names_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_names_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_names_iterator, libxcb_xkb), xcb_xkb_key_name_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_aliases(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_aliases, libxcb_xkb), Ptr{xcb_xkb_key_alias_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_aliases_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_aliases_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_aliases_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_key_aliases_iterator, libxcb_xkb), xcb_xkb_key_alias_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_radio_group_names(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_radio_group_names, libxcb_xkb), Ptr{xcb_atom_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_radio_group_names_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_radio_group_names_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_radio_group_names_end(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_radio_group_names_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_serialize(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32, Ptr{xcb_xkb_get_kbd_by_name_replies_key_names_value_list_t}), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_unpack(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32, Ptr{xcb_xkb_get_kbd_by_name_replies_key_names_value_list_t}), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which, _aux)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list_sizeof(_buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt8, UInt32, UInt16, UInt8, UInt8, UInt8, UInt8, UInt32), _buffer, nTypes, indicators, virtualMods, groupNames, nKeys, nKeyAliases, nRadioGroups, which)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_compat_map_si_rtrn(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_compat_map_si_rtrn, libxcb_xkb), Ptr{xcb_xkb_sym_interpret_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_compat_map_si_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_compat_map_si_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_compat_map_si_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_compat_map_si_rtrn_iterator, libxcb_xkb), xcb_xkb_sym_interpret_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_compat_map_group_rtrn(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_compat_map_group_rtrn, libxcb_xkb), Ptr{xcb_xkb_mod_def_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_compat_map_group_rtrn_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_compat_map_group_rtrn_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_compat_map_group_rtrn_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_compat_map_group_rtrn_iterator, libxcb_xkb), xcb_xkb_mod_def_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_indicator_maps_maps(S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_indicator_maps_maps, libxcb_xkb), Ptr{xcb_xkb_indicator_map_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_indicator_maps_maps_length(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_indicator_maps_maps_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_indicator_maps_maps_iterator(R, S)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_indicator_maps_maps_iterator, libxcb_xkb), xcb_xkb_indicator_map_iterator_t, (Ptr{xcb_xkb_get_kbd_by_name_reply_t}, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), R, S)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_key_names_value_list(R)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_key_names_value_list, libxcb_xkb), Ptr{xcb_xkb_get_kbd_by_name_replies_key_names_value_list_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), R)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_geometry_label_font(R)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_geometry_label_font, libxcb_xkb), Ptr{xcb_xkb_counted_string_16_t}, (Ptr{xcb_xkb_get_kbd_by_name_replies_t},), R)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_serialize(_buffer, reported, _aux)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_serialize, libxcb_xkb), Cint, (Ptr{Ptr{Cvoid}}, UInt16, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), _buffer, reported, _aux)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_unpack(_buffer, reported, _aux)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_unpack, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt16, Ptr{xcb_xkb_get_kbd_by_name_replies_t}), _buffer, reported, _aux)
+end
+
+function xcb_xkb_get_kbd_by_name_replies_sizeof(_buffer, reported)
+    ccall((:xcb_xkb_get_kbd_by_name_replies_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid}, UInt16), _buffer, reported)
+end
+
+function xcb_xkb_get_kbd_by_name_sizeof(_buffer)
+    ccall((:xcb_xkb_get_kbd_by_name_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_get_kbd_by_name(c, deviceSpec, need, want, load)
+    ccall((:xcb_xkb_get_kbd_by_name, libxcb_xkb), xcb_xkb_get_kbd_by_name_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt8), c, deviceSpec, need, want, load)
+end
+
+function xcb_xkb_get_kbd_by_name_unchecked(c, deviceSpec, need, want, load)
+    ccall((:xcb_xkb_get_kbd_by_name_unchecked, libxcb_xkb), xcb_xkb_get_kbd_by_name_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt16, UInt8), c, deviceSpec, need, want, load)
+end
+
+function xcb_xkb_get_kbd_by_name_replies(R)
+    ccall((:xcb_xkb_get_kbd_by_name_replies, libxcb_xkb), Ptr{Cvoid}, (Ptr{xcb_xkb_get_kbd_by_name_reply_t},), R)
+end
+
+function xcb_xkb_get_kbd_by_name_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_kbd_by_name_reply, libxcb_xkb), Ptr{xcb_xkb_get_kbd_by_name_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_kbd_by_name_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_get_device_info_sizeof(_buffer)
+    ccall((:xcb_xkb_get_device_info_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_get_device_info(c, deviceSpec, wanted, allButtons, firstButton, nButtons, ledClass, ledID)
+    ccall((:xcb_xkb_get_device_info, libxcb_xkb), xcb_xkb_get_device_info_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt8, UInt8, UInt8, xcb_xkb_led_class_spec_t, xcb_xkb_id_spec_t), c, deviceSpec, wanted, allButtons, firstButton, nButtons, ledClass, ledID)
+end
+
+function xcb_xkb_get_device_info_unchecked(c, deviceSpec, wanted, allButtons, firstButton, nButtons, ledClass, ledID)
+    ccall((:xcb_xkb_get_device_info_unchecked, libxcb_xkb), xcb_xkb_get_device_info_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt16, UInt8, UInt8, UInt8, xcb_xkb_led_class_spec_t, xcb_xkb_id_spec_t), c, deviceSpec, wanted, allButtons, firstButton, nButtons, ledClass, ledID)
+end
+
+function xcb_xkb_get_device_info_name(R)
+    ccall((:xcb_xkb_get_device_info_name, libxcb_xkb), Ptr{xcb_xkb_string8_t}, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_name_length(R)
+    ccall((:xcb_xkb_get_device_info_name_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_name_end(R)
+    ccall((:xcb_xkb_get_device_info_name_end, libxcb_xkb), xcb_generic_iterator_t, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_btn_actions(R)
+    ccall((:xcb_xkb_get_device_info_btn_actions, libxcb_xkb), Ptr{xcb_xkb_action_t}, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_btn_actions_length(R)
+    ccall((:xcb_xkb_get_device_info_btn_actions_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_btn_actions_iterator(R)
+    ccall((:xcb_xkb_get_device_info_btn_actions_iterator, libxcb_xkb), xcb_xkb_action_iterator_t, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_leds_length(R)
+    ccall((:xcb_xkb_get_device_info_leds_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_leds_iterator(R)
+    ccall((:xcb_xkb_get_device_info_leds_iterator, libxcb_xkb), xcb_xkb_device_led_info_iterator_t, (Ptr{xcb_xkb_get_device_info_reply_t},), R)
+end
+
+function xcb_xkb_get_device_info_reply(c, cookie, e)
+    ccall((:xcb_xkb_get_device_info_reply, libxcb_xkb), Ptr{xcb_xkb_get_device_info_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_get_device_info_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
+end
+
+function xcb_xkb_set_device_info_sizeof(_buffer)
+    ccall((:xcb_xkb_set_device_info_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_set_device_info_checked(c, deviceSpec, firstBtn, nBtns, change, nDeviceLedFBs, btnActions, leds)
+    ccall((:xcb_xkb_set_device_info_checked, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt16, UInt16, Ptr{xcb_xkb_action_t}, Ptr{xcb_xkb_device_led_info_t}), c, deviceSpec, firstBtn, nBtns, change, nDeviceLedFBs, btnActions, leds)
+end
+
+function xcb_xkb_set_device_info(c, deviceSpec, firstBtn, nBtns, change, nDeviceLedFBs, btnActions, leds)
+    ccall((:xcb_xkb_set_device_info, libxcb_xkb), xcb_void_cookie_t, (Ptr{xcb_connection_t}, xcb_xkb_device_spec_t, UInt8, UInt8, UInt16, UInt16, Ptr{xcb_xkb_action_t}, Ptr{xcb_xkb_device_led_info_t}), c, deviceSpec, firstBtn, nBtns, change, nDeviceLedFBs, btnActions, leds)
+end
+
+function xcb_xkb_set_device_info_btn_actions(R)
+    ccall((:xcb_xkb_set_device_info_btn_actions, libxcb_xkb), Ptr{xcb_xkb_action_t}, (Ptr{xcb_xkb_set_device_info_request_t},), R)
+end
+
+function xcb_xkb_set_device_info_btn_actions_length(R)
+    ccall((:xcb_xkb_set_device_info_btn_actions_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_device_info_request_t},), R)
+end
+
+function xcb_xkb_set_device_info_btn_actions_iterator(R)
+    ccall((:xcb_xkb_set_device_info_btn_actions_iterator, libxcb_xkb), xcb_xkb_action_iterator_t, (Ptr{xcb_xkb_set_device_info_request_t},), R)
+end
+
+function xcb_xkb_set_device_info_leds_length(R)
+    ccall((:xcb_xkb_set_device_info_leds_length, libxcb_xkb), Cint, (Ptr{xcb_xkb_set_device_info_request_t},), R)
+end
+
+function xcb_xkb_set_device_info_leds_iterator(R)
+    ccall((:xcb_xkb_set_device_info_leds_iterator, libxcb_xkb), xcb_xkb_device_led_info_iterator_t, (Ptr{xcb_xkb_set_device_info_request_t},), R)
+end
+
+function xcb_xkb_set_debugging_flags_sizeof(_buffer)
+    ccall((:xcb_xkb_set_debugging_flags_sizeof, libxcb_xkb), Cint, (Ptr{Cvoid},), _buffer)
+end
+
+function xcb_xkb_set_debugging_flags(c, msgLength, affectFlags, flags, affectCtrls, ctrls, message)
+    ccall((:xcb_xkb_set_debugging_flags, libxcb_xkb), xcb_xkb_set_debugging_flags_cookie_t, (Ptr{xcb_connection_t}, UInt16, UInt32, UInt32, UInt32, UInt32, Ptr{xcb_xkb_string8_t}), c, msgLength, affectFlags, flags, affectCtrls, ctrls, message)
+end
+
+function xcb_xkb_set_debugging_flags_unchecked(c, msgLength, affectFlags, flags, affectCtrls, ctrls, message)
+    ccall((:xcb_xkb_set_debugging_flags_unchecked, libxcb_xkb), xcb_xkb_set_debugging_flags_cookie_t, (Ptr{xcb_connection_t}, UInt16, UInt32, UInt32, UInt32, UInt32, Ptr{xcb_xkb_string8_t}), c, msgLength, affectFlags, flags, affectCtrls, ctrls, message)
+end
+
+function xcb_xkb_set_debugging_flags_reply(c, cookie, e)
+    ccall((:xcb_xkb_set_debugging_flags_reply, libxcb_xkb), Ptr{xcb_xkb_set_debugging_flags_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_set_debugging_flags_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
 end
 # Julia wrapper for header: xcb_keysyms.h
 # Automatically generated using Clang.jl

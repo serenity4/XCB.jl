@@ -294,17 +294,17 @@ end
 
 
 function xkb_x11_setup_xkb_extension(connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
-    ccall((:xkb_x11_setup_xkb_extension, libxkbcommon), Cint, (Ptr{xcb_connection_t}, UInt16, UInt16, xkb_x11_setup_xkb_extension_flags, Ptr{UInt16}, Ptr{UInt16}, Ptr{UInt8}, Ptr{UInt8}), connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
+    ccall((:xkb_x11_setup_xkb_extension, libxkbcommon_x11), Cint, (Ptr{xcb_connection_t}, UInt16, UInt16, xkb_x11_setup_xkb_extension_flags, Ptr{UInt16}, Ptr{UInt16}, Ptr{UInt8}, Ptr{UInt8}), connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
 end
 
 function xkb_x11_get_core_keyboard_device_id(connection)
-    ccall((:xkb_x11_get_core_keyboard_device_id, libxkbcommon), Int32, (Ptr{xcb_connection_t},), connection)
+    ccall((:xkb_x11_get_core_keyboard_device_id, libxkbcommon_x11), Int32, (Ptr{xcb_connection_t},), connection)
 end
 
 function xkb_x11_keymap_new_from_device(context, connection, device_id, flags)
-    ccall((:xkb_x11_keymap_new_from_device, libxkbcommon), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{xcb_connection_t}, Int32, xkb_keymap_compile_flags), context, connection, device_id, flags)
+    ccall((:xkb_x11_keymap_new_from_device, libxkbcommon_x11), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{xcb_connection_t}, Int32, xkb_keymap_compile_flags), context, connection, device_id, flags)
 end
 
 function xkb_x11_state_new_from_device(keymap, connection, device_id)
-    ccall((:xkb_x11_state_new_from_device, libxkbcommon), Ptr{xkb_state}, (Ptr{xkb_keymap}, Ptr{xcb_connection_t}, Int32), keymap, connection, device_id)
+    ccall((:xkb_x11_state_new_from_device, libxkbcommon_x11), Ptr{xkb_state}, (Ptr{xkb_keymap}, Ptr{xcb_connection_t}, Int32), keymap, connection, device_id)
 end

@@ -1,6 +1,6 @@
 module Libxcb
 
-import Xorg_libxcb_jll:libxcb
+import Xorg_libxcb_jll:libxcb, libxcb_xkb
 import Xorg_xcb_util_keysyms_jll:libxcb_keysyms
 
 using CEnum
