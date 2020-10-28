@@ -1,10 +1,21 @@
-function Base.getkey(connection::Connection, key_event::Union{xcb_key_press_event_t,xcb_key_release_event_t})
+struct XCBButtonCode{T}
+    XCBButtonCode(v::Val{T}) where {T} = new{v}()
+end
+XCBButtonCode(mouse_event::Union{xcb_button_press_event_t, xcb_button_release_event_t}) = XCBButtonCode(Val(mouse_event.detail))
+
+button(xcb_button::XCBButtonCode{Val(1)}) = ButtonLeft()
+button(xcb_button::XCBButtonCode{Val(2)}) = ButtonMiddle()
+button(xcb_button::XCBButtonCode{Val(3)}) = ButtonRight()
+button(xcb_button::XCBButtonCode{Val(4)}) = ButtonScrollUp()
+button(xcb_button::XCBButtonCode{Val(5)}) = ButtonScrollDown()
+
+function get_key(connection::Connection, key_event::Union{xcb_key_press_event_t,xcb_key_release_event_t})
     keysymbols = xcb_key_symbols_alloc(connection)
     keysym = xcb_key_symbols_get_keysym(keysymbols, key_event.detail, 0)
     Char(keysym)
 end
 
-KeyCombination(connection::Connection, key_event::Union{xcb_key_press_event_t,xcb_key_release_event_t}) = KeyCombination(getkey(connection, key_event), KeyModifierState(key_event))
+KeyCombination(connection::Connection, key_event::Union{xcb_key_press_event_t,xcb_key_release_event_t}) = KeyCombination(get_key(connection, key_event), KeyModifierState(key_event))
 
 function KeyContext(key_event::Union{xcb_key_press_event_t,xcb_key_release_event_t})
     state = key_event.state
@@ -16,12 +27,6 @@ function KeyModifierState(key_event::Union{xcb_key_press_event_t,xcb_key_release
     KeyModifierState((state .| [XCB_MOD_MASK_SHIFT, XCB_MOD_MASK_CONTROL, XCB_MOD_MASK_1, XCB_MOD_MASK_4] .== state)...)
 end
 
-function Button(button_event::Union{xcb_button_press_event_t, xcb_button_release_event_t})
-    detail = button_event.detail
-    Button(detail)
-end
+MouseState(mouse_event::Union{xcb_button_press_event_t, xcb_button_release_event_t}) = MouseState((mouse_event.state .| [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY] .== mouse_event.state)...)
 
-function ButtonState(button_event::Union{xcb_button_press_event_t, xcb_button_release_event_t})
-    state = button_event.state
-    ButtonState((state .| [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY] .== state)...)
-end
+MouseEvent(mouse_event::xcb_button_press_event_t) = MouseEvent(button(XCBButtonCode(Val(Int(mouse_event.detail)))), MouseState(mouse_event), mouse_event.response_type == XCB_BUTTON_PRESS ? ButtonPressed() : ButtonReleased())

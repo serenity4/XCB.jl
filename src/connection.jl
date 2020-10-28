@@ -91,8 +91,72 @@ Base.flush(connection::Connection) = check_flush(xcb_flush(connection))
 
 function check_request(conn, request; raise=true)
     errcode_ptr = xcb_request_check(conn, request)
-    if errcode_ptr != C_NULL
+    if errcode_ptr ≠ C_NULL
         errcode = Base.unsafe_load(errcode_ptr).error_code
         raise ? throw(RequestError("Request unsuccessful: (error code " * string(errcode) * ")")) : @warn("Error " * string(errcode) * " thrown during request")
     end
+end
+
+"""
+Flush a connection attached to a request `expr`.
+
+The connection is taken to be the first argument of `expr`. `expr` can be a call to `XCB.@check`.
+
+# Examples
+```
+julia> @macroexpand @flush xcb_unmap_window(win.conn, win.id)
+quote
+    #= /home/belmant/.julia/dev/XCB/src/window.jl:94 =#
+    xcb_unmap_window(win.conn, win.id)
+    #= /home/belmant/.julia/dev/XCB/src/window.jl:95 =#
+    (flush)(win.conn)
+end
+```
+"""
+macro flush(expr)
+    if expr.head == :macrocall
+        expr = expr.args[3]
+    end
+    conn = expr.args[2]
+    quote
+        $(esc(expr))
+        $(esc(flush))($(esc(conn)))
+    end
+end
+
+"""
+Check that the request `request` was successful.
+
+Wraps `request` with `check_request(conn, request(conn, ...))` taking the first argument of `request` as a valid Connection. The request is transformed to be checkable, through the functions xcb_*_checked (or xcb_* if there exists a xcb_*_unchecked version). If no checkable substitute is found, then an error is raised.
+
+# Examples
+```
+julia> @macroexpand @flush xcb_unmap_window(win.conn, win.id)
+quote
+    #= /home/belmant/.julia/dev/XCB/src/window.jl:94 =#
+    xcb_unmap_window(win.conn, win.id)
+    #= /home/belmant/.julia/dev/XCB/src/window.jl:95 =#
+    (flush)(win.conn)
+end
+```
+"""
+macro check(request)
+    conn = request.args[2]
+    request_fun = request.args[1]
+    
+    if endswith(string(request_fun), "_unchecked")
+        request_fun_checked = Symbol(replace(string(request_fun), "_unchecked" => ""))
+    elseif !endswith(string(request_fun), "_checked")
+        if isdefined(@__MODULE__, Symbol(string(request_fun) * "_unchecked"))
+            request_fun_checked = request_fun
+        else
+            request_fun_checked = Symbol(string(request_fun) * "_checked")
+        end
+    end
+    if isdefined(@__MODULE__, request_fun_checked)
+        request.args[1] = request_fun_checked
+    else
+        throw(ArgumentError("Function $request_fun does not have a checked version available."))
+    end
+    :($(esc(check_request))($(esc(conn)), $(esc(request))))
 end
