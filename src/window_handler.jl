@@ -5,7 +5,7 @@ end
 XWindowHandler(conn, windows::Vector{XCBWindow}) = XWindowHandler(conn, Dict(Symbol.("window_" .* string.(1:length(windows))) .=> windows))
 
 function poll_for_event(handler::XWindowHandler, t0)
-    xcb_poll_for_event(handler.conn)
+    event = xcb_poll_for_event(handler.conn)
     event == C_NULL ? nothing : event
 end
 

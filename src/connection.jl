@@ -10,6 +10,9 @@ Base.unsafe_convert(::Type{<: Ptr}, handle::Handle) = handle.h
 Connection to the X server.
 """
 mutable struct Connection <: Handle
+    """
+    Opaque handle to the connection, used for API calls.
+    """
     h
     function Connection(h)
         conn = new(h)
@@ -22,7 +25,13 @@ end
 Connection setup handle and data.
 """
 struct Setup <: Handle
+    """
+    Handle to the setup, used for API calls.
+    """
     h
+    """
+    Setup value, obtained when dereferencing its handle.
+    """
     value::xcb_setup_t
 end
 
@@ -68,7 +77,7 @@ function Base.show(io::IO, screen::xcb_screen_t)
 end
 
 """
-Check that the connection to the X server was successful. Throws a ConnectionError if the connection failed.
+Check that the connection to the X server was successful. Throws a [`ConnectionError`](@ref) if the connection failed.
 """
 function check(connection::Connection)
     code = xcb_connection_has_error(connection)
@@ -81,14 +90,21 @@ function Setup(connection::Connection)
     Setup(stp, unsafe_load(stp))
 end
 
+"""
+Check that the flush was successful, throwing a [`FlushError`](@ref) if the code is negative.
+"""
 function check_flush(code)
     if code <= 0
-        error("Error during flush ($code)")
+        throw(FlushError(code))
     end
 end
 
+Base.showerror(io::IO, error::FlushError) = print("FlushError: server returned code $(error.code)")
 Base.flush(connection::Connection) = check_flush(xcb_flush(connection))
 
+"""
+Check that the request was successfully handled by the server, throwing a [`RequestError`](@ref) if the request failed.
+"""
 function check_request(conn, request; raise=true)
     errcode_ptr = xcb_request_check(conn, request)
     if errcode_ptr ≠ C_NULL
@@ -125,20 +141,11 @@ macro flush(expr)
 end
 
 """
-Check that the request `request` was successful.
+Check the value returned by the function call `request` with [`check_request`](@ref).
 
-Wraps `request` with `check_request(conn, request(conn, ...))` taking the first argument of `request` as a valid Connection. The request is transformed to be checkable, through the functions xcb_*_checked (or xcb_* if there exists a xcb_*_unchecked version). If no checkable substitute is found, then an error is raised.
+Wraps `request` with [`check_request`](@ref). The [`Connection`](@ref) argument is taken as the first argument of the function call expression `request`. The request is transformed to be checkable, through the functions xcb_*_checked (or xcb_* if there exists a xcb_*_unchecked version). If no checkable substitute is found, an `ArgumentError` is raised.
 
-# Examples
-```
-julia> @macroexpand @flush xcb_unmap_window(win.conn, win.id)
-quote
-    #= /home/belmant/.julia/dev/XCB/src/window.jl:94 =#
-    xcb_unmap_window(win.conn, win.id)
-    #= /home/belmant/.julia/dev/XCB/src/window.jl:95 =#
-    (flush)(win.conn)
-end
-```
+TODO: `@macroexpand` example
 """
 macro check(request)
     conn = request.args[2]

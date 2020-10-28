@@ -1,5 +1,21 @@
 module XCB
 
+using DocStringExtensions
+
+@template (FUNCTIONS, METHODS, MACROS) =
+    """
+    $(DOCSTRING)
+    $(TYPEDSIGNATURES)
+    """
+
+@template TYPES =
+    """
+    $(DOCSTRING)
+    $(TYPEDEF)
+    $(TYPEDSIGNATURES)
+    $(TYPEDFIELDS)
+    """
+
 using Parameters
 using WindowAbstractions
 using WindowAbstractions: Point2
@@ -34,27 +50,17 @@ include("window.jl")
 include("window_handler.jl")
 include("context.jl")
 include("inputs.jl")
+include("testing.jl")
 
 
 export xcb,
-       KeyCombination,
-       KeyContext,
-       KeyModifierState,
        key,
-       @key_str,
        Connection,
        Setup,
        check,
        check_flush,
        flush,
        XCBWindow,
-       Button,
-       MouseEvent,
-       left_click,
-       middle_click,
-       right_click,
-       scroll_up,
-       scroll_down,
        GraphicsContext,
        XWindowHandler,
        get_window,

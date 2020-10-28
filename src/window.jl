@@ -1,5 +1,5 @@
 """
-XCBWindow 
+Window type used with the XCB API.
 """
 mutable struct XCBWindow <: AbstractWindow
     conn::Connection
