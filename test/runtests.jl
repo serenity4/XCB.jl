@@ -18,7 +18,6 @@ function on_key_pressed(details::EventDetails)
     key = details.data.kc
     ctx = win.ctx
     set_title(win, "Random title $(rand())")
-    println("Pressed $key")
     if key ∈ [key"q", key"ctrl+q", key"f4"]
         throw(CloseWindow(details.window_handler, win))
     elseif key == key"s"

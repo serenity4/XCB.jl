@@ -54,6 +54,7 @@ include("xkb.jl")
 include("window_handler.jl")
 include("context.jl")
 include("testing.jl")
+include("events.jl")
 
 
 export xcb,
@@ -74,6 +75,7 @@ export xcb,
        keymap_info,
        key_info,
        name_from_keycode,
-       name_from_keysym
+       name_from_keysym,
+       unsafe_load_event
 
 end # module

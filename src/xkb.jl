@@ -29,7 +29,10 @@ function event_details_xkb(fields::Dict{String, Bool})
 end
 
 function Keymap(conn::Connection; setup_xkb=true)
-    setup_xkb && @assert Bool(xkb_x11_setup_xkb_extension(conn, 1, 0, XKB_X11_SETUP_XKB_EXTENSION_NO_FLAGS, C_NULL, C_NULL, C_NULL, C_NULL))
+    if setup_xkb
+        ret_code = xkb_x11_setup_xkb_extension(conn, 1, 0, XKB_X11_SETUP_XKB_EXTENSION_NO_FLAGS, C_NULL, C_NULL, C_NULL, C_NULL)
+        ret_code == 0 && error("XKB extension could not be setup")
+    end
     ctx = xkb_context_new(XKB_CONTEXT_NO_DEFAULT_INCLUDES)
     ctx == C_NULL && error("Context could not be created: $ctx")
     device_id = xkb_x11_get_core_keyboard_device_id(conn)
@@ -67,10 +70,11 @@ end
 function key_info(km, keycode)
     sym = xkb_state_key_get_one_sym(km.state, keycode)
     """
-    Keycode \e[33m$(keycode)\e[m:
+Keycode \e[33m$(keycode)\e[m:
         keycode name: \e[36m$(name_from_keycode(km, keycode))\e[m
-                 sym: \e[36m$(hex(sym))\e[m
+              keysym: \e[36m$(hex(sym))\e[m
          keysym name: \e[36m$(name_from_keysym(sym))\e[m
+        utf32 symbol: \e[36m$(Char(xkb_state_key_get_utf32(km.state, keycode)))\e[m
     """
 end
 

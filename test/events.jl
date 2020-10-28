@@ -1,31 +1,3 @@
-function unsafe_load_event(xge_ptr; warn_unknown=false)
-    xge = unsafe_load(xge_ptr)
-    rt = xge.response_type % 128
-    if rt == XCB.XCB_CONFIGURE_NOTIFY
-        unsafe_load(convert(Ptr{XCB.xcb_configure_notify_event_t}, xge_ptr))
-    elseif rt ∈ (XCB.XCB_KEY_PRESS, XCB.XCB_KEY_RELEASE)
-        unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, xge_ptr))
-    elseif rt ∈ (XCB.XCB_ENTER_NOTIFY, XCB.XCB_LEAVE_NOTIFY)
-        unsafe_load(convert(Ptr{XCB.xcb_enter_notify_event_t}, xge_ptr))
-    elseif rt ∈ (XCB.XCB_BUTTON_PRESS, XCB.XCB_BUTTON_RELEASE)
-        unsafe_load(convert(Ptr{XCB.xcb_button_press_event_t}, xge_ptr))
-    elseif rt == XCB.XCB_MOTION_NOTIFY
-        unsafe_load(convert(Ptr{XCB.xcb_motion_notify_event_t}, xge_ptr))
-    elseif rt == XCB.XCB_EXPOSE
-        unsafe_load(convert(Ptr{XCB.xcb_expose_event_t}, xge_ptr))
-    elseif rt == XCB.XCB_CLIENT_MESSAGE
-        unsafe_load(convert(Ptr{xcb.xcb_client_message_event_t}, xge_ptr)) # delete window request
-    elseif rt == XCB.XCB_XKB_STATE_NOTIFY || rt == 85 # response type XCB_XKB_STATE_NOTIFY never gets signaled, but 85 is emitted instead...
-        unsafe_load(convert(Ptr{xcb.xcb_xkb_state_notify_event_t}, xge_ptr))
-    elseif rt == XCB.XCB_KEYMAP_NOTIFY
-        unsafe_load(convert(Ptr{xcb.xcb_keymap_notify_event_t}, xge_ptr))
-    else
-        warn_unknown && @warn "Unknown event $(rt)"
-        nothing
-        # throw(ErrorException("Unknown event with response_type $rt"))
-    end
-end
-
 process_xevent(wh, event_loop, xge::Nothing, t; warn_unknown=false, kwargs...) = nothing
 function process_xevent(wh, event_loop, xge, t; warn_unknown=false, kwargs...)
     event = unsafe_load_event(xge; warn_unknown)
