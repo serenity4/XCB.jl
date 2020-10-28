@@ -152,6 +152,7 @@ macro check(request)
     has_module_prefix = startswith(request_fun, module_prefix)
     has_module_prefix && (request_fun = request_fun[5:end])
     
+    # get checked version of the request function
     if endswith(request_fun, "_unchecked")
         request_fun_checked = replace(request_fun, "_unchecked" => "")
     elseif !endswith(request_fun, "_checked")
@@ -163,12 +164,14 @@ macro check(request)
     else
         request_fun_checked = request_fun
     end
+    # restore module prefix and add it to `check_request` as well if relevant
     if has_module_prefix
         request_fun_checked = module_prefix * request_fun_checked
         check_request_fun = Meta.parse(module_prefix * "check_request")
     else
         check_request_fun = :check_request
     end
+    # change the request function in the original expr
     if isdefined(@__MODULE__, Symbol(replace(request_fun_checked, module_prefix => "")))
         request.args[1] = Meta.parse(request_fun_checked)
     else
