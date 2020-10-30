@@ -45,7 +45,7 @@ end
 
 function keymap_info(km)
     km_name_ptr = xkb_keymap_get_as_string(km, XKB_KEYMAP_FORMAT_TEXT_V1)
-    km_name_ptr == C_NULL && error("Could not fetch keymap name")
+    km_name_ptr == C_NULL && error("Could not fetch keymap")
     unsafe_string(km_name_ptr)
 end
 
@@ -67,15 +67,40 @@ function name_from_keycode(km::Keymap, keycode)
     unsafe_string(ptr)
 end
 
-function key_info(km, keycode)
-    sym = xkb_state_key_get_one_sym(km.state, keycode)
-    """
-Keycode \e[33m$(keycode)\e[m:
-        keycode name: \e[36m$(name_from_keycode(km, keycode))\e[m
-              keysym: \e[36m$(hex(sym))\e[m
-         keysym name: \e[36m$(name_from_keysym(sym))\e[m
-        utf32 symbol: \e[36m$(Char(xkb_state_key_get_utf32(km.state, keycode)))\e[m
-    """
+function key_info(event_details::EventDetails)
+    km = event_details.window_handler.keymap
+    @unpack key_name, key, input = event_details.data
+    keycode = xkb_keymap_key_by_name(km, string(key_name))
+    "Key \e[31m$key_name\e[m (code \e[33m$keycode\e[m): input \"\e[36m$input\e[m\" from symbol \e[36m$key\e[m"
 end
 
-get_key(km::Keymap, keycode) = begin @info(key_info(km, keycode)); Char(xkb_state_key_get_utf32(km.state, keycode)) end
+Base.Char(km::Keymap, keycode) = Char(xkb_state_key_get_utf32(km.state, keycode))
+"""
+Get a `KeySymbol` from a keycode.
+"""
+KeySymbol(km::Keymap, keycode::Integer) = keysym_name_to_keysymbol(name_from_keysym(xkb_state_key_get_one_sym(km.state, keycode)))
+"""
+Get a `KeySymbol` from a physical key name.
+"""
+KeySymbol(km::Keymap, key_name) = KeySymbol(km, xkb_keymap_key_by_name(km, key_name))
+"""
+Get a `KeySymbol` from a keysym name.
+"""
+function keysym_name_to_keysymbol(keysym_name)
+    ks = Symbol(lowercase(keysym_name))
+    sym = ks ∈ keys(keysym_names_translation) ? keysym_names_translation[ks] : ks
+    KeySymbol(sym)
+end
+
+"""
+Translation `Dict` from a keysym obtained via XCB to a standard key name defined in `WindowAbstractions`.
+"""
+const keysym_names_translation = Dict(
+    :shift_r          => :shift_right,
+    :shift_l          => :shift_left,
+    :control_r        => :control_right,
+    :control_l        => :control_left,
+    :iso_level3_shift => :alt_gr,
+    :alt_l            => :alt_left,
+    :return           => :enter,
+)

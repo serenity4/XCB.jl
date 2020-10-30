@@ -1,6 +1,7 @@
 using XCB
 using WindowAbstractions
 using Test
+using Parameters
 
 include("events.jl")
 
@@ -15,14 +16,22 @@ end
 
 function on_key_pressed(details::EventDetails)
     win = details.window
-    key = details.data.kc
+    km = details.window_handler.keymap
+    @info(key_info(details))
+    @unpack key_name, key, input, modifiers = details.data
+    kc = KeyCombination(key, modifiers)
     ctx = win.ctx
     set_title(win, "Random title $(rand())")
-    if key ∈ [key"q", key"ctrl+q", key"f4"]
+    # @info("Input from key $key_name: \"\e[33m$(input)\e[m\" from pressing \e[33m$(key)\e[m")
+    if kc ∈ [key"q", key"ctrl+q", key"f4"]
         throw(CloseWindow(details.window_handler, win))
-    elseif key == key"s"
+    elseif kc == key"s"
         curr_extent = XCB.extent(win)
         XCB.set_extent(win, curr_extent .+ 1)
+    elseif kc == key"i"
+        open("keymap.txt", "w") do io
+            write(io, keymap_info(km))
+        end
     else
         XCB.change_graphics_context!(ctx, ctx.mask, [rand(1:16_777_215), 0])
         XCB.@flush XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
@@ -70,9 +79,9 @@ function test()
                 on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
                 on_key_pressed,
                 # on_key_released = x -> println("Released $(x.data.kc)"),
-                on_pointer_enter = x -> @info("Entering window at $(x.location)"),
-                on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
-                on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
+                # on_pointer_enter = x -> @info("Entering window at $(x.location)"),
+                # on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
+                # on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
                 on_expose = x -> @info("Window exposed"),
             ),
             :window_2 => WindowCallbacks(;
@@ -81,7 +90,6 @@ function test()
         ),
     )
     run(event_loop, Synchronous(); warn_unknown=true, poll=true)
-
 end
 
 test()

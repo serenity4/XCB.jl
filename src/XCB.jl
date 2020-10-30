@@ -38,7 +38,8 @@ import WindowAbstractions: set_title,
                            KeyModifierState,
                            KeyContext,
                            KeyCombination,
-                           EventDetails
+                           EventDetails,
+                           KeySymbol
 
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 include(joinpath(@__DIR__, "..", "gen", "Libxkb.jl"))
