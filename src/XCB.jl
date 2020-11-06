@@ -38,19 +38,24 @@ import WindowAbstractions: set_title,
                            KeyModifierState,
                            KeyContext,
                            KeyCombination,
-                           EventDetails
+                           EventDetails,
+                           KeySymbol
 
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
+include(joinpath(@__DIR__, "..", "gen", "Libxkb.jl"))
 const xcb = Libxcb
 using .Libxcb
+using .Libxkb
 
 include("exceptions.jl")
 include("connection.jl")
 include("window.jl")
+include("inputs.jl")
+include("xkb.jl")
 include("window_handler.jl")
 include("context.jl")
-include("inputs.jl")
 include("testing.jl")
+include("events.jl")
 
 
 export xcb,
@@ -65,6 +70,13 @@ export xcb,
        XWindowHandler,
        get_window,
        get_window_symbol,
-       event_details
+       event_details_xkb,
+       @check,
+       @flush,
+       keymap_info,
+       key_info,
+       name_from_keycode,
+       name_from_keysym,
+       unsafe_load_event
 
 end # module

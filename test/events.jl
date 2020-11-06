@@ -1,28 +1,3 @@
-function unsafe_load_event(xge_ptr; warn_unknown=false)
-    xge = unsafe_load(xge_ptr)
-    rt = xge.response_type
-    rt = rt > 128 ? rt - 128 : rt
-    if rt == XCB.XCB_CONFIGURE_NOTIFY
-        unsafe_load(convert(Ptr{XCB.xcb_configure_notify_event_t}, xge_ptr))
-    elseif rt ∈ (XCB.XCB_KEY_PRESS, XCB.XCB_KEY_RELEASE)
-        unsafe_load(convert(Ptr{XCB.xcb_key_press_event_t}, xge_ptr))
-    elseif rt ∈ (XCB.XCB_ENTER_NOTIFY, XCB.XCB_LEAVE_NOTIFY)
-        unsafe_load(convert(Ptr{XCB.xcb_enter_notify_event_t}, xge_ptr))
-    elseif rt ∈ (XCB.XCB_BUTTON_PRESS, XCB.XCB_BUTTON_RELEASE)
-        unsafe_load(convert(Ptr{XCB.xcb_button_press_event_t}, xge_ptr))
-    elseif rt == XCB.XCB_MOTION_NOTIFY
-        unsafe_load(convert(Ptr{XCB.xcb_motion_notify_event_t}, xge_ptr))
-    elseif rt == XCB.XCB_EXPOSE
-        unsafe_load(convert(Ptr{XCB.xcb_expose_event_t}, xge_ptr))
-    elseif rt == XCB.XCB_CLIENT_MESSAGE
-        unsafe_load(convert(Ptr{xcb.xcb_client_message_event_t}, xge_ptr)) # delete window request
-    else
-        warn_unknown && @warn "Unknown event $(rt)"
-        nothing
-        # throw(ErrorException("Unknown event with response_type $rt"))
-    end
-end
-
 process_xevent(wh, event_loop, xge::Nothing, t; warn_unknown=false, kwargs...) = nothing
 function process_xevent(wh, event_loop, xge, t; warn_unknown=false, kwargs...)
     event = unsafe_load_event(xge; warn_unknown)
@@ -32,6 +7,10 @@ function process_xevent(wh, event_loop, xge, t; warn_unknown=false, kwargs...)
             ed_8 = Int.(event.data.data8)
             event_data32_1 = ed_8[1] + ed_8[2] * 2^8 + ed_8[3] * 2^16 + ed_8[4] *2^24
             event_data32_1 == window.delete_request && throw(CloseWindow(wh, window, ""))
+        elseif event isa XCB.xcb_xkb_state_notify_event_t
+            XCB.xkb_state_update_mask(wh.keymap.state, event.baseMods, event.latchedMods, event.lockedMods, event.baseGroup, event.latchedGroup, event.lockedGroup)
+        elseif event isa XCB.xcb_keymap_notify_event_t
+            wh.keymap = XCB.Keymap(wh.conn; setup_xkb=false)
         elseif !isnothing(window) # event happened on inexistant window
             details = EventDetails(wh, window, event, t)
             execute_callback(event_loop, details; kwargs...)
