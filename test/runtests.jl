@@ -3,8 +3,6 @@ using WindowAbstractions
 using Test
 using Parameters
 
-include("events.jl")
-
 function on_button_pressed(details::EventDetails)
     x, y = details.location
     click = details.data.button
