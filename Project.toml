@@ -13,6 +13,11 @@ xkbcommon_jll = "d8fb68d0-12a3-5cfd-a85a-d49703b185fd"
 
 [compat]
 julia = "1.5"
+DocStringExtensions = "0.8.3"
+Parameters = "0.12.1"
+WindowAbstractions = "0.2.0"
+Xorg_libxcb_jll = "1.13.0"
+Xorg_xcb_util_keysyms_jll = "0.4.0"
 xkbcommon_jll = "0.9.1"
 
 [extras]
