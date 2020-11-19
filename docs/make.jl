@@ -13,11 +13,11 @@ makedocs(;
             "Utility tools" => "utility.md",
         ]
     ],
-    repo="https://github.com/serenity4/XCB.jl/blob/{commit}{path}#L{line}",
+    repo="https://github.com/JuliaGL/XCB.jl/blob/{commit}{path}#L{line}",
     sitename="XCB.jl",
-    authors="serenity4 <cedric.bel@hotmail.fr>",
+    authors=["serenity4 <cedric.bel@hotmail.fr>", "SimonDanisch"]
 )
 
 deploydocs(
-    repo = "github.com/serenity4/XCB.jl.git",
+    repo = "github.com/JuliaGL/XCB.jl.git",
 )
