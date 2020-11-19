@@ -20,6 +20,6 @@ jobs:
         with:
           version: ${{ matrix.julia-version }}
       - uses: julia-actions/julia-buildpkg@latest
-      - uses: GabrielBB/xvfb-action@v1
-        with:
-          run: julia --project=. -e "using Pkg; Pkg.test()"
+        run: |
+          sudo apt install xvfb
+          /usr/bin/xvfb-run julia --project=. -e 'using Pkg; Pkg.test()'
