@@ -19,5 +19,5 @@ makedocs(;
 )
 
 deploydocs(
-    repo = "github.com/JuliaGL/XCB.jl.git",
+    repo = "github.com/serenity4/XCB.jl.git",
 )

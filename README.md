@@ -1,6 +1,6 @@
 # XCB
 
-![tests](https://github.com/JuliaGL/XCB.jl/workflows/Run%20tests/badge.svg) [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliagl.github.io/XCB.jl/stable) [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://juliagl.github.io/XCB.jl/dev)
+![tests](https://github.com/JuliaGL/XCB.jl/workflows/Run%20tests/badge.svg) [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://serenity4.github.io/XCB.jl/stable) [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://serenity4.github.io/XCB.jl/dev)
 
 Wrapper around the [X protocol C-language Binding (XCB)](https://xcb.freedesktop.org/) library for interacting with X window systems.
 Includes a Clang-generated library wrapper along with a few abstractions including setting up connections, graphics contexts and windows, handling input events, and running a window. For more information, see the [package documentation](https://serenity.github.io/XCB.jl/stable).
