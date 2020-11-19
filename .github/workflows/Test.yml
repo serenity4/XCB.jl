@@ -22,4 +22,4 @@ jobs:
       - uses: julia-actions/julia-buildpkg@latest
       - uses: GabrielBB/xvfb-action@v1
         with:
-          run: julia --project=. -e 'using Pkg; Pkg.test()'
+          run: "julia --project=. -e 'using Pkg; Pkg.test()'"
