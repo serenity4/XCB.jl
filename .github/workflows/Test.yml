@@ -23,4 +23,4 @@ jobs:
       - name: Run tests with xvfb
         run: |
           sudo apt-get install xvfb
-          /usr/bin/xvfb-run julia --project=. -e 'using Pkg; Pkg.test()'
+          /usr/bin/xvfb-run -n 1 julia --project=. -e 'using Pkg; Pkg.test()'
