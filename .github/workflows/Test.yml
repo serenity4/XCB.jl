@@ -15,11 +15,11 @@ jobs:
             julia-arch: x86
 
     steps:
-      - uses: GabrielBB/xvfb-action@v1
       - uses: actions/checkout@v2
       - uses: julia-actions/setup-julia@latest
         with:
           version: ${{ matrix.julia-version }}
-          run: julia --project=. -e 'using Pkg; Pkg.instantiate()' && julia --project=. test/runtests.jl
       - uses: julia-actions/julia-buildpkg@latest
-      - uses: julia-actions/julia-runtest@latest
+      - uses: GabrielBB/xvfb-action@v1
+        with:
+          run: julia --project=. -e 'using Pkg; Pkg.test()'
