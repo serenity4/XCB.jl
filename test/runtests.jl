@@ -39,7 +39,7 @@ end
 r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
 
 function test()
-    !get(ENV, "CI", false) && setindex!(ENV, ":1.0", "DISPLAY")
+    !parse(Bool, get(ENV, "CI", "false")) && setindex!(ENV, ":1.0", "DISPLAY")
 
     connection = Connection(display=nothing)
     setup = Setup(connection)
