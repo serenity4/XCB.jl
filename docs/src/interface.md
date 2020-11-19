@@ -18,10 +18,12 @@ Although drag actions are technically just of combination of mouse state and poi
 
 #### Key events
 
-XKB is used for translating keystrokes into characters, taking for example the keyboard layout and state into account. The code to retrieve characters was inspired from the [XKB tutorial](https://github.com/xkbcommon/libxkbcommon/blob/master/doc/quick-guide.md).
+X and XCB do not offer much keystroke-related utilities, unless we look at some extensions such as XKB, which was used here for processing key inputs. It allows the storage of keyboard and keymap states, as well as functions to translate keystrokes into characters. The input processing using XKB was inspired from the [XKB tutorial](https://github.com/xkbcommon/libxkbcommon/blob/master/doc/quick-guide.md).
 
 #### Mouse events
 
-Mouse events are a lot less complex than key events. Mouse state (e.g. which buttons were pressed during another mouse event) and pressed/released buttons are extracted from related X event data. The action being performed (pressing or releasing a button) is extracted from the event code.
+It is a lot simpler to handle mouse events. Mouse state (e.g. which buttons were already pressed before the current mouse event) and pressed/released buttons are simply extracted from related X events, exposed in XCB via `xcb_button_press_release_event_t` and `xcb_button_release_event_t`.
 
 #### Pointer events
+
+Pointer events are handled similarly to mouse events. Moving the pointer in the window, as well as leaving or entering it send a X event from which the relevant data is extracted.
