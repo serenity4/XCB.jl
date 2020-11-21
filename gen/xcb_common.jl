@@ -5812,3 +5812,7 @@ end
 
 const _XCBKeySymbols = Cvoid
 const xcb_key_symbols_t = _XCBKeySymbols
+const XCB_EVENT_RESPONSE_TYPE_MASK = Float32(0x07)
+
+# Skipping MacroDefinition: XCB_EVENT_RESPONSE_TYPE ( e ) ( e -> response_type & XCB_EVENT_RESPONSE_TYPE_MASK )
+# Skipping MacroDefinition: XCB_EVENT_SENT ( e ) ( e -> response_type & ~ XCB_EVENT_RESPONSE_TYPE_MASK )

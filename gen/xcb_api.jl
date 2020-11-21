@@ -4624,3 +4624,18 @@ end
 function xcb_is_modifier_key(keysym)
     ccall((:xcb_is_modifier_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
 end
+# Julia wrapper for header: xcb_event.h
+# Automatically generated using Clang.jl
+
+
+function xcb_event_get_label(type)
+    ccall((:xcb_event_get_label, libxcb_util), Cstring, (UInt8,), type)
+end
+
+function xcb_event_get_error_label(type)
+    ccall((:xcb_event_get_error_label, libxcb_util), Cstring, (UInt8,), type)
+end
+
+function xcb_event_get_request_label(type)
+    ccall((:xcb_event_get_request_label, libxcb_util), Cstring, (UInt8,), type)
+end
