@@ -81,13 +81,24 @@ Base.flush(connection::Connection) = check_flush(xcb_flush(connection))
 
 """
 Check that the request was successfully handled by the server, throwing a [`RequestError`](@ref) if the request failed.
+
+The severity level can be set via `level` with one of the two following values:
+
+    - `:warn`: logs a warning with `@warn` (default).
+    - `:error`: raise a `RequestError`.
 """
-function check_request(conn, request; raise=true)
+function check_request(conn, request; level=:warn)
+    @assert level ∈ (:warn, :error) "Unknown severity level $level"
     errcode_ptr = xcb_request_check(conn, request)
     if errcode_ptr ≠ C_NULL
         errcode = Base.unsafe_load(errcode_ptr).error_code
         msg = unsafe_string(xcb_event_get_error_label(errcode))
-        raise ? throw(RequestError("Request unsuccessful: (error code $errcode: $msg)")) : @warn("Error " * string(errcode) * " thrown during request")
+        error_msg = "Request unsuccessful: (error code $errcode: $msg)"
+        if level == :error
+            throw(RequestError(error_msg))
+        elseif level == :warn
+            @warn error_msg
+        end
     end
 end
 
@@ -109,7 +120,11 @@ macro flush(expr)
     if expr.head == :macrocall
         expr = expr.args[3]
     end
-    conn = expr.args[2]
+    if expr isa QuoteNode
+        conn = expr.value
+    else
+        conn = expr.args[2]
+    end
     quote
         $(esc(expr))
         $(esc(flush))($(esc(conn)))
@@ -119,11 +134,14 @@ end
 """
 Check the value returned by the function call `request` with [`check_request`](@ref).
 
+The severity level (`:error` or `:warn`) can be supplied as first argument.
+By default, the severity level is `:warn`.
+
 Wraps `request` with [`check_request`](@ref). The [`Connection`](@ref) argument is taken as the first argument of the function call expression `request`. The request is transformed to be checkable, through the functions xcb_*_checked (or xcb_* if there exists a xcb_*_unchecked version). If no checkable substitute is found, an `ArgumentError` is raised.
 
 TODO: `@macroexpand` example
 """
-macro check(request)
+macro check(level, request)
     conn = request.args[2]
     request_fun = string(request.args[1])
     module_prefix = string(@__MODULE__) * "."
@@ -155,8 +173,10 @@ macro check(request)
     else
         throw(ArgumentError("Function $request_fun does not have a checked version available."))
     end
-    :($(esc(check_request_fun))($(esc(conn)), $(esc(request))))
+    :($(esc(check_request_fun))($(esc(conn)), $(esc(request)), level=$level))
 end
+
+macro check(request) esc(:(@check(:warn, $request))) end
 
 Base.showerror(io::IO, error::FlushError) = print("FlushError: server returned code $(error.code)")
 

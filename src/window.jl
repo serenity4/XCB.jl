@@ -37,7 +37,7 @@ mutable struct XCBWindow <: AbstractWindow
         set_icon_title(win, icon_title)
         set_delete_request!(win) # to close window on X11 requests
         map && map_window(win)
-        Base.finalizer(x -> @check(xcb_destroy_window(x.conn, x.id)), win)
+        Base.finalizer(x -> @check(:error, xcb_destroy_window(x.conn, x.id)), win)
     end
 end
 

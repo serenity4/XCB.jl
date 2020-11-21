@@ -10,9 +10,9 @@ mutable struct GraphicsContext
     function GraphicsContext(conn, window, mask, value_list)
         id = XCB.xcb_generate_id(conn)
         gc = new(conn, id, window, mask, value_list)
-        @check xcb_create_gc(gc.conn, gc.id, gc.window.id, 0, C_NULL)
+        @check :error xcb_create_gc(gc.conn, gc.id, gc.window.id, 0, C_NULL)
         change_graphics_context!(gc, mask, value_list)
-        Base.finalizer(x -> @check(xcb_free_gc(gc.conn, gc.id)), gc)
+        Base.finalizer(x -> @check(:error, xcb_free_gc(gc.conn, gc.id)), gc)
         gc
     end
 end
