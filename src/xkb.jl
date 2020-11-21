@@ -75,6 +75,7 @@ function key_info(event_details::EventDetails)
 end
 
 Base.Char(km::Keymap, keycode) = Char(xkb_state_key_get_utf32(km.state, keycode))
+
 """
 Get a `KeySymbol` from a keycode.
 """
@@ -83,6 +84,7 @@ KeySymbol(km::Keymap, keycode::Integer) = keysym_name_to_keysymbol(name_from_key
 Get a `KeySymbol` from a physical key name.
 """
 KeySymbol(km::Keymap, key_name) = KeySymbol(km, xkb_keymap_key_by_name(km, key_name))
+
 """
 Get a `KeySymbol` from a keysym name.
 """

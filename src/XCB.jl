@@ -43,6 +43,7 @@ import WindowAbstractions: set_title,
 
 include(joinpath(@__DIR__, "..", "gen", "Libxcb.jl"))
 include(joinpath(@__DIR__, "..", "gen", "Libxkb.jl"))
+
 const xcb = Libxcb
 using .Libxcb
 using .Libxkb

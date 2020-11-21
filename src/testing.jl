@@ -15,8 +15,10 @@ _xcb_translate_button(::ButtonRight) = XCB_BUTTON_MASK_3
 _xcb_translate_button(::ButtonScrollUp) = XCB_BUTTON_MASK_4
 _xcb_translate_button(::ButtonScrollDown) = XCB_BUTTON_MASK_5
 
-send_xevent(window::XCBWindow, ed::EventData) = @flush @check xcb_send_event(window.conn, false, window.id, window.mask, xevent(w, ed))
+send_xevent(window::XCBWindow, ed::EventData) =
+    @flush @check xcb_send_event(window.conn, false, window.id, window.mask, xevent(w, ed))
 
-xevent(w::XCBWindow, e::EventDetails{MouseEvent{E}}) where {E} = xcb_button_press_event_t(_xcb_translate_event(E), _xcb_translate_button(e.data.button), e.time, w.parent_id, w.id, 0, 0, e.location..., _xcb_translate_state(e.data.state))
+xevent(w::XCBWindow, e::EventDetails{MouseEvent{E}}) where {E} =
+    xcb_button_press_event_t(_xcb_translate_event(E), _xcb_translate_button(e.data.button), e.time, w.parent_id, w.id, 0, 0, e.location..., _xcb_translate_state(e.data.state))
 
 hex(x) = "0x$(string(x, base=16))"

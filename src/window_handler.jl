@@ -3,6 +3,7 @@ mutable struct XWindowHandler <: AbstractWindowHandler
     windows::Dict{Symbol, XCBWindow}
     keymap::Keymap
 end
+
 XWindowHandler(conn::Connection, windows::Dict{Symbol, XCBWindow}) = XWindowHandler(conn, windows, Keymap(conn))
 XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(conn, Dict(Symbol.("window_" .* string.(1:length(windows))) .=> windows))
 
@@ -32,4 +33,5 @@ get_window(handler::XWindowHandler, event::xcb_xkb_state_notify_event_t) = nothi
 get_window(handler::XWindowHandler, event::xcb_keymap_notify_event_t) = nothing
 get_window(handler::XWindowHandler, event) = get_window(handler, window_id(event))
 get_window(handler::XWindowHandler, id::Symbol) = handler.windows[id]
+
 get_window_symbol(handler::XWindowHandler, window::XCBWindow) = collect(keys(handler.windows))[findfirst(values(handler.windows) .== window)]
