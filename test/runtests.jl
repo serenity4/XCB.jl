@@ -39,9 +39,7 @@ end
 r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
 
 function test()
-    ENV["DISPLAY"] = ":1"
-
-    connection = Connection(display=nothing)
+    connection = Connection(display=":1")
     setup = Setup(connection)
     println(setup.value)
     iter = XCB.xcb_setup_roots_iterator(setup)
