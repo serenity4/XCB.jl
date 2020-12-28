@@ -17,7 +17,7 @@ mutable struct XCBWindow <: AbstractWindow
         icon_title = isnothing(icon_title) ? window_title : icon_title
         value_list_filled = zeros(UInt32, 32)
         setindex!.(Ref(value_list_filled), value_list, 1:length(value_list))
-        win = new(conn, id, parent_id, visual_id, class, depth, mask, value_list)
+        win = new(conn, id, parent_id, visual_id, class, depth, mask, value_list, nothing, nothing)
         xcb_create_window(
             win.conn,
             depth,
