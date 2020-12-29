@@ -1,3 +1,8 @@
+"""
+Keymap used to encode information regarding keyboard layout, and country and language codes.
+
+A string representation can be obtained from a `Keymap` by using `String(keymap)`.
+"""
 mutable struct Keymap <: Handle
     h::Ptr{xkb_keymap}
     ctx::Ptr{xkb_context}
@@ -28,75 +33,104 @@ function event_details_xkb(fields::Dict{String, Bool})
     xcb_xkb_select_events_details_t(flags...)
 end
 
+"""
+Construct a `Keymap` using `conn` as the connection to the X Server.
+
+It uses XKB, the X Keyboard extension, which must be initialized for each connection, typically when creating a keymap (it is unlikely to be used before then). If this is not your first call to this constructor with this connection, you should set `setup_xkb` to `false`.
+"""
 function Keymap(conn::Connection; setup_xkb=true)
     if setup_xkb
         ret_code = xkb_x11_setup_xkb_extension(conn, 1, 0, XKB_X11_SETUP_XKB_EXTENSION_NO_FLAGS, C_NULL, C_NULL, C_NULL, C_NULL)
-        ret_code == 0 && error("XKB extension could not be setup")
+        ret_code == 0 && error("XKB extension setup failed")
     end
     ctx = xkb_context_new(XKB_CONTEXT_NO_DEFAULT_INCLUDES)
-    ctx == C_NULL && error("Context could not be created: $ctx")
+    ctx == C_NULL && error("Context creation failed")
     device_id = xkb_x11_get_core_keyboard_device_id(conn)
-    device_id == -1 && error("Invalid device ID retrieved: $device_id")
+    device_id == -1 && error("No keyboard device ID could be retrieved")
     keymap = xkb_x11_keymap_new_from_device(ctx, conn, device_id, XKB_KEYMAP_COMPILE_NO_FLAGS)
     state = xkb_x11_state_new_from_device(keymap, conn, device_id)
-    state == C_NULL && error("State could not be created: $state")
+    state == C_NULL && error("State creation failed")
     Keymap(keymap, ctx, state, conn, device_id)
 end
 
-function keymap_info(km)
+function Base.String(km::Keymap)
     km_name_ptr = xkb_keymap_get_as_string(km, XKB_KEYMAP_FORMAT_TEXT_V1)
-    km_name_ptr == C_NULL && error("Could not fetch keymap")
+    km_name_ptr == C_NULL && error("Failed to obtain a string from the keymap $km")
     unsafe_string(km_name_ptr)
 end
 
-
-function name_from_keysym(keysym; max_chars=50)
+"""
+Return a `String` representation of an integer XCB keysym.
+"""
+function keysym_string(keysym::Integer; max_chars=50)
     char_tmp = zeros(UInt8, max_chars)
     char_tmp_ptr = pointer(char_tmp)
     GC.@preserve char_tmp begin
         val = xkb_keysym_get_name(keysym, pointer(char_tmp), sizeof(eltype(char_tmp)) * length(char_tmp))
-        val == -1 && @error("Could not find keysym name for $(hex(keysym))")
+        val == -1 && @error("Failed to obtain a keysym string for $(hex(keysym))")
         str = unsafe_string(char_tmp_ptr)
     end
     str
 end
 
-function name_from_keycode(km::Keymap, keycode)
+"""
+Obtain the name of a physical key identified by its `keycode` using a keymap.
+"""
+function key_name(km::Keymap, keycode::Integer)
     ptr = xkb_keymap_key_get_name(km, keycode)
-    ptr == C_NULL && error("Could not get name from keycode $keycode")
-    unsafe_string(ptr)
+    ptr == C_NULL && error("Failed to obtain a name from the keycode $keycode")
+    Symbol(unsafe_string(ptr))
 end
 
-function key_info(event_details::EventDetails)
+"""
+Obtain a keycode from a key `name` using a keymap.
+"""
+function keycode(km::Keymap, name::Symbol)
+    keycode = xkb_keymap_key_by_name(km, string(name))
+    keycode == typemax(UInt32) && error("Failed to obtain a keycode from the key name $name")
+    keycode
+end
+
+"""
+Extract a keycode from an key event.
+"""
+keycode(details::EventDetails{<:KeyEvent}) = keycode(details.window_handler.keymap, details.data.key_name)
+
+"""
+Return condensed information regarding a keystroke as a `String`. Includes key name, keycode, character input and key symbol.
+"""
+function keystroke_info(event_details::EventDetails)
     km = event_details.window_handler.keymap
     @unpack key_name, key, input = event_details.data
     keycode = xkb_keymap_key_by_name(km, string(key_name))
     "Key \e[31m$key_name\e[m (code \e[33m$keycode\e[m): input \"\e[36m$input\e[m\" from symbol \e[36m$key\e[m"
 end
 
-Base.Char(km::Keymap, keycode) = Char(xkb_state_key_get_utf32(km.state, keycode))
+Base.Char(km::Keymap, keycode::Integer) = Char(xkb_state_key_get_utf32(km.state, keycode))
 
 """
-Get a `KeySymbol` from a keycode.
+Generate a `KeySymbol` from a keycode.
 """
-KeySymbol(km::Keymap, keycode::Integer) = keysym_name_to_keysymbol(name_from_keysym(xkb_state_key_get_one_sym(km.state, keycode)))
-"""
-Get a `KeySymbol` from a physical key name.
-"""
-KeySymbol(km::Keymap, key_name) = KeySymbol(km, xkb_keymap_key_by_name(km, key_name))
+KeySymbol(km::Keymap, keycode::Integer) = key_symbol_from_keysym_string(keysym_string(xkb_state_key_get_one_sym(km.state, keycode)))
 
 """
-Get a `KeySymbol` from a keysym name.
+Generate a `KeySymbol` from a key name.
 """
-function keysym_name_to_keysymbol(keysym_name)
-    ks = Symbol(lowercase(keysym_name))
-    sym = ks ∈ keys(keysym_names_translation) ? keysym_names_translation[ks] : ks
-    KeySymbol(sym)
+KeySymbol(km::Keymap, key_name::Symbol) = KeySymbol(km, xkb_keymap_key_by_name(km, string(key_name)))
+
+"""
+Generate a `KeySymbol` from a XCB keysym string.
+"""
+function key_symbol_from_keysym_string(keysym::AbstractString)
+    keysym = Symbol(lowercase(keysym))
+    KeySymbol(standardize_key_symbol(keysym))
 end
 
 """
-Translation `Dict` from a keysym obtained via XCB to a standard key name defined in `WindowAbstractions`.
+Transform a key symbol obtained via XCB to a standard symbol defined in `WindowAbstractions`.
 """
+standardize_key_symbol(key_symbol::Symbol) = key_symbol ∈ keys(keysym_names_translation) ? keysym_names_translation[key_symbol] : key_symbol
+
 const keysym_names_translation = Dict(
     :shift_r          => :shift_right,
     :shift_l          => :shift_left,
@@ -106,3 +140,10 @@ const keysym_names_translation = Dict(
     :alt_l            => :alt_left,
     :return           => :enter,
 )
+
+"""
+Produce a key event based on a key name, a modifier state and an action using a keymap.
+"""
+function key_event_from_name(km::Keymap, key_name::Symbol, modifiers::KeyModifierState, action::KeyAction)
+    KeyEvent(key_name, KeySymbol(km, key_name), Char(km, keycode(km, key_name)), modifiers, action)
+end

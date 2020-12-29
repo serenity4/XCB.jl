@@ -44,15 +44,15 @@ EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_button_press_
     EventDetails(handler, window, MouseEvent(data), data, t)
 
 function EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_key_press_event_t, t)
-    keycode_symbol = Symbol(name_from_keycode(handler.keymap, data.detail))
+    keycode_symbol = key_name(handler.keymap, data.detail)
     key_symbol = KeySymbol(handler.keymap, data.detail)
     input_char = Char(handler.keymap, data.detail)
-    event_type = data.response_type == XCB_KEY_PRESS ? KeyPressed() : KeyReleased()
+    event_type = data.response_type % 128 == XCB_KEY_PRESS ? KeyPressed() : KeyReleased()
     EventDetails(handler, window, KeyEvent(keycode_symbol, key_symbol, input_char, KeyModifierState(data), event_type), data, t)
 end
 
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_enter_notify_event_t, t) =
-    EventDetails(handler, window, data.response_type == XCB_ENTER_NOTIFY ? PointerEntersWindowEvent() : PointerLeavesWindowEvent(), data, t)
+    EventDetails(handler, window, data.response_type % 128 == XCB_ENTER_NOTIFY ? PointerEntersWindowEvent() : PointerLeavesWindowEvent(), data, t)
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_motion_notify_event_t, t) =
     EventDetails(handler, window, PointerMovesEvent(), data, t)
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_expose_event_t, t) =

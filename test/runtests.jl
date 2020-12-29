@@ -14,22 +14,25 @@ end
 
 function on_key_pressed(details::EventDetails)
     win = details.window
-    km = details.window_handler.keymap
-    @info(key_info(details))
+    handler = details.window_handler
+    km = handler.keymap
+    @info(keystroke_info(details))
     @unpack key_name, key, input, modifiers = details.data
     kc = KeyCombination(key, modifiers)
     ctx = win.ctx
     set_title(win, "Random title $(rand())")
-    # @info("Input from key $key_name: \"\e[33m$(input)\e[m\" from pressing \e[33m$(key)\e[m")
     if kc ∈ [key"q", key"ctrl+q", key"f4"]
-        throw(CloseWindow(details.window_handler, win))
+        throw(CloseWindow(handler, win, "Received closing request from user input"))
     elseif kc == key"s"
         curr_extent = XCB.extent(win)
         XCB.set_extent(win, curr_extent .+ 1)
     elseif kc == key"i"
         open("keymap.txt", "w") do io
-            write(io, keymap_info(km))
+            write(io, String(km))
         end
+    elseif kc == key"f"
+        @info "Faking input: sending key AD01 to quit (requires an english keyboard layout to be translated to the relevant symbol 'q')"
+        send_fake_event(EventDetails(key_event_from_name(handler.keymap, :AD01, KeyModifierState(), KeyPressed()), (50, 50), floor(time()), :window_1, win, handler))
     else
         XCB.change_graphics_context!(ctx, ctx.mask, [rand(1:16_777_215), 0])
         XCB.@flush XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
@@ -38,8 +41,10 @@ end
 
 r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
 
+const is_xvfb = ENV["DISPLAY"] == ":99"
+
 function test()
-    connection = Connection(display=":1")
+    connection = Connection()
     setup = Setup(connection)
     println(setup.value)
     iter = XCB.xcb_setup_roots_iterator(setup)
@@ -85,7 +90,14 @@ function test()
             ),
         ),
     )
-    run(event_loop, Synchronous(); warn_unknown=true, poll=true)
+
+    if is_xvfb
+        run(event_loop, Asynchronous(); warn_unknown=true, poll=true)
+        send_fake_event(EventDetails(key_event_from_name(handler.keymap, :AC04, KeyModifierState(), KeyPressed()), (50, 50), floor(time()), :window_1, window, handler))
+        sleep(2)
+    else
+        run(event_loop, Synchronous(); warn_unknown=true, poll=true)
+    end
 end
 
 test()

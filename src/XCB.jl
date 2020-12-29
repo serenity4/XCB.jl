@@ -74,10 +74,15 @@ export xcb,
        event_details_xkb,
        @check,
        @flush,
-       keymap_info,
-       key_info,
-       name_from_keycode,
-       name_from_keysym,
-       unsafe_load_event
+       keystroke_info,
+       keycode,
+       key_name,
+       keysym_string,
+       key_symbol_from_keysym_string,
+       key_event_from_name,
+       unsafe_load_event,
+       send_event,
+       fake_event,
+       send_fake_event
 
 end # module
