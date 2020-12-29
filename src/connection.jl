@@ -117,14 +117,11 @@ end
 ```
 """
 macro flush(expr)
-    if expr.head == :macrocall
-        expr = expr.args[3]
+    if expr.head == :macrocall && expr.args[1] == Symbol("@check")
+        _expr = expr.args[3]
+        expr = _expr isa QuoteNode && _expr.value ∈ [:error, :warn] ? expr.args[4] : _expr
     end
-    if expr isa QuoteNode
-        conn = expr.value
-    else
-        conn = expr.args[2]
-    end
+    conn = expr.args[2]
     quote
         $(esc(expr))
         $(esc(flush))($(esc(conn)))
