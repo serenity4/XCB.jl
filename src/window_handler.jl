@@ -9,6 +9,7 @@ XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(co
 
 function poll_for_event(handler::XWindowHandler, t0)
     event = xcb_poll_for_event(handler.conn)
+    yield()
     event == C_NULL ? nothing : event
 end
 
