@@ -92,6 +92,7 @@ function test()
     )
 
     if is_xvfb
+        @info "Running window asynchronously"
         run(event_loop, Asynchronous(); warn_unknown=true, poll=true)
         send_fake_event(EventDetails(key_event_from_name(handler.keymap, :AC04, KeyModifierState(), KeyPressed()), (50, 50), floor(time()), :window_1, window, handler))
         sleep(2)
