@@ -33,15 +33,15 @@ window_id_field(event::xcb_configure_notify_event_t) = :window
 
 window_id(event) = getproperty(event, window_id_field(event))
 
-WindowAbstractions.Point2(event::xcb_button_press_event_t) = Point2{Int}(event.event_x, event.event_y)
-WindowAbstractions.Point2(event::xcb_key_press_event_t) = Point2{Int}(event.event_x, event.event_y)
-WindowAbstractions.Point2(event::xcb_enter_notify_event_t) = Point2{Int}(event.event_x, event.event_y)
-WindowAbstractions.Point2(event::xcb_motion_notify_event_t) = Point2{Int}(event.event_x, event.event_y)
-WindowAbstractions.Point2(event::xcb_expose_event_t) = Point2{Int}(event.x, event.y)
-WindowAbstractions.Point2(event::xcb_configure_notify_event_t) = Point2{Int}(event.x, event.y)
+location(event::xcb_button_press_event_t) = (event.event_x, event.event_y)
+location(event::xcb_key_press_event_t) = (event.event_x, event.event_y)
+location(event::xcb_enter_notify_event_t) = (event.event_x, event.event_y)
+location(event::xcb_motion_notify_event_t) = (event.event_x, event.event_y)
+location(event::xcb_expose_event_t) = (event.x, event.y)
+location(event::xcb_configure_notify_event_t) = (event.x, event.y)
 
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::EventData, event, t) =
-    EventDetails(data, Point2(event), t, get_window_symbol(handler, window), window, handler)
+    EventDetails(data, Int.(location(event)), t, get_window_symbol(handler, window), window, handler)
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_button_press_event_t, t) =
     EventDetails(handler, window, MouseEvent(data), data, t)
 
@@ -58,9 +58,9 @@ EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_enter_notify_
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_motion_notify_event_t, t) =
     EventDetails(handler, window, PointerMovesEvent(), data, t)
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_expose_event_t, t) =
-    EventDetails(handler, window, ExposeEvent(Point2{Int}(data.width, data.height), data.count), data, t)
+    EventDetails(handler, window, ExposeEvent((data.width, data.height), data.count), data, t)
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_configure_notify_event_t, t) =
-    EventDetails(handler, window, ResizeEvent(Point2{Int}(data.width, data.height)), data, t)
+    EventDetails(handler, window, ResizeEvent((data.width, data.height)), data, t)
 
 process_xevent(wh, event_loop, xge::Nothing, t; warn_unknown=false, kwargs...) = nothing
 

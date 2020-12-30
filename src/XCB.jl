@@ -18,7 +18,7 @@ using DocStringExtensions
 
 using Parameters
 using WindowAbstractions
-using WindowAbstractions: Point2, action
+using WindowAbstractions: action
 import WindowAbstractions: set_title,
                            set_icon_title,
                            set_extent,
