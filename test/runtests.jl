@@ -15,6 +15,7 @@ end
 function on_key_pressed(details::EventDetails)
     win = details.window
     handler = details.window_handler
+    send = XCB.send(handler, win)
     km = handler.keymap
     @info(keystroke_info(details))
     @unpack key_name, key, input, modifiers = details.data
@@ -32,7 +33,7 @@ function on_key_pressed(details::EventDetails)
         end
     elseif kc == key"f"
         @info "Faking input: sending key AD01 to quit (requires an english keyboard layout to be translated to the relevant symbol 'q')"
-        send_fake_event(EventDetails(key_event_from_name(handler.keymap, :AD01, KeyModifierState(), KeyPressed()), (50, 50), floor(time()), :window_1, win, handler))
+        send(key_event_from_name(handler.keymap, :AD01, KeyModifierState(), KeyPressed()))
     else
         XCB.change_graphics_context!(ctx, ctx.mask, [rand(1:16_777_215), 0])
         XCB.@flush XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
@@ -79,10 +80,10 @@ function test()
                 on_mouse_button_pressed = on_button_pressed,
                 on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
                 on_key_pressed,
-                # on_key_released = x -> println("Released $(x.data.kc)"),
-                # on_pointer_enter = x -> @info("Entering window at $(x.location)"),
-                # on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
-                # on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
+                on_key_released = x -> @info("Released $(KeyCombination(x.data.key, x.data.modifiers))"),
+                on_pointer_enter = x -> @info("Entering window at $(x.location)"),
+                on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
+                on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
                 on_expose = x -> @info("Window exposed"),
             ),
             :window_2 => WindowCallbacks(;
@@ -91,11 +92,21 @@ function test()
         ),
     )
 
+    send = XCB.send(handler, window)
+
     if is_xvfb
-        @info "Running window asynchronously"
-        run(event_loop, Asynchronous(); warn_unknown=true, poll=true)
-        send_fake_event(EventDetails(key_event_from_name(handler.keymap, :AC04, KeyModifierState(), KeyPressed()), (50, 50), floor(time()), :window_1, window, handler))
-        sleep(2)
+        @info "- Running window asynchronously"
+        task = run(event_loop, Asynchronous(); warn_unknown=true, poll=true)
+        @info "- Sending fake inputs"
+        send(MouseEvent(ButtonLeft(), MouseState(), ButtonPressed()))
+        send(MouseEvent(ButtonLeft(), MouseState(), ButtonReleased()))
+        send(PointerEntersWindowEvent())
+        send(PointerMovesEvent())
+        send(PointerLeavesWindowEvent())
+        send(key_event_from_name(handler.keymap, :AC04, KeyModifierState(), KeyReleased()))
+        send(key_event_from_name(handler.keymap, :AC04, KeyModifierState(), KeyPressed()))
+        @info "- Waiting for window to close"
+        wait(task)
     else
         run(event_loop, Synchronous(); warn_unknown=true, poll=true)
     end

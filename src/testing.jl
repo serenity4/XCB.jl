@@ -1,55 +1,105 @@
 """
-Translate mouse or modifier state into the corresponding API value.
+Translate mouse or modifier state into the corresponding XCB value.
 """
-function _xcb_translate_state end
+function state_xcb end
 
-_xcb_translate_state(s::MouseState) = .&(UInt[s.left, s.middle, s.right, s.scroll_up, s.scroll_down, s.any] .* UInt[XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY]...)
-_xcb_translate_state(s::KeyModifierState) = sum(2 .^ (0:3) .* Int[s.shift, s.ctrl, s.alt, s.super])
+state_xcb(s::MouseState) = .&(UInt[s.left, s.middle, s.right, s.scroll_up, s.scroll_down, s.any] .* UInt[XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY]...)
+state_xcb(s::KeyModifierState) = sum(2 .^ (0:3) .* Int[s.shift, s.ctrl, s.alt, s.super])
+state_xcb(::Any) = 0
+
+state_xcb(e::MouseEvent) = state_xcb(e.state)
+state_xcb(e::KeyEvent) = state_xcb(e.modifiers)
 
 """
-Translate an event type into its API value.
+Translate an action into its corresponding XCB value.
 """
-function _xcb_translate_event end
+function response_type_xcb end
 
-_xcb_translate_event(::ButtonPressed) = XCB_BUTTON_PRESS
-_xcb_translate_event(::ButtonReleased) = XCB_BUTTON_RELEASE
-_xcb_translate_event(::KeyPressed) = XCB_KEY_PRESS
-_xcb_translate_event(::KeyReleased) = XCB_KEY_RELEASE
-_xcb_translate_event(::PointerMoves) = XCB_MOTION_NOTIFY
-_xcb_translate_event(::PointerEntersWindow) = XCB_ENTER_NOTIFY
-_xcb_translate_event(::PointerLeavesWindow) = XCB_LEAVE_NOTIFY
-_xcb_translate_event(::ExposeEvent) = XCB_EXPOSE
+response_type_xcb(::ButtonPressed) = XCB_BUTTON_PRESS
+response_type_xcb(::ButtonReleased) = XCB_BUTTON_RELEASE
+response_type_xcb(::KeyPressed) = XCB_KEY_PRESS
+response_type_xcb(::KeyReleased) = XCB_KEY_RELEASE
+response_type_xcb(::PointerMoves) = XCB_MOTION_NOTIFY
+response_type_xcb(::PointerEntersWindow) = XCB_ENTER_NOTIFY
+response_type_xcb(::PointerLeavesWindow) = XCB_LEAVE_NOTIFY
+response_type_xcb(::Expose) = XCB_EXPOSE
+response_type_xcb(::Resize) = XCB_CONFIGURE_NOTIFY
 
-_xcb_translate_button(::ButtonLeft) = XCB_BUTTON_INDEX_1
-_xcb_translate_button(::ButtonMiddle) = XCB_BUTTON_INDEX_2
-_xcb_translate_button(::ButtonRight) = XCB_BUTTON_INDEX_3
-_xcb_translate_button(::ButtonScrollUp) = XCB_BUTTON_INDEX_4
-_xcb_translate_button(::ButtonScrollDown) = XCB_BUTTON_INDEX_5
+event_type_xcb(::Union{ButtonPressed, ButtonReleased}) = xcb_button_press_event_t
+event_type_xcb(::Union{KeyPressed, KeyReleased}) = xcb_key_press_event_t
+event_type_xcb(::PointerMoves) = xcb_motion_notify_event_t
+event_type_xcb(::Union{PointerEntersWindow, PointerLeavesWindow}) = xcb_enter_notify_event_t
+event_type_xcb(::ResizeEvent) = xcb_configure_notify_event_t
+event_type_xcb(::ExposeEvent) = xcb_expose_event_t
 
-send_fake_event(details::EventDetails) = send_event(details.window, fake_event(details))
+button_xcb(::ButtonLeft) = XCB_BUTTON_INDEX_1
+button_xcb(::ButtonMiddle) = XCB_BUTTON_INDEX_2
+button_xcb(::ButtonRight) = XCB_BUTTON_INDEX_3
+button_xcb(::ButtonScrollUp) = XCB_BUTTON_INDEX_4
+button_xcb(::ButtonScrollDown) = XCB_BUTTON_INDEX_5
+
+detail_xcb(e::MouseEvent) = button_xcb(e.button)
+detail_xcb(e::PointerMovesEvent) = XCB_MOTION_NORMAL
+detail_xcb(e::PointerEntersWindowEvent) = XCB_ENTER_NOTIFY
+detail_xcb(e::PointerLeavesWindowEvent) = XCB_LEAVE_NOTIFY
+detail_xcb(e::EventData) = 0
+detail_xcb(e::EventDetails) = detail_xcb(e.data)
+detail_xcb(e::EventDetails{<:KeyEvent}) = keycode(e)
+
+event_xcb(e::EventDetails) = event_type_xcb(action(e))(
+    response_type_xcb(action(e)),
+    detail_xcb(e),
+    0,
+    e.time,
+    e.window.parent_id,
+    e.window.id,
+    0,
+    0,
+    0,
+    e.location...,
+    state_xcb(e.data),
+    true,
+    false
+)
+
+event_xcb(e::EventDetails{<:ExposeEvent}) = event_type_xcb(action(e))(
+    response_type_xcb(action(e)),
+    0,
+    0,
+    e.window.id,
+    e.location...,
+    extent(e.window)...,
+    0,
+    0
+)
+
+event_xcb(e::EventDetails{<:ResizeEvent}) = event_type_xcb(action(e))(
+    response_type_xcb(action(e)),
+    0,
+    0,
+    e.window.id,
+    e.window.id,
+    0,
+    e.location...,
+    extent(e.window)...,
+    0,
+    0,
+    0
+)
+
+send_event(e::EventDetails) = send_event(e.window, event_xcb(e))
 
 function send_event(window::XCBWindow, event)
     ref = Ref(event)
     GC.@preserve ref begin
-        @flush @check :error xcb_send_event(window.conn, false, window.id, window.mask, Base.reinterpret(Cstring, Base.unsafe_convert(Ptr{typeof(event)}, ref)))
+        event_ptr = Base.reinterpret(Cstring, Base.unsafe_convert(Ptr{typeof(event)}, ref))
+        @flush @check :error xcb_send_event(window.conn, false, window.id, window.mask, event_ptr)
     end
 end
 
-fake_event(e::EventDetails, type, args...) = type(
-    _xcb_translate_event(e.data.action), # response type
-    args...                              # event payload
-)
-
-function fake_event(e::EventDetails{<:MouseEvent})
-    button = _xcb_translate_button(e.data.button)
-    state = _xcb_translate_state(e.data.state)
-    fake_event(e, xcb_button_press_event_t, button, 0, e.time, e.window.parent_id, e.window.id, 0, 0, 0, e.location..., state, true, false)
-end
-
-function fake_event(e::EventDetails{<:KeyEvent})
-    key = keycode(e)
-    state = _xcb_translate_state(e.data.modifiers)
-    fake_event(e, xcb_key_press_event_t, key, 0, e.time, e.window.parent_id, e.window.id, 0, 0, 0, e.location..., state, true, false)
-end
-
 hex(x) = "0x$(string(x, base=16))"
+
+function send(wh::XWindowHandler, win::XCBWindow; location=(0, 0))
+    win_sym = get_window_symbol(wh, win)
+    event -> send_event(EventDetails(event, location, floor(time()), win_sym, win, wh))
+end

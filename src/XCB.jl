@@ -18,7 +18,7 @@ using DocStringExtensions
 
 using Parameters
 using WindowAbstractions
-using WindowAbstractions: Point2
+using WindowAbstractions: Point2, action
 import WindowAbstractions: set_title,
                            set_icon_title,
                            set_extent,
@@ -82,7 +82,10 @@ export xcb,
        key_event_from_name,
        unsafe_load_event,
        send_event,
-       fake_event,
-       send_fake_event
+       event_xcb,
+       action_xcb,
+       state_xcb,
+       event_type_xcb,
+       button_xcb
 
 end # module
