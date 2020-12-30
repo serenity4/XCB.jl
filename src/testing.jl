@@ -3,7 +3,7 @@ Translate mouse or modifier state into the corresponding API value.
 """
 function _xcb_translate_state end
 
-_xcb_translate_state(s::MouseState) = .&(UInt[s.left, s.middle, s.right, s.scroll_up, s.scroll_down, s.any] .* [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY]...)
+_xcb_translate_state(s::MouseState) = .&(UInt[s.left, s.middle, s.right, s.scroll_up, s.scroll_down, s.any] .* UInt[XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY]...)
 _xcb_translate_state(s::KeyModifierState) = sum(2 .^ (0:3) .* Int[s.shift, s.ctrl, s.alt, s.super])
 
 """
@@ -20,11 +20,11 @@ _xcb_translate_event(::PointerEntersWindow) = XCB_ENTER_NOTIFY
 _xcb_translate_event(::PointerLeavesWindow) = XCB_LEAVE_NOTIFY
 _xcb_translate_event(::ExposeEvent) = XCB_EXPOSE
 
-_xcb_translate_button(::ButtonLeft) = XCB_BUTTON_MASK_1
-_xcb_translate_button(::ButtonMiddle) = XCB_BUTTON_MASK_2
-_xcb_translate_button(::ButtonRight) = XCB_BUTTON_MASK_3
-_xcb_translate_button(::ButtonScrollUp) = XCB_BUTTON_MASK_4
-_xcb_translate_button(::ButtonScrollDown) = XCB_BUTTON_MASK_5
+_xcb_translate_button(::ButtonLeft) = XCB_BUTTON_INDEX_1
+_xcb_translate_button(::ButtonMiddle) = XCB_BUTTON_INDEX_2
+_xcb_translate_button(::ButtonRight) = XCB_BUTTON_INDEX_3
+_xcb_translate_button(::ButtonScrollUp) = XCB_BUTTON_INDEX_4
+_xcb_translate_button(::ButtonScrollDown) = XCB_BUTTON_INDEX_5
 
 send_fake_event(details::EventDetails) = send_event(details.window, fake_event(details))
 

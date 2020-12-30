@@ -15,7 +15,7 @@ button(::XCBButtonCode{Val(5)}) = ButtonScrollDown()
 
 MouseState(mouse_event::xcb_button_press_event_t) = MouseState((mouse_event.state .| [XCB_BUTTON_MASK_1, XCB_BUTTON_MASK_2, XCB_BUTTON_MASK_3, XCB_BUTTON_MASK_4, XCB_BUTTON_MASK_5, XCB_BUTTON_MASK_ANY] .== mouse_event.state)...)
 
-MouseEvent(mouse_event::xcb_button_press_event_t) = MouseEvent(button(XCBButtonCode(mouse_event)), MouseState(mouse_event), mouse_event.response_type == XCB_BUTTON_PRESS ? ButtonPressed() : ButtonReleased())
+MouseEvent(mouse_event::xcb_button_press_event_t) = MouseEvent(button(XCBButtonCode(mouse_event)), MouseState(mouse_event), response_type(mouse_event) == XCB_BUTTON_PRESS ? ButtonPressed() : ButtonReleased())
 
 function KeyContext(key_event::xcb_key_press_event_t)
     state = key_event.state
