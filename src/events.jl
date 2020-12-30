@@ -9,10 +9,12 @@ event_type(::Val{85}) = xcb.xcb_xkb_state_notify_event_t # very hacky, but respo
 event_type(::Val{XCB_KEYMAP_NOTIFY}) = xcb_keymap_notify_event_t
 event_type(rt) = nothing
 
+response_type(data) = Int(data.response_type % 128)
+
 function unsafe_load_event(xge_ptr; warn_unknown=false)
     xge = unsafe_load(xge_ptr)
-    rt = xge.response_type % 128
-    et = event_type(Val(Int(rt)))
+    rt = response_type(xge)
+    et = event_type(Val(rt))
     if isnothing(et)
         warn_unknown && @warn "Unknown event $(xge.response_type) (modulo 128: $rt)"
         nothing
@@ -47,12 +49,12 @@ function EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_key_
     keycode_symbol = key_name(handler.keymap, data.detail)
     key_symbol = KeySymbol(handler.keymap, data.detail)
     input_char = Char(handler.keymap, data.detail)
-    event_type = data.response_type % 128 == XCB_KEY_PRESS ? KeyPressed() : KeyReleased()
+    event_type = response_type(data) == XCB_KEY_PRESS ? KeyPressed() : KeyReleased()
     EventDetails(handler, window, KeyEvent(keycode_symbol, key_symbol, input_char, KeyModifierState(data), event_type), data, t)
 end
 
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_enter_notify_event_t, t) =
-    EventDetails(handler, window, data.response_type % 128 == XCB_ENTER_NOTIFY ? PointerEntersWindowEvent() : PointerLeavesWindowEvent(), data, t)
+    EventDetails(handler, window, response_type(data) == XCB_ENTER_NOTIFY ? PointerEntersWindowEvent() : PointerLeavesWindowEvent(), data, t)
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_motion_notify_event_t, t) =
     EventDetails(handler, window, PointerMovesEvent(), data, t)
 EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_expose_event_t, t) =
