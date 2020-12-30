@@ -7,13 +7,17 @@ end
 XWindowHandler(conn::Connection, windows::Dict{Symbol, XCBWindow}) = XWindowHandler(conn, windows, Keymap(conn))
 XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(conn, Dict(Symbol.("window_" .* string.(1:length(windows))) .=> windows))
 
-function poll_for_event(handler::XWindowHandler, t0)
+function poll_for_event(handler::XWindowHandler)
     event = xcb_poll_for_event(handler.conn)
-    yield()
-    event == C_NULL ? nothing : event
+    if event == C_NULL
+        yield()
+        poll_for_event(handler::XWindowHandler)
+    else
+        event
+    end
 end
 
-function wait_for_event(handler::XWindowHandler, t0)
+function wait_for_event(handler::XWindowHandler)
     event = xcb_wait_for_event(handler.conn)
     event == C_NULL ? nothing : event
 end

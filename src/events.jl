@@ -87,7 +87,7 @@ function main_loop(wh::XWindowHandler, event_loop::EventLoop{XWindowHandler}, t0
     while !isempty(wh.windows)
         try
             event_loop.on_iter_first()
-            xge = next_event(wh, t0)
+            xge = next_event(wh)
             t = time() - t0
             process_xevent(wh, event_loop, xge, t; warn_unknown, kwargs...)
             event_loop.on_iter_last()
