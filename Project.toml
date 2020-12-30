@@ -9,7 +9,6 @@ Parameters = "d96e819e-fc66-5662-9728-84c9c7592b0a"
 WindowAbstractions = "e18202ca-4a7d-4de8-b056-fa6bbd7de157"
 Xorg_libxcb_jll = "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b"
 Xorg_xcb_util_jll = "2def613f-5ad1-5310-b15b-b15d46f528f5"
-Xorg_xcb_util_keysyms_jll = "975044d2-76e6-5fbe-bf08-97ce7c6574c7"
 xkbcommon_jll = "d8fb68d0-12a3-5cfd-a85a-d49703b185fd"
 
 [compat]
@@ -19,7 +18,6 @@ Parameters = "0.12.1"
 WindowAbstractions = "0.2.2"
 Xorg_libxcb_jll = "1.13.0"
 Xorg_xcb_util_jll = "0.4.0"
-Xorg_xcb_util_keysyms_jll = "0.4.0"
 julia = "1.5"
 xkbcommon_jll = "0.9.1"
 

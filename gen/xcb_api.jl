@@ -4565,65 +4565,6 @@ end
 function xcb_xkb_set_debugging_flags_reply(c, cookie, e)
     ccall((:xcb_xkb_set_debugging_flags_reply, libxcb_xkb), Ptr{xcb_xkb_set_debugging_flags_reply_t}, (Ptr{xcb_connection_t}, xcb_xkb_set_debugging_flags_cookie_t, Ptr{Ptr{xcb_generic_error_t}}), c, cookie, e)
 end
-# Julia wrapper for header: xcb_keysyms.h
-# Automatically generated using Clang.jl
-
-
-function xcb_key_symbols_alloc(c)
-    ccall((:xcb_key_symbols_alloc, libxcb_keysyms), Ptr{xcb_key_symbols_t}, (Ptr{xcb_connection_t},), c)
-end
-
-function xcb_key_symbols_free(syms)
-    ccall((:xcb_key_symbols_free, libxcb_keysyms), Cvoid, (Ptr{xcb_key_symbols_t},), syms)
-end
-
-function xcb_key_symbols_get_keysym(syms, keycode, col)
-    ccall((:xcb_key_symbols_get_keysym, libxcb_keysyms), xcb_keysym_t, (Ptr{xcb_key_symbols_t}, xcb_keycode_t, Cint), syms, keycode, col)
-end
-
-function xcb_key_symbols_get_keycode(syms, keysym)
-    ccall((:xcb_key_symbols_get_keycode, libxcb_keysyms), Ptr{xcb_keycode_t}, (Ptr{xcb_key_symbols_t}, xcb_keysym_t), syms, keysym)
-end
-
-function xcb_key_press_lookup_keysym(syms, event, col)
-    ccall((:xcb_key_press_lookup_keysym, libxcb_keysyms), xcb_keysym_t, (Ptr{xcb_key_symbols_t}, Ptr{xcb_key_press_event_t}, Cint), syms, event, col)
-end
-
-function xcb_key_release_lookup_keysym(syms, event, col)
-    ccall((:xcb_key_release_lookup_keysym, libxcb_keysyms), xcb_keysym_t, (Ptr{xcb_key_symbols_t}, Ptr{xcb_key_release_event_t}, Cint), syms, event, col)
-end
-
-function xcb_refresh_keyboard_mapping(syms, event)
-    ccall((:xcb_refresh_keyboard_mapping, libxcb_keysyms), Cint, (Ptr{xcb_key_symbols_t}, Ptr{xcb_mapping_notify_event_t}), syms, event)
-end
-
-function xcb_is_keypad_key(keysym)
-    ccall((:xcb_is_keypad_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
-end
-
-function xcb_is_private_keypad_key(keysym)
-    ccall((:xcb_is_private_keypad_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
-end
-
-function xcb_is_cursor_key(keysym)
-    ccall((:xcb_is_cursor_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
-end
-
-function xcb_is_pf_key(keysym)
-    ccall((:xcb_is_pf_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
-end
-
-function xcb_is_function_key(keysym)
-    ccall((:xcb_is_function_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
-end
-
-function xcb_is_misc_function_key(keysym)
-    ccall((:xcb_is_misc_function_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
-end
-
-function xcb_is_modifier_key(keysym)
-    ccall((:xcb_is_modifier_key, libxcb_keysyms), Cint, (xcb_keysym_t,), keysym)
-end
 # Julia wrapper for header: xcb_event.h
 # Automatically generated using Clang.jl
 
