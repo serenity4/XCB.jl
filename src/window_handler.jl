@@ -8,12 +8,10 @@ XWindowHandler(conn::Connection, windows::Dict{Symbol, XCBWindow}) = XWindowHand
 XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(conn, Dict(Symbol.("window_" .* string.(1:length(windows))) .=> windows))
 
 function poll_for_event(handler::XWindowHandler)
-    event = xcb_poll_for_event(handler.conn)
-    if event == C_NULL
+    while true
+        event = xcb_poll_for_event(handler.conn)
+        event ≠ C_NULL && return event
         yield()
-        poll_for_event(handler::XWindowHandler)
-    else
-        event
     end
 end
 
