@@ -9,14 +9,16 @@ event_type(::Val{85}) = xcb.xcb_xkb_state_notify_event_t # very hacky, but respo
 event_type(::Val{XCB_KEYMAP_NOTIFY}) = xcb_keymap_notify_event_t
 event_type(rt) = nothing
 
-response_type(data) = Int(data.response_type % 128)
+response_type(data) = Int(data.response_type & 0x7f)
+
+is_from_send_request(data) = Bool(data.response_type & 0x80)
 
 function unsafe_load_event(xge_ptr; warn_unknown=false)
     xge = unsafe_load(xge_ptr)
     rt = response_type(xge)
     et = event_type(Val(rt))
     if isnothing(et)
-        warn_unknown && @warn "Unknown event $(xge.response_type) (modulo 128: $rt)"
+        warn_unknown && @warn "Unknown event $(rt)"
         nothing
     else
         unsafe_load(convert(Ptr{et}, xge_ptr))
