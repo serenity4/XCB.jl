@@ -8,16 +8,12 @@ mutable struct XCBWindow <: AbstractWindow
     visual_id
     class
     depth
-    mask
-    value_list
-    ctx
+    gc
     delete_request
-    function XCBWindow(conn, parent_id, visual_id, mask, value_list; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, map=true)
+    function XCBWindow(conn, parent_id, visual_id; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, attributes=[], values=[], map=true)
         id = XCB.xcb_generate_id(conn)
         icon_title = isnothing(icon_title) ? window_title : icon_title
-        value_list_filled = zeros(UInt32, 32)
-        setindex!.(Ref(value_list_filled), value_list, 1:length(value_list))
-        win = new(conn, id, parent_id, visual_id, class, depth, mask, value_list, nothing, nothing)
+        win = new(conn, id, parent_id, visual_id, class, depth, nothing, nothing)
         xcb_create_window(
             win.conn,
             depth,
@@ -30,9 +26,12 @@ mutable struct XCBWindow <: AbstractWindow
             border_width,
             class,
             visual_id,
-            mask,
-            value_list,
+            0,
+            C_NULL,
         )
+
+        set_attributes(win, [XCB_CW_EVENT_MASK], [base_event_mask])
+        set_attributes(win, attributes, values)
         set_title(win, window_title)
         set_icon_title(win, icon_title)
         set_delete_request!(win) # to close window on X11 requests
@@ -41,11 +40,16 @@ mutable struct XCBWindow <: AbstractWindow
     end
 end
 
-attach_graphics_context!(win::XCBWindow, ctx) = setproperty!(win, :ctx, ctx)
-
 Base.:(==)(x::XCBWindow, y::XCBWindow) = x.id == y.id
 
 Base.hash(win::XCBWindow, h::UInt) = h + hash(win.id)
+
+function set_attributes(win::XCBWindow, attributes, values)
+    values = values[sortperm(attributes)]
+    list = zeros(UInt32, 32)
+    setindex!.(Ref(list), values, 1:length(values))
+    @flush @check xcb_change_window_attributes(win.conn, win.id, reduce(|, attributes), list)
+end
 
 function set_delete_request!(win::XCBWindow)
     @unpack conn, id = win
@@ -57,7 +61,7 @@ function set_delete_request!(win::XCBWindow)
     win.delete_request = unsafe_load(wm_delete_reply).atom
 end
 
-XCBWindow(conn, screen, mask, value_list; kwargs...) = XCBWindow(conn, screen.root, screen.root_visual, mask, value_list; kwargs...)
+XCBWindow(conn, screen; kwargs...) = XCBWindow(conn, screen.root, screen.root_visual; kwargs...)
 
 function extent(win::XCBWindow)
     geometry_cookie = xcb_get_geometry(win.conn, win.id)
@@ -83,4 +87,25 @@ end
 function set_icon_title(win::XCBWindow, title)
     title_c = title * "\0"
     @flush @check xcb_change_property(win.conn, XCB_PROP_MODE_REPLACE, win.id, XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, length(title_c) * 2, pointer(title_c^2))
+end
+
+const base_event_mask = XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT | XCB_EVENT_MASK_KEYMAP_STATE | XCB_EVENT_MASK_STRUCTURE_NOTIFY
+
+const event_bits_mapping = Dict(
+    :on_key_pressed => XCB_EVENT_MASK_KEY_PRESS,
+    :on_key_released => XCB_EVENT_MASK_KEY_RELEASE,
+    :on_mouse_button_pressed => XCB_EVENT_MASK_BUTTON_PRESS,
+    :on_mouse_button_released => XCB_EVENT_MASK_BUTTON_RELEASE,
+    :on_pointer_enter => XCB_EVENT_MASK_ENTER_WINDOW,
+    :on_pointer_move => XCB_EVENT_MASK_POINTER_MOTION,
+    :on_pointer_leave => XCB_EVENT_MASK_LEAVE_WINDOW,
+    :on_expose => XCB_EVENT_MASK_EXPOSURE,
+    :on_resize => XCB_EVENT_MASK_STRUCTURE_NOTIFY,
+)
+
+event_bit(prop::Symbol, callbacks::WindowCallbacks) = !isnothing(getproperty(callbacks, prop)) * UInt32(event_bits_mapping[prop])
+event_bits(callbacks::WindowCallbacks) = reduce(|, (event_bit(prop, callbacks) for prop ∈ keys(event_bits_mapping)))
+
+function set_event_mask(win::XCBWindow, callbacks::WindowCallbacks)
+    set_attributes(win, [XCB_CW_EVENT_MASK], [event_bits(callbacks)])
 end

@@ -11,6 +11,10 @@ mutable struct Keymap <: Handle
     device_id
     function Keymap(h, ctx, state, conn, id)
         km = new(h, ctx, state, conn, id)
+
+        # get notified of state changes
+        @check xcb_xkb_select_events_aux(conn, id, XCB_XKB_EVENT_TYPE_STATE_NOTIFY, true, true, false, 0, Ref(event_details_xkb(Dict("state" => true))))
+
         finalizer(km) do x
             xkb_state_unref(x.state)
             xkb_keymap_unref(x.h)

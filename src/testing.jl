@@ -93,7 +93,7 @@ function send_event(win::XCBWindow, event)
     ref = Ref(event)
     GC.@preserve ref begin
         event_ptr = Base.reinterpret(Cstring, Base.unsafe_convert(Ptr{typeof(event)}, ref))
-        @flush @check :error xcb_send_event(win.conn, false, win.id, win.mask, event_ptr)
+        @flush @check :error xcb_send_event(win.conn, false, win.id, 0, event_ptr)
     end
 end
 

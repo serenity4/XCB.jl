@@ -6,7 +6,18 @@ mutable struct XWindowHandler <: AbstractWindowHandler
 end
 
 XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(conn, windows, Keymap(conn), Dict())
-XWindowHandler(conn::Connection, windows::Vector{XCBWindow}, callbacks::Dict{XCBWindow, WindowCallbacks}) = XWindowHandler(conn, windows, Keymap(conn), callbacks)
+
+function XWindowHandler(conn::Connection, windows::Vector{XCBWindow}, callbacks::Dict{XCBWindow, WindowCallbacks})
+    wh = XWindowHandler(conn, windows, Keymap(conn))
+    for (win, cb) ∈ callbacks
+        set_callbacks!(wh, win, cb)
+    end
+end
+
+function set_callbacks!(wh::XWindowHandler, win::XCBWindow, callbacks::WindowCallbacks)
+    wh.callbacks[win] = callbacks
+    set_event_mask(win, callbacks)
+end
 
 function poll_for_event(wh::XWindowHandler)
     while true

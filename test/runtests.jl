@@ -33,9 +33,9 @@ function on_key_pressed(wh::XWindowHandler, details::EventDetails)
         @info "Faking input: sending key AD01 to quit (requires an english keyboard layout to be translated to the relevant symbol 'q')"
         send(key_event_from_name(wh.keymap, :AD01, KeyModifierState(), KeyPressed()))
     else
-        ctx = win.ctx
-        XCB.change_graphics_context!(ctx, ctx.mask, [rand(1:16_777_215), 0])
-        XCB.@flush XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
+        gc = win.gc
+        set_attributes(gc, [XCB.XCB_GC_FOREGROUND], [rand(1:16_777_215)])
+        XCB.@flush XCB.xcb_poly_fill_rectangle(win.conn, win.id, gc.id, UInt32(1), r)
     end
 end
 
@@ -51,23 +51,14 @@ function test()
     screen = unsafe_load(iter.data)
     println(screen)
 
-    value_masks = |(XCB.XCB_CW_BACK_PIXEL, XCB.XCB_CW_EVENT_MASK)
-    value_list = [screen.black_pixel, |(XCB.XCB_EVENT_MASK_EXPOSURE, XCB.XCB_EVENT_MASK_KEY_PRESS, XCB.XCB_EVENT_MASK_KEY_RELEASE, XCB.XCB_EVENT_MASK_BUTTON_PRESS, XCB.XCB_EVENT_MASK_BUTTON_RELEASE, XCB.XCB_EVENT_MASK_STRUCTURE_NOTIFY, XCB.XCB_EVENT_MASK_ENTER_WINDOW, XCB.XCB_EVENT_MASK_LEAVE_WINDOW, XCB.XCB_EVENT_MASK_POINTER_MOTION, XCB.XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT, XCB.XCB_EVENT_MASK_KEYMAP_STATE)]
-
-    win = XCBWindow(connection, screen, value_masks, value_list; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB")
+    win = XCBWindow(connection, screen; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB", attributes=[XCB.XCB_CW_BACK_PIXEL], values=[screen.black_pixel])
     println("Window ID: ", win.id)
-    mask = |(XCB.XCB_GC_FOREGROUND, XCB.XCB_GC_GRAPHICS_EXPOSURES)
-    value_list[1] = screen.black_pixel
-    value_list[2] = 0
-    ctx = GraphicsContext(connection, win, mask, value_list)
+    ctx = GraphicsContext(connection, win; attributes=(XCB.XCB_GC_FOREGROUND, XCB.XCB_GC_GRAPHICS_EXPOSURES), values=(screen.black_pixel, 0))
     attach_graphics_context!(win, ctx)
-    # window_2 = XCBWindow(connection, screen, value_masks, value_list; x=200, y=500, border_width=50, window_title="XCB window 2", icon_title="XCB2")
-    # ctx_2 = GraphicsContext(connection, window_2, mask, value_list)
-    # attach_graphics_context!(window_2, ctx_2)
 
     wh = XWindowHandler(connection, [win])
 
-    wh.callbacks[win] = WindowCallbacks(;
+    set_callbacks!(wh, win, WindowCallbacks(;
         on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
         on_mouse_button_pressed = on_button_pressed,
         on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
@@ -77,12 +68,7 @@ function test()
         on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
         on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
         on_expose = x -> @info("Window exposed")
-    )
-
-
-    xkb_event_details = event_details_xkb(Dict("state" => true))
-    @show xkb_event_details
-    @check XCB.xcb_xkb_select_events_aux(connection, wh.keymap.device_id, XCB.XCB_XKB_EVENT_TYPE_STATE_NOTIFY, true, true, false, 0, Ref(xkb_event_details))
+    ))
 
     send = XCB.send(wh, win)
 
