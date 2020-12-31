@@ -47,14 +47,14 @@ Base.:(==)(x::XCBWindow, y::XCBWindow) = x.id == y.id
 
 Base.hash(win::XCBWindow, h::UInt) = h + hash(win.id)
 
-function set_delete_request!(window::XCBWindow)
-    @unpack conn, id = window
+function set_delete_request!(win::XCBWindow)
+    @unpack conn, id = win
     wm_protocols_cookie = xcb_intern_atom(conn, 1, length("WM_PROTOCOLS"), "WM_PROTOCOLS")
     wm_protocols_reply = xcb_intern_atom_reply(conn, wm_protocols_cookie, C_NULL)
     wm_delete_cookie = xcb_intern_atom(conn, 0, length("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW")
     wm_delete_reply = xcb_intern_atom_reply(conn, wm_delete_cookie, C_NULL)
     @check xcb_change_property(conn, XCB_PROP_MODE_REPLACE, id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
-    window.delete_request = unsafe_load(wm_delete_reply).atom
+    win.delete_request = unsafe_load(wm_delete_reply).atom
 end
 
 XCBWindow(conn, screen, mask, value_list; kwargs...) = XCBWindow(conn, screen.root, screen.root_visual, mask, value_list; kwargs...)
@@ -62,7 +62,7 @@ XCBWindow(conn, screen, mask, value_list; kwargs...) = XCBWindow(conn, screen.ro
 function extent(win::XCBWindow)
     geometry_cookie = xcb_get_geometry(win.conn, win.id)
     geometry_reply = xcb_get_geometry_reply(win.conn, geometry_cookie, C_NULL)
-    geometry_reply == C_NULL && throw(InvalidWindow(window))
+    geometry_reply == C_NULL && throw(InvalidWindow(win))
     getproperty.(Ref(unsafe_load(geometry_reply)), (:width, :height))
 end
 

@@ -51,8 +51,8 @@ event_xcb(e::EventDetails) = event_type_xcb(action(e))(
     detail_xcb(e),
     0,
     e.time,
-    e.window.parent_id,
-    e.window.id,
+    e.win.parent_id,
+    e.win.id,
     0,
     0,
     0,
@@ -66,9 +66,9 @@ event_xcb(e::EventDetails{<:ExposeEvent}) = event_type_xcb(action(e))(
     response_type_xcb(action(e)),
     0,
     0,
-    e.window.id,
+    e.win.id,
     e.location...,
-    extent(e.window)...,
+    extent(e.win)...,
     0,
     0
 )
@@ -77,23 +77,23 @@ event_xcb(e::EventDetails{<:ResizeEvent}) = event_type_xcb(action(e))(
     response_type_xcb(action(e)),
     0,
     0,
-    e.window.id,
-    e.window.id,
+    e.win.id,
+    e.win.id,
     0,
     e.location...,
-    extent(e.window)...,
+    extent(e.win)...,
     0,
     0,
     0
 )
 
-send_event(e::EventDetails) = send_event(e.window, event_xcb(e))
+send_event(e::EventDetails) = send_event(e.win, event_xcb(e))
 
-function send_event(window::XCBWindow, event)
+function send_event(win::XCBWindow, event)
     ref = Ref(event)
     GC.@preserve ref begin
         event_ptr = Base.reinterpret(Cstring, Base.unsafe_convert(Ptr{typeof(event)}, ref))
-        @flush @check :error xcb_send_event(window.conn, false, window.id, window.mask, event_ptr)
+        @flush @check :error xcb_send_event(win.conn, false, win.id, win.mask, event_ptr)
     end
 end
 

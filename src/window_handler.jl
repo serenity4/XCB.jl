@@ -8,16 +8,16 @@ end
 XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(conn, windows, Keymap(conn), Dict())
 XWindowHandler(conn::Connection, windows::Vector{XCBWindow}, callbacks::Dict{XCBWindow, WindowCallbacks}) = XWindowHandler(conn, windows, Keymap(conn), callbacks)
 
-function poll_for_event(handler::XWindowHandler)
+function poll_for_event(wh::XWindowHandler)
     while true
-        event = xcb_poll_for_event(handler.conn)
+        event = xcb_poll_for_event(wh.conn)
         event ≠ C_NULL && return event
         yield()
     end
 end
 
-function wait_for_event(handler::XWindowHandler)
-    event = xcb_wait_for_event(handler.conn)
+function wait_for_event(wh::XWindowHandler)
+    event = xcb_wait_for_event(wh.conn)
     event == C_NULL ? nothing : event
 end
 

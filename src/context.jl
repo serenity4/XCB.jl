@@ -4,13 +4,13 @@ Graphics context attached to a window. Used to register drawing commands on the 
 mutable struct GraphicsContext
     conn
     id
-    window
+    win
     mask
     value_list
-    function GraphicsContext(conn, window, mask, value_list)
+    function GraphicsContext(conn, win, mask, value_list)
         id = XCB.xcb_generate_id(conn)
-        gc = new(conn, id, window, mask, value_list)
-        @check :error xcb_create_gc(gc.conn, gc.id, gc.window.id, 0, C_NULL)
+        gc = new(conn, id, win, mask, value_list)
+        @check :error xcb_create_gc(gc.conn, gc.id, gc.win.id, 0, C_NULL)
         change_graphics_context!(gc, mask, value_list)
         Base.finalizer(x -> @check(:error, xcb_free_gc(gc.conn, gc.id)), gc)
         gc
