@@ -1,11 +1,12 @@
 mutable struct XWindowHandler <: AbstractWindowHandler
     conn::Connection
-    windows::Dict{Symbol, XCBWindow}
+    windows::Vector{XCBWindow}
     keymap::Keymap
+    callbacks::Dict{XCBWindow, WindowCallbacks}
 end
 
-XWindowHandler(conn::Connection, windows::Dict{Symbol, XCBWindow}) = XWindowHandler(conn, windows, Keymap(conn))
-XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(conn, Dict(Symbol.("window_" .* string.(1:length(windows))) .=> windows))
+XWindowHandler(conn::Connection, windows::Vector{XCBWindow}) = XWindowHandler(conn, windows, Keymap(conn), Dict())
+XWindowHandler(conn::Connection, windows::Vector{XCBWindow}, callbacks::Dict{XCBWindow, WindowCallbacks}) = XWindowHandler(conn, windows, Keymap(conn), callbacks)
 
 function poll_for_event(handler::XWindowHandler)
     while true
@@ -20,21 +21,17 @@ function wait_for_event(handler::XWindowHandler)
     event == C_NULL ? nothing : event
 end
 
-function terminate_window!(handler::XWindowHandler, win::XCBWindow)
-    delete!(handler.windows, get_window_symbol(handler, win))
+function terminate_window!(wh::XWindowHandler, win::XCBWindow)
+    deleteat!(wh.windows, window_index(wh, win))
     finalize(win)
 end
 
-function get_window(handler::XWindowHandler, id::Integer)
-    windows = collect(values(handler.windows))
-    index = findfirst(x -> id == x.id, windows)
-    isnothing(index) && return nothing
-    windows[index]
-end
+window_index(wh::XWindowHandler, win::XCBWindow) = findfirst(x -> x.id == win.id, wh.windows)
+window_index(wh::XWindowHandler, id::Integer) = findfirst(x -> x.id == id, wh.windows)
 
-get_window(handler::XWindowHandler, event::xcb_xkb_state_notify_event_t) = nothing
-get_window(handler::XWindowHandler, event::xcb_keymap_notify_event_t) = nothing
-get_window(handler::XWindowHandler, event) = get_window(handler, window_id(event))
-get_window(handler::XWindowHandler, id::Symbol) = handler.windows[id]
+get_window(wh::XWindowHandler, id::Integer) = wh.windows[window_index(wh, id)]
+get_window(wh::XWindowHandler, event::xcb_xkb_state_notify_event_t) = nothing
+get_window(wh::XWindowHandler, event::xcb_keymap_notify_event_t) = nothing
+get_window(wh::XWindowHandler, event) = get_window(wh, window_id(event))
 
-get_window_symbol(handler::XWindowHandler, window::XCBWindow) = collect(keys(handler.windows))[findfirst(values(handler.windows) .== window)]
+callbacks(wh::XWindowHandler, win::XCBWindow) = get(wh.callbacks, win, WindowCallbacks())

@@ -41,7 +41,11 @@ mutable struct XCBWindow <: AbstractWindow
     end
 end
 
-attach_graphics_context!(window::XCBWindow, ctx) = setproperty!(window, :ctx, ctx)
+attach_graphics_context!(win::XCBWindow, ctx) = setproperty!(win, :ctx, ctx)
+
+Base.:(==)(x::XCBWindow, y::XCBWindow) = x.id == y.id
+
+Base.hash(win::XCBWindow, h::UInt) = h + hash(win.id)
 
 function set_delete_request!(window::XCBWindow)
     @unpack conn, id = window

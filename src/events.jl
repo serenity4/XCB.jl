@@ -40,10 +40,10 @@ location(event::xcb_motion_notify_event_t) = (event.event_x, event.event_y)
 location(event::xcb_expose_event_t) = (event.x, event.y)
 location(event::xcb_configure_notify_event_t) = (event.x, event.y)
 
-EventDetails(handler::XWindowHandler, window::XCBWindow, data::EventData, event, t) =
-    EventDetails(data, Int.(location(event)), t, get_window_symbol(handler, window), window, handler)
-EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_button_press_event_t, t) =
-    EventDetails(handler, window, MouseEvent(data), data, t)
+EventDetails(wh::XWindowHandler, win::XCBWindow, data::EventData, event, t) =
+    EventDetails(data, Int.(location(event)), t, win, wh)
+EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_button_press_event_t, t) =
+    EventDetails(wh, win, MouseEvent(data), data, t)
 
 function EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_key_press_event_t, t)
     keycode_symbol = key_name(handler.keymap, data.detail)
@@ -64,36 +64,36 @@ EventDetails(handler::XWindowHandler, window::XCBWindow, data::xcb_configure_not
 
 process_xevent(wh, event_loop, xge::Nothing, t; warn_unknown=false, kwargs...) = nothing
 
-function process_xevent(wh, event_loop, xge, t; warn_unknown=false, kwargs...)
+function process_xevent(wh::XWindowHandler, xge, t; warn_unknown=false, kwargs...)
     event = unsafe_load_event(xge; warn_unknown)
     if !isnothing(event) # unknown event
-        window = get_window(wh, event)
+        win = get_window(wh, event)
         if event isa xcb_client_message_event_t
             ed_8 = Int.(event.data.data8)
             event_data32_1 = ed_8[1] + ed_8[2] * 2^8 + ed_8[3] * 2^16 + ed_8[4] *2^24
-            event_data32_1 == window.delete_request && throw(CloseWindow(wh, window, ""))
+            event_data32_1 == win.delete_request && throw(CloseWindow(wh, win, ""))
         elseif event isa xcb_xkb_state_notify_event_t
             xkb_state_update_mask(wh.keymap.state, event.baseMods, event.latchedMods, event.lockedMods, event.baseGroup, event.latchedGroup, event.lockedGroup)
         elseif event isa xcb_keymap_notify_event_t
             wh.keymap = Keymap(wh.conn; setup_xkb=false)
-        elseif !isnothing(window) # event happened on inexistant window
-            details = EventDetails(wh, window, event, t)
-            execute_callback(event_loop, details; kwargs...)
+        elseif !isnothing(win) # event happened on inexistant window
+            details = EventDetails(wh, win, event, t)
+            execute_callback(callbacks(wh, win), details; kwargs...)
         end
     end
 end
 
-function main_loop(wh::XWindowHandler, event_loop::EventLoop{XWindowHandler}, t0, next_event::Function; warn_unknown=false, kwargs...)
+function listen_for_events(wh::XWindowHandler, t0, next_event::Function; warn_unknown=false, on_iter_first=() -> nothing, on_iter_last=() -> nothing, kwargs...)
     while !isempty(wh.windows)
         try
-            event_loop.on_iter_first()
+            on_iter_first()
             xge = next_event(wh)
             t = time() - t0
-            process_xevent(wh, event_loop, xge, t; warn_unknown, kwargs...)
-            event_loop.on_iter_last()
+            process_xevent(wh, xge, t; warn_unknown, kwargs...)
+            on_iter_last()
         catch e
             if e isa CloseWindow || e isa InvalidWindow
-                execute_callback(event_loop, e)
+                execute_callback(callbacks(wh, e.window), e)
             else
                 rethrow(e)
                 break
@@ -105,15 +105,13 @@ end
 """
 Run an `EventLoop` attached to a `XWindowHandler` instance.
 """
-function Base.run(event_loop::EventLoop{XWindowHandler}, ::Synchronous; warn_unknown=false, poll=false, kwargs...)
-    wh = event_loop.window_handler
+function Base.run(wh::XWindowHandler, ::Synchronous; warn_unknown=false, poll=false, kwargs...)
     t0 = time()
     next_event = poll ? poll_for_event : wait_for_event
-    main_loop(wh, event_loop, t0, next_event; warn_unknown, kwargs...)
+    listen_for_events(wh, t0, next_event; warn_unknown, kwargs...)
 end
 
-function Base.run(event_loop::EventLoop{XWindowHandler}, ::Asynchronous; warn_unknown=false, kwargs...)
-    wh = event_loop.window_handler
+function Base.run(wh::XWindowHandler, ::Asynchronous; warn_unknown=false, kwargs...)
     t0 = time()
-    @async main_loop(wh, event_loop, t0, poll_for_event; warn_unknown, kwargs...)
+    @async listen_for_events(wh, t0, poll_for_event; warn_unknown, kwargs...)
 end

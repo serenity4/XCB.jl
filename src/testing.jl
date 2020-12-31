@@ -100,6 +100,5 @@ end
 hex(x) = "0x$(string(x, base=16))"
 
 function send(wh::XWindowHandler, win::XCBWindow; location=(0, 0))
-    win_sym = get_window_symbol(wh, win)
-    (event; location=location) -> send_event(EventDetails(event, location, floor(time()), win_sym, win, wh))
+    (event; location=location) -> send_event(EventDetails(event, location, floor(time()), win, wh))
 end

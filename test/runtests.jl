@@ -66,37 +66,30 @@ function test()
     # ctx_2 = GraphicsContext(connection, window_2, mask, value_list)
     # attach_graphics_context!(window_2, ctx_2)
 
-    handler = XWindowHandler(connection, [window])
+    callbacks = Dict(
+        window => WindowCallbacks(;
+                    on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
+                    on_mouse_button_pressed = on_button_pressed,
+                    on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
+                    on_key_pressed,
+                    on_key_released = x -> @info("Released $(KeyCombination(x.data.key, x.data.modifiers))"),
+                    on_pointer_enter = x -> @info("Entering window at $(x.location)"),
+                    on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
+                    on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
+                    on_expose = x -> @info("Window exposed")
+    ))
+
+    handler = XWindowHandler(connection, [window], callbacks)
 
     xkb_event_details = event_details_xkb(Dict("state" => true))
     @show xkb_event_details
     @check XCB.xcb_xkb_select_events_aux(connection, handler.keymap.device_id, XCB.XCB_XKB_EVENT_TYPE_STATE_NOTIFY, true, true, false, 0, Ref(xkb_event_details))
 
-    event_loop = EventLoop(
-        window_handler=handler,
-        callbacks=Dict(
-            :window_1 => WindowCallbacks(;
-                on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
-                on_mouse_button_pressed = on_button_pressed,
-                on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
-                on_key_pressed,
-                on_key_released = x -> @info("Released $(KeyCombination(x.data.key, x.data.modifiers))"),
-                on_pointer_enter = x -> @info("Entering window at $(x.location)"),
-                on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
-                on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
-                on_expose = x -> @info("Window exposed"),
-            ),
-            :window_2 => WindowCallbacks(;
-            on_key_pressed,
-            ),
-        ),
-    )
-
     send = XCB.send(handler, window)
 
     if is_xvfb
         @info "- Running window asynchronously"
-        task = run(event_loop, Asynchronous(); warn_unknown=true, poll=true)
+        task = run(handler, Asynchronous(); warn_unknown=true)
         @info "- Sending fake inputs"
         send(MouseEvent(ButtonLeft(), MouseState(), ButtonPressed()))
         send(MouseEvent(ButtonLeft(), MouseState(), ButtonReleased()))
@@ -108,7 +101,7 @@ function test()
         @info "- Waiting for window to close"
         wait(task)
     else
-        run(event_loop, Synchronous(); warn_unknown=true, poll=true)
+        run(handler, Synchronous(); warn_unknown=true, poll=true)
     end
 end
 
