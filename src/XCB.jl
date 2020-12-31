@@ -54,7 +54,7 @@ include("window.jl")
 include("inputs.jl")
 include("xkb.jl")
 include("window_handler.jl")
-include("context.jl")
+include("graphics.jl")
 include("testing.jl")
 include("events.jl")
 
