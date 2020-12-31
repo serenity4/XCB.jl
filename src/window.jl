@@ -107,5 +107,5 @@ event_bit(prop::Symbol, callbacks::WindowCallbacks) = !isnothing(getproperty(cal
 event_bits(callbacks::WindowCallbacks) = reduce(|, (event_bit(prop, callbacks) for prop ∈ keys(event_bits_mapping)))
 
 function set_event_mask(win::XCBWindow, callbacks::WindowCallbacks)
-    set_attributes(win, [XCB_CW_EVENT_MASK], [event_bits(callbacks)])
+    set_attributes(win, [XCB_CW_EVENT_MASK], [base_event_mask | event_bits(callbacks)])
 end
