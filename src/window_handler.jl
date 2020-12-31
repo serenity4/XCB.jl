@@ -35,3 +35,13 @@ get_window(wh::XWindowHandler, event::xcb_keymap_notify_event_t) = nothing
 get_window(wh::XWindowHandler, event) = get_window(wh, window_id(event))
 
 callbacks(wh::XWindowHandler, win::XCBWindow) = get(wh.callbacks, win, WindowCallbacks())
+
+"""
+Extract a keycode from an key event.
+"""
+keycode(wh::XWindowHandler, details::EventDetails{<:KeyEvent}) = keycode(wh.keymap, details.data.key_name)
+
+"""
+Return condensed information regarding a keystroke as a `String`. Includes key name, keycode, character input and key symbol.
+"""
+keystroke_info(wh::XWindowHandler, event_details::EventDetails) = keystroke_info(wh.keymap, event_details)

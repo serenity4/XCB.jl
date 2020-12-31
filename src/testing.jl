@@ -38,17 +38,17 @@ button_xcb(::ButtonRight) = XCB_BUTTON_INDEX_3
 button_xcb(::ButtonScrollUp) = XCB_BUTTON_INDEX_4
 button_xcb(::ButtonScrollDown) = XCB_BUTTON_INDEX_5
 
-detail_xcb(e::MouseEvent) = button_xcb(e.button)
-detail_xcb(e::PointerMovesEvent) = XCB_MOTION_NORMAL
-detail_xcb(e::PointerEntersWindowEvent) = XCB_ENTER_NOTIFY
-detail_xcb(e::PointerLeavesWindowEvent) = XCB_LEAVE_NOTIFY
-detail_xcb(e::EventData) = 0
-detail_xcb(e::EventDetails) = detail_xcb(e.data)
-detail_xcb(e::EventDetails{<:KeyEvent}) = keycode(e)
+detail_xcb(wh::XWindowHandler, e::MouseEvent) = button_xcb(e.button)
+detail_xcb(wh::XWindowHandler, e::PointerMovesEvent) = XCB_MOTION_NORMAL
+detail_xcb(wh::XWindowHandler, e::PointerEntersWindowEvent) = XCB_ENTER_NOTIFY
+detail_xcb(wh::XWindowHandler, e::PointerLeavesWindowEvent) = XCB_LEAVE_NOTIFY
+detail_xcb(wh::XWindowHandler, e::EventData) = 0
+detail_xcb(wh::XWindowHandler, e::EventDetails) = detail_xcb(wh, e.data)
+detail_xcb(wh::XWindowHandler, e::EventDetails{<:KeyEvent}) = keycode(wh, e)
 
-event_xcb(e::EventDetails) = event_type_xcb(action(e))(
+event_xcb(wh::XWindowHandler, e::EventDetails) = event_type_xcb(action(e))(
     response_type_xcb(action(e)),
-    detail_xcb(e),
+    detail_xcb(wh, e),
     0,
     e.time,
     e.win.parent_id,
@@ -62,7 +62,7 @@ event_xcb(e::EventDetails) = event_type_xcb(action(e))(
     false
 )
 
-event_xcb(e::EventDetails{<:ExposeEvent}) = event_type_xcb(action(e))(
+event_xcb(wh::XWindowHandler, e::EventDetails{<:ExposeEvent}) = event_type_xcb(action(e))(
     response_type_xcb(action(e)),
     0,
     0,
@@ -73,7 +73,7 @@ event_xcb(e::EventDetails{<:ExposeEvent}) = event_type_xcb(action(e))(
     0
 )
 
-event_xcb(e::EventDetails{<:ResizeEvent}) = event_type_xcb(action(e))(
+event_xcb(wh::XWindowHandler, e::EventDetails{<:ResizeEvent}) = event_type_xcb(action(e))(
     response_type_xcb(action(e)),
     0,
     0,
@@ -87,7 +87,7 @@ event_xcb(e::EventDetails{<:ResizeEvent}) = event_type_xcb(action(e))(
     0
 )
 
-send_event(e::EventDetails) = send_event(e.win, event_xcb(e))
+send_event(wh::XWindowHandler, e::EventDetails) = send_event(e.win, event_xcb(wh, e))
 
 function send_event(win::XCBWindow, event)
     ref = Ref(event)
@@ -100,5 +100,5 @@ end
 hex(x) = "0x$(string(x, base=16))"
 
 function send(wh::XWindowHandler, win::XCBWindow; location=(0, 0))
-    (event; location=location) -> send_event(EventDetails(event, location, floor(time()), win, wh))
+    (event; location=location) -> send_event(wh, EventDetails(event, location, floor(time()), win))
 end

@@ -12,17 +12,16 @@ function on_button_pressed(details::EventDetails)
     @info "$click at $x, $y $printed_state"
 end
 
-function on_key_pressed(details::EventDetails)
-    @unpack wh, win = details
+function on_key_pressed(wh::XWindowHandler, details::EventDetails)
+    @unpack win, data = details
     send = XCB.send(wh, win)
     km = wh.keymap
-    @info(keystroke_info(details))
-    @unpack key_name, key, input, modifiers = details.data
+    @info keystroke_info(km, details)
+    @unpack key_name, key, input, modifiers = data
     kc = KeyCombination(key, modifiers)
-    ctx = win.ctx
     set_title(win, "Random title $(rand())")
     if kc ∈ [key"q", key"ctrl+q", key"f4"]
-        throw(CloseWindow(wh, win, "Received closing request from user input"))
+        throw(CloseWindow(win, "Received closing request from user input"))
     elseif kc == key"s"
         curr_extent = XCB.extent(win)
         XCB.set_extent(win, curr_extent .+ 1)
@@ -34,6 +33,7 @@ function on_key_pressed(details::EventDetails)
         @info "Faking input: sending key AD01 to quit (requires an english keyboard layout to be translated to the relevant symbol 'q')"
         send(key_event_from_name(wh.keymap, :AD01, KeyModifierState(), KeyPressed()))
     else
+        ctx = win.ctx
         XCB.change_graphics_context!(ctx, ctx.mask, [rand(1:16_777_215), 0])
         XCB.@flush XCB.xcb_poly_fill_rectangle(win.conn, win.id, ctx.id, UInt32(1), r)
     end
@@ -50,10 +50,10 @@ function test()
     iter = XCB.xcb_setup_roots_iterator(setup)
     screen = unsafe_load(iter.data)
     println(screen)
-    
+
     value_masks = |(XCB.XCB_CW_BACK_PIXEL, XCB.XCB_CW_EVENT_MASK)
     value_list = [screen.black_pixel, |(XCB.XCB_EVENT_MASK_EXPOSURE, XCB.XCB_EVENT_MASK_KEY_PRESS, XCB.XCB_EVENT_MASK_KEY_RELEASE, XCB.XCB_EVENT_MASK_BUTTON_PRESS, XCB.XCB_EVENT_MASK_BUTTON_RELEASE, XCB.XCB_EVENT_MASK_STRUCTURE_NOTIFY, XCB.XCB_EVENT_MASK_ENTER_WINDOW, XCB.XCB_EVENT_MASK_LEAVE_WINDOW, XCB.XCB_EVENT_MASK_POINTER_MOTION, XCB.XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT, XCB.XCB_EVENT_MASK_KEYMAP_STATE)]
-    
+
     win = XCBWindow(connection, screen, value_masks, value_list; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB")
     println("Window ID: ", win.id)
     mask = |(XCB.XCB_GC_FOREGROUND, XCB.XCB_GC_GRAPHICS_EXPOSURES)
@@ -65,20 +65,20 @@ function test()
     # ctx_2 = GraphicsContext(connection, window_2, mask, value_list)
     # attach_graphics_context!(window_2, ctx_2)
 
-    callbacks = Dict(
-        win => WindowCallbacks(;
-                    on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
-                    on_mouse_button_pressed = on_button_pressed,
-                    on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
-                    on_key_pressed,
-                    on_key_released = x -> @info("Released $(KeyCombination(x.data.key, x.data.modifiers))"),
-                    on_pointer_enter = x -> @info("Entering window at $(x.location)"),
-                    on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
-                    on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
-                    on_expose = x -> @info("Window exposed")
-    ))
+    wh = XWindowHandler(connection, [win])
 
-    wh = XWindowHandler(connection, [win], callbacks)
+    wh.callbacks[win] = WindowCallbacks(;
+        on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
+        on_mouse_button_pressed = on_button_pressed,
+        on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
+        on_key_pressed = x -> on_key_pressed(wh, x),
+        on_key_released = x -> @info("Released $(KeyCombination(x.data.key, x.data.modifiers))"),
+        on_pointer_enter = x -> @info("Entering window at $(x.location)"),
+        on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
+        on_pointer_move = x -> @info("Moving pointer at $(x.location)"),
+        on_expose = x -> @info("Window exposed")
+    )
+
 
     xkb_event_details = event_details_xkb(Dict("state" => true))
     @show xkb_event_details

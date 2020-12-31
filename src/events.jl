@@ -40,29 +40,29 @@ location(event::xcb_motion_notify_event_t) = (event.event_x, event.event_y)
 location(event::xcb_expose_event_t) = (event.x, event.y)
 location(event::xcb_configure_notify_event_t) = (event.x, event.y)
 
-EventDetails(wh::XWindowHandler, win::XCBWindow, data::EventData, event, t) =
-    EventDetails(data, Int.(location(event)), t, win, wh)
+EventDetails(win::XCBWindow, data::EventData, event, t) =
+    EventDetails(data, Int.(location(event)), t, win)
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_button_press_event_t, t) =
-    EventDetails(wh, win, MouseEvent(data), data, t)
+    EventDetails(win, MouseEvent(data), data, t)
 
 function EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_key_press_event_t, t)
     keycode_symbol = key_name(wh.keymap, data.detail)
     key_symbol = KeySymbol(wh.keymap, data.detail)
     input_char = Char(wh.keymap, data.detail)
     event_type = response_type(data) == XCB_KEY_PRESS ? KeyPressed() : KeyReleased()
-    EventDetails(wh, win, KeyEvent(keycode_symbol, key_symbol, input_char, KeyModifierState(data), event_type), data, t)
+    EventDetails(win, KeyEvent(keycode_symbol, key_symbol, input_char, KeyModifierState(data), event_type), data, t)
 end
 
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_enter_notify_event_t, t) =
-    EventDetails(wh, win, response_type(data) == XCB_ENTER_NOTIFY ? PointerEntersWindowEvent() : PointerLeavesWindowEvent(), data, t)
+    EventDetails(win, response_type(data) == XCB_ENTER_NOTIFY ? PointerEntersWindowEvent() : PointerLeavesWindowEvent(), data, t)
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_motion_notify_event_t, t) =
-    EventDetails(wh, win, PointerMovesEvent(), data, t)
+    EventDetails(win, PointerMovesEvent(), data, t)
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_expose_event_t, t) =
-    EventDetails(wh, win, ExposeEvent((data.width, data.height), data.count), data, t)
+    EventDetails(win, ExposeEvent((data.width, data.height), data.count), data, t)
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_configure_notify_event_t, t) =
-    EventDetails(wh, win, ResizeEvent((data.width, data.height)), data, t)
+    EventDetails(win, ResizeEvent((data.width, data.height)), data, t)
 
-process_xevent(wh, event_loop, xge::Nothing, t; warn_unknown=false, kwargs...) = nothing
+process_xevent(wh, xge::Nothing, t; warn_unknown=false, kwargs...) = nothing
 
 function process_xevent(wh::XWindowHandler, xge, t; warn_unknown=false, kwargs...)
     event = unsafe_load_event(xge; warn_unknown)
@@ -71,7 +71,7 @@ function process_xevent(wh::XWindowHandler, xge, t; warn_unknown=false, kwargs..
         if event isa xcb_client_message_event_t
             ed_8 = Int.(event.data.data8)
             event_data32_1 = ed_8[1] + ed_8[2] * 2^8 + ed_8[3] * 2^16 + ed_8[4] *2^24
-            event_data32_1 == win.delete_request && throw(CloseWindow(wh, win, ""))
+            event_data32_1 == win.delete_request && throw(CloseWindow(win, ""))
         elseif event isa xcb_xkb_state_notify_event_t
             xkb_state_update_mask(wh.keymap.state, event.baseMods, event.latchedMods, event.lockedMods, event.baseGroup, event.latchedGroup, event.lockedGroup)
         elseif event isa xcb_keymap_notify_event_t
@@ -92,8 +92,10 @@ function listen_for_events(wh::XWindowHandler, t0, next_event::Function; warn_un
             process_xevent(wh, xge, t; warn_unknown, kwargs...)
             on_iter_last()
         catch e
-            if e isa CloseWindow || e isa InvalidWindow
-                execute_callback(callbacks(wh, e.win), e)
+            if e isa WindowException
+                win_callbacks = callbacks(wh, e.win)
+                e isa CloseWindow && win_callbacks.on_close(wh, e)
+                e isa InvalidWindow && win_callbacks.on_invalid(wh, e)
             else
                 rethrow(e)
                 break

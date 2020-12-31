@@ -91,16 +91,7 @@ function keycode(km::Keymap, name::Symbol)
     keycode
 end
 
-"""
-Extract a keycode from an key event.
-"""
-keycode(details::EventDetails{<:KeyEvent}) = keycode(details.wh.keymap, details.data.key_name)
-
-"""
-Return condensed information regarding a keystroke as a `String`. Includes key name, keycode, character input and key symbol.
-"""
-function keystroke_info(event_details::EventDetails)
-    km = event_details.wh.keymap
+function keystroke_info(km::Keymap, event_details::EventDetails)
     @unpack key_name, key, input = event_details.data
     keycode = xkb_keymap_key_by_name(km, string(key_name))
     "Key \e[31m$key_name\e[m (code \e[33m$keycode\e[m): input \"\e[36m$input\e[m\" from symbol \e[36m$key\e[m"
