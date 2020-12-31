@@ -100,7 +100,7 @@ function test()
         @info "- Waiting for window to close"
         wait(task)
     else
-        run(wh, Synchronous(); warn_unknown=true, poll=true)
+        run(wh, Synchronous(); warn_unknown=true, poll=false)
     end
 end
 
