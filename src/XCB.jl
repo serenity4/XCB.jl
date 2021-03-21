@@ -16,7 +16,7 @@ using DocStringExtensions
     $(TYPEDFIELDS)
     """
 
-using Parameters
+using UnPack
 using WindowAbstractions
 import WindowAbstractions: set_title,
                            set_icon_title,

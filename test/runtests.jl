@@ -1,7 +1,7 @@
 using XCB
 using WindowAbstractions
 using Test
-using Parameters
+using UnPack
 
 function on_button_pressed(details::EventDetails)
     x, y = details.location
