@@ -17,7 +17,8 @@ using DocStringExtensions
     """
 
 using UnPack
-using WindowAbstractions
+using Reexport
+@reexport using WindowAbstractions
 import WindowAbstractions: set_title,
                            set_icon_title,
                            set_extent,
@@ -59,7 +60,6 @@ include("events.jl")
 
 
 export xcb,
-       key,
        Connection,
        Setup,
        check,
@@ -67,11 +67,9 @@ export xcb,
        flush,
        XCBWindow,
        GraphicsContext,
-       XWindowHandler,
        set_callbacks!,
        set_attributes,
-       get_window,
-       get_window_symbol,
+       XWindowHandler,
        event_details_xkb,
        @check,
        @flush,
