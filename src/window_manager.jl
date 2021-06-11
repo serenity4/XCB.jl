@@ -3,16 +3,18 @@ mutable struct XWindowManager <: AbstractWindowManager
     windows::Dict{Int,XCBWindow}
     keymap::Keymap
     callbacks::Dict{XCBWindow, WindowCallbacks}
-end
-
-XWindowManager(conn::Connection, windows::Vector{XCBWindow}) = XWindowManager(conn, windows, Keymap(conn), Dict())
-
-function XWindowManager(conn::Connection, windows::Vector{XCBWindow}, callbacks::Dict{XCBWindow, WindowCallbacks})
-    wm = XWindowManager(conn, windows, Keymap(conn))
-    for (win, cb) ∈ callbacks
-        set_callbacks!(wm, win, cb)
+    function XWindowManager(conn::Connection, windows::Dict{Int,XCBWindow}, keymap::Keymap, callbacks::Dict{XCBWindow, WindowCallbacks})
+        wm = new(conn, windows, Keymap(conn), Dict())
+        for (win, cb) ∈ callbacks
+            set_callbacks!(wm, win, cb)
+        end
+        wm
     end
+    XWindowManager(conn, windows, keymap, callbacks) = XWindowManager(convert(Connection, conn), convert(Dict{Int,XCBWindow}, windows), convert(Keymap, keymap), convert(Dict{XCBWindow,WindowCallbacks}, callbacks))
 end
+
+XWindowManager(conn::Connection, windows::AbstractDict) = XWindowManager(conn, windows, Keymap(conn), Dict())
+XWindowManager(conn::Connection, windows::Vector{XCBWindow}) = XWindowManager(conn, Dict(win.id => win for win in windows))
 
 function set_callbacks!(wm::XWindowManager, win::XCBWindow, callbacks::WindowCallbacks)
     wm.callbacks[win] = callbacks
@@ -33,7 +35,7 @@ function wait_for_event(wm::XWindowManager)
 end
 
 function terminate_window!(wm::XWindowManager, win::XCBWindow)
-    deleteat!(wm.windows, window_index(wm, win))
+    delete!(wm.windows, win.id)
     finalize(win)
 end
 
