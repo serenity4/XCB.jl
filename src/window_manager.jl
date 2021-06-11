@@ -1,6 +1,6 @@
 mutable struct XWindowManager <: AbstractWindowManager
     conn::Connection
-    windows::Vector{XCBWindow}
+    windows::Dict{Int,XCBWindow}
     keymap::Keymap
     callbacks::Dict{XCBWindow, WindowCallbacks}
 end
@@ -37,10 +37,7 @@ function terminate_window!(wm::XWindowManager, win::XCBWindow)
     finalize(win)
 end
 
-window_index(wm::XWindowManager, win::XCBWindow) = findfirst(x -> x.id == win.id, wm.windows)
-window_index(wm::XWindowManager, id::Integer) = findfirst(x -> x.id == id, wm.windows)
-
-get_window(wm::XWindowManager, id::Integer) = wm.windows[window_index(wm, id)]
+get_window(wm::XWindowManager, id::Integer) = wm.windows[id]
 get_window(wm::XWindowManager, event::xcb_xkb_state_notify_event_t) = nothing
 get_window(wm::XWindowManager, event::xcb_keymap_notify_event_t) = nothing
 get_window(wm::XWindowManager, event) = get_window(wm, window_id(event))
