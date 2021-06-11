@@ -15,22 +15,22 @@ Translate an action into its corresponding XCB value.
 """
 function response_type_xcb end
 
-response_type_xcb(::ButtonPressed) = XCB_BUTTON_PRESS
-response_type_xcb(::ButtonReleased) = XCB_BUTTON_RELEASE
-response_type_xcb(::KeyPressed) = XCB_KEY_PRESS
-response_type_xcb(::KeyReleased) = XCB_KEY_RELEASE
-response_type_xcb(::PointerMoves) = XCB_MOTION_NOTIFY
-response_type_xcb(::PointerEntersWindow) = XCB_ENTER_NOTIFY
-response_type_xcb(::PointerLeavesWindow) = XCB_LEAVE_NOTIFY
-response_type_xcb(::Expose) = XCB_EXPOSE
-response_type_xcb(::Resize) = XCB_CONFIGURE_NOTIFY
+response_type_xcb(::Type{ButtonPressed}) = XCB_BUTTON_PRESS
+response_type_xcb(::Type{ButtonReleased}) = XCB_BUTTON_RELEASE
+response_type_xcb(::Type{KeyPressed}) = XCB_KEY_PRESS
+response_type_xcb(::Type{KeyReleased}) = XCB_KEY_RELEASE
+response_type_xcb(::Type{PointerMoves}) = XCB_MOTION_NOTIFY
+response_type_xcb(::Type{PointerEntersWindow}) = XCB_ENTER_NOTIFY
+response_type_xcb(::Type{PointerLeavesWindow}) = XCB_LEAVE_NOTIFY
+response_type_xcb(::Type{Expose}) = XCB_EXPOSE
+response_type_xcb(::Type{Resize}) = XCB_CONFIGURE_NOTIFY
 
-event_type_xcb(::Union{ButtonPressed, ButtonReleased}) = xcb_button_press_event_t
-event_type_xcb(::Union{KeyPressed, KeyReleased}) = xcb_key_press_event_t
-event_type_xcb(::PointerMoves) = xcb_motion_notify_event_t
-event_type_xcb(::Union{PointerEntersWindow, PointerLeavesWindow}) = xcb_enter_notify_event_t
-event_type_xcb(::ResizeEvent) = xcb_configure_notify_event_t
-event_type_xcb(::ExposeEvent) = xcb_expose_event_t
+event_type_xcb(::Type{<:Union{ButtonPressed, ButtonReleased}}) = xcb_button_press_event_t
+event_type_xcb(::Type{<:Union{KeyPressed, KeyReleased}}) = xcb_key_press_event_t
+event_type_xcb(::Type{PointerMoves}) = xcb_motion_notify_event_t
+event_type_xcb(::Type{<:Union{PointerEntersWindow, PointerLeavesWindow}}) = xcb_enter_notify_event_t
+event_type_xcb(::Type{ResizeEvent}) = xcb_configure_notify_event_t
+event_type_xcb(::Type{ExposeEvent}) = xcb_expose_event_t
 
 button_xcb(::ButtonLeft) = XCB_BUTTON_INDEX_1
 button_xcb(::ButtonMiddle) = XCB_BUTTON_INDEX_2
