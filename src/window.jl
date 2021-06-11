@@ -97,7 +97,7 @@ const event_bits_mapping = Dict(
     :on_mouse_button_pressed => XCB_EVENT_MASK_BUTTON_PRESS,
     :on_mouse_button_released => XCB_EVENT_MASK_BUTTON_RELEASE,
     :on_pointer_enter => XCB_EVENT_MASK_ENTER_WINDOW,
-    :on_pointer_move => XCB_EVENT_MASK_POINTER_MOTION,
+    :on_pointer_move => XCB_EVENT_MASK_POINTER_MOTION | XCB_EVENT_MASK_BUTTON_MOTION | XCB_EVENT_MASK_BUTTON_PRESS,
     :on_pointer_leave => XCB_EVENT_MASK_LEAVE_WINDOW,
     :on_expose => XCB_EVENT_MASK_EXPOSURE,
     :on_resize => XCB_EVENT_MASK_STRUCTURE_NOTIFY,
@@ -107,5 +107,6 @@ event_bit(prop::Symbol, callbacks::WindowCallbacks) = !isnothing(getproperty(cal
 event_bits(callbacks::WindowCallbacks) = reduce(|, (event_bit(prop, callbacks) for prop ∈ keys(event_bits_mapping)))
 
 function set_event_mask(win::XCBWindow, callbacks::WindowCallbacks)
-    set_attributes(win, [XCB_CW_EVENT_MASK], [base_event_mask | event_bits(callbacks)])
+    mask = base_event_mask | event_bits(callbacks)
+    set_attributes(win, [XCB_CW_EVENT_MASK], [mask])
 end

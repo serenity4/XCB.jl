@@ -58,7 +58,7 @@ end
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_enter_notify_event_t, t) =
     EventDetails(win, response_type(data) == XCB_ENTER_NOTIFY ? PointerEntersWindowEvent() : PointerLeavesWindowEvent(), data, t)
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_motion_notify_event_t, t) =
-    EventDetails(win, PointerMovesEvent(), data, t)
+    EventDetails(win, PointerMovesEvent(data), data, t)
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_expose_event_t, t) =
     EventDetails(win, ExposeEvent((data.width, data.height), data.count), data, t)
 EventDetails(wh::XWindowHandler, win::XCBWindow, data::xcb_configure_notify_event_t, t) =

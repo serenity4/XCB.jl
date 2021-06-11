@@ -34,6 +34,7 @@ import WindowAbstractions: set_title,
 
                            MouseEvent,
                            MouseState,
+                           PointerMovesEvent,
                            KeyEvent,
                            KeyModifierState,
                            KeyContext,
