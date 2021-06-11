@@ -11,10 +11,10 @@ function on_button_pressed(details::EventDetails)
     @info "$click at $x, $y $printed_state"
 end
 
-function on_key_pressed(wh::XWindowHandler, details::EventDetails)
+function on_key_pressed(wm::XWindowManager, details::EventDetails)
     @unpack win, data = details
-    send = XCB.send(wh, win)
-    km = wh.keymap
+    send = XCB.send(wm, win)
+    km = wm.keymap
     @info keystroke_info(km, details)
     @unpack key_name, key, input, modifiers = data
     kc = KeyCombination(key, modifiers)
@@ -30,7 +30,7 @@ function on_key_pressed(wh::XWindowHandler, details::EventDetails)
         end
     elseif kc == key"f"
         @info "Faking input: sending key AD01 to quit (requires an english keyboard layout to be translated to the relevant symbol 'q')"
-        send(key_event_from_name(wh.keymap, :AD01, KeyModifierState(), KeyPressed()))
+        send(key_event_from_name(wm.keymap, :AD01, KeyModifierState(), KeyPressed()))
     else
         gc = win.gc
         set_attributes(gc, [XCB.XCB_GC_FOREGROUND], [rand(1:16_777_215)])
@@ -55,13 +55,13 @@ function test()
     ctx = GraphicsContext(connection, win; attributes=(XCB.XCB_GC_FOREGROUND, XCB.XCB_GC_GRAPHICS_EXPOSURES), values=(screen.black_pixel, 0))
     attach_graphics_context!(win, ctx)
 
-    wh = XWindowHandler(connection, [win])
+    wm = XWindowManager(connection, [win])
 
-    set_callbacks!(wh, win, WindowCallbacks(;
+    set_callbacks!(wm, win, WindowCallbacks(;
         on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),
         on_mouse_button_pressed = on_button_pressed,
         on_mouse_button_released = x -> @info("Released mouse button $(x.data.button)"),
-        on_key_pressed = x -> on_key_pressed(wh, x),
+        on_key_pressed = x -> on_key_pressed(wm, x),
         on_key_released = x -> @info("Released $(KeyCombination(x.data.key, x.data.modifiers))"),
         on_pointer_enter = x -> @info("Entering window at $(x.location)"),
         on_pointer_leave = x -> @info("Leaving window at $(x.location)"),
@@ -69,23 +69,23 @@ function test()
         on_expose = x -> @info("Window exposed")
     ))
 
-    send = XCB.send(wh, win)
+    send = XCB.send(wm, win)
 
     if is_xvfb
         @info "- Running window asynchronously"
-        task = run(wh, Asynchronous(); warn_unknown=true)
+        task = run(wm, Asynchronous(); warn_unknown=true)
         @info "- Sending fake inputs"
         send(MouseEvent(ButtonLeft(), MouseState(), ButtonPressed()))
         send(MouseEvent(ButtonLeft(), MouseState(), ButtonReleased()))
         send(PointerEntersWindowEvent())
         send(PointerMovesEvent())
         send(PointerLeavesWindowEvent())
-        send(key_event_from_name(wh.keymap, :AC04, KeyModifierState(), KeyReleased()))
-        send(key_event_from_name(wh.keymap, :AC04, KeyModifierState(), KeyPressed()))
+        send(key_event_from_name(wm.keymap, :AC04, KeyModifierState(), KeyReleased()))
+        send(key_event_from_name(wm.keymap, :AC04, KeyModifierState(), KeyPressed()))
         @info "- Waiting for window to close"
         wait(task)
     else
-        run(wh, Synchronous(); warn_unknown=true, poll=false)
+        run(wm, Synchronous(); warn_unknown=true, poll=false)
     end
 end
 

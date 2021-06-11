@@ -54,7 +54,7 @@ include("connection.jl")
 include("window.jl")
 include("inputs.jl")
 include("xkb.jl")
-include("window_handler.jl")
+include("window_manager.jl")
 include("graphics.jl")
 include("testing.jl")
 include("events.jl")
@@ -70,7 +70,7 @@ export xcb,
        GraphicsContext,
        set_callbacks!,
        set_attributes,
-       XWindowHandler,
+       XWindowManager,
        event_details_xkb,
        @check,
        @flush,
