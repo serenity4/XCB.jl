@@ -31,6 +31,7 @@ import WindowAbstractions: set_title,
                            attach_graphics_context!,
                            get_window,
                            get_window_symbol,
+                           callbacks,
 
                            MouseEvent,
                            MouseState,

@@ -64,34 +64,41 @@ EventDetails(wm::XWindowManager, win::XCBWindow, data::xcb_expose_event_t, t) =
 EventDetails(wm::XWindowManager, win::XCBWindow, data::xcb_configure_notify_event_t, t) =
     EventDetails(win, ResizeEvent((data.width, data.height)), data, t)
 
-process_xevent(wm, xge::Nothing, t; warn_unknown=false, kwargs...) = nothing
+process_xevent(wm::XWindowManager, xge::Nothing, t) = nothing
 
-function process_xevent(wm::XWindowManager, xge, t; warn_unknown=false, kwargs...)
-    event = unsafe_load_event(xge; warn_unknown)
-    if !isnothing(event) # unknown event
+function process_xevent(wm::XWindowManager, event, t)
+    if !isnothing(event) # event is known
         win = get_window(wm, event)
         if event isa xcb_client_message_event_t
             ed_8 = Int.(event.data.data8)
-            event_data32_1 = ed_8[1] + ed_8[2] * 2^8 + ed_8[3] * 2^16 + ed_8[4] *2^24
+            event_data32_1 = ed_8[1] + ed_8[2] * 2^8 + ed_8[3] * 2^16 + ed_8[4] * 2^24
             event_data32_1 == win.delete_request && throw(CloseWindow(win, ""))
+            nothing
         elseif event isa xcb_xkb_state_notify_event_t
             xkb_state_update_mask(wm.keymap.state, event.baseMods, event.latchedMods, event.lockedMods, event.baseGroup, event.latchedGroup, event.lockedGroup)
+            nothing
         elseif event isa xcb_keymap_notify_event_t
             wm.keymap = Keymap(wm.conn; setup_xkb=false)
-        elseif !isnothing(win) # event happened on inexistant window
-            details = EventDetails(wm, win, event, t)
-            execute_callback(callbacks(wm, win), details; kwargs...)
+            nothing
+        elseif !isnothing(win) # happened on an existing window
+            EventDetails(wm, win, event, t)
+        else
+            nothing
         end
+    else
+        nothing
     end
 end
 
-function listen_for_events(wm::XWindowManager, t0, next_event::Function; warn_unknown=false, on_iter_first=() -> nothing, on_iter_last=() -> nothing, kwargs...)
+function listen_for_events(wm::XWindowManager, t0, next_event::Function, execute_callback; on_iter_first=() -> nothing, on_iter_last=() -> nothing, warn_unknown=false, kwargs...)
     while !isempty(wm.windows)
         try
             on_iter_first()
             xge = next_event(wm)
+            event = unsafe_load_event(xge; warn_unknown)
             t = time() - t0
-            process_xevent(wm, xge, t; warn_unknown, kwargs...)
+            ed = process_xevent(wm, event, t)
+            !isnothing(ed) && execute_callback(ed; kwargs...)
             on_iter_last()
         catch e
             if e isa WindowException
@@ -109,13 +116,13 @@ end
 """
 Run an `EventLoop` attached to a `XWindowManager` instance.
 """
-function Base.run(wm::XWindowManager, ::Synchronous; warn_unknown=false, poll=false, kwargs...)
+function Base.run(wm::XWindowManager, ::Synchronous, execute_callback = (ed; kwargs...) -> execute_callback(wm, ed; kwargs...); poll=false, kwargs...)
     t0 = time()
     next_event = poll ? poll_for_event : wait_for_event
-    listen_for_events(wm, t0, next_event; warn_unknown, kwargs...)
+    listen_for_events(wm, t0, next_event, execute_callback; kwargs...)
 end
 
-function Base.run(wm::XWindowManager, ::Asynchronous; warn_unknown=false, kwargs...)
+function Base.run(wm::XWindowManager, ::Asynchronous, execute_callback = (ed; kwargs...) -> execute_callback(wm, ed; kwargs...); kwargs...)
     t0 = time()
-    @async listen_for_events(wm, t0, poll_for_event; warn_unknown, kwargs...)
+    @async listen_for_events(wm, t0, poll_for_event, execute_callback; kwargs...)
 end
