@@ -12,7 +12,11 @@ mutable struct GraphicsContext
     end
 end
 
-GraphicsContext(conn, win_id) = GraphicsContext(convert(Connection, conn), convert(xcb_window_t, win_id))
+function GraphicsContext(conn, win_id; attributes=[], values=[])
+    gc = GraphicsContext(convert(Connection, conn), convert(xcb_window_t, win_id))
+    set_attributes(gc, attributes, values)
+    gc
+end
 
 function set_attributes(gc::GraphicsContext, attributes, values)
     values = values[sortperm(collect(attributes))]

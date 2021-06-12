@@ -13,7 +13,7 @@ end
 """
 Create a new window whose parent is given by `parent_id` and visual by `visual_id`.
 """
-function XCBWindow(conn, parent_id, visual_id; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, map=true)
+function XCBWindow(conn, parent_id, visual_id; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, map=true, attributes=[], values=[])
     win_id = xcb_generate_id(conn)
     xcb_create_window(
         conn,
@@ -34,6 +34,7 @@ function XCBWindow(conn, parent_id, visual_id; depth=XCB_COPY_FROM_PARENT, x=0, 
     Base.finalizer(x -> @check(:error, xcb_destroy_window(x.conn, x.id)), win)
 
     set_attributes(win, [XCB_CW_EVENT_MASK], [base_event_mask])
+    set_attributes(win, attributes, values)
 
     set_title(win, window_title)
 
@@ -126,4 +127,4 @@ end
 
 attach_graphics_context!(win::XCBWindow, gc::GraphicsContext) = setproperty!(win, :gc, gc)
 
-GraphicsContext(win::XCBWindow) = GraphicsContext(win.conn, win.id)
+GraphicsContext(win::XCBWindow; kwargs...) = GraphicsContext(win.conn, win.id; kwargs...)
