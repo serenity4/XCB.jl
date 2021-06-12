@@ -51,11 +51,11 @@ using .Libxkb
 
 include("exceptions.jl")
 include("connection.jl")
+include("graphics.jl")
 include("window.jl")
 include("inputs.jl")
 include("xkb.jl")
 include("window_manager.jl")
-include("graphics.jl")
 include("testing.jl")
 include("events.jl")
 
@@ -66,6 +66,7 @@ export xcb,
        check,
        check_flush,
        flush,
+       current_screen,
        XCBWindow,
        GraphicsContext,
        set_callbacks!,

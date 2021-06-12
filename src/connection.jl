@@ -186,7 +186,7 @@ end
 
 function Base.show(io::IO, screen::xcb_screen_t)
     desc = ["White pixel value", "Black pixel value", "Width", "Height"]
-    vals = Any[format_bignumber(screen.white_pixel), format_bignumber(screen.black_pixel), "$(screen.width_in_pixels) pixels, $(screen.width_in_millimeters / 10) cm", "$(screen.height_in_pixels) pixels, $(screen.height_in_millimeters / 10) cm"]
+    vals = [format_bignumber(screen.white_pixel), format_bignumber(screen.black_pixel), "$(screen.width_in_pixels) pixels, $(screen.width_in_millimeters / 10) cm", "$(screen.height_in_pixels) pixels, $(screen.height_in_millimeters / 10) cm"]
     println(io, "Screen details")
     prettyprint(io, desc, vals)
 end

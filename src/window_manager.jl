@@ -1,16 +1,16 @@
 mutable struct XWindowManager <: AbstractWindowManager
     conn::Connection
-    windows::Dict{Int,XCBWindow}
+    windows::Dict{xcb_window_t,XCBWindow}
     keymap::Keymap
     callbacks::Dict{XCBWindow, WindowCallbacks}
-    function XWindowManager(conn::Connection, windows::Dict{Int,XCBWindow}, keymap::Keymap, callbacks::Dict{XCBWindow, WindowCallbacks})
+    function XWindowManager(conn::Connection, windows::Dict{xcb_window_t,XCBWindow}, keymap::Keymap, callbacks::Dict{XCBWindow, WindowCallbacks})
         wm = new(conn, windows, Keymap(conn), Dict())
         for (win, cb) ∈ callbacks
             set_callbacks!(wm, win, cb)
         end
         wm
     end
-    XWindowManager(conn, windows, keymap, callbacks) = XWindowManager(convert(Connection, conn), convert(Dict{Int,XCBWindow}, windows), convert(Keymap, keymap), convert(Dict{XCBWindow,WindowCallbacks}, callbacks))
+    XWindowManager(conn, windows, keymap, callbacks) = XWindowManager(convert(Connection, conn), convert(Dict{xcb_window_t,XCBWindow}, windows), convert(Keymap, keymap), convert(Dict{XCBWindow,WindowCallbacks}, callbacks))
 end
 
 XWindowManager(conn::Connection, windows::AbstractDict) = XWindowManager(conn, windows, Keymap(conn), Dict())

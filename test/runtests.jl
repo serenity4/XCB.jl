@@ -43,19 +43,17 @@ r = Ref(XCB.xcb_rectangle_t(20, 20, 60, 60))
 const is_xvfb = ENV["DISPLAY"] == ":99"
 
 function test()
-    connection = Connection()
-    setup = Setup(connection)
-    println(setup.value)
-    iter = XCB.xcb_setup_roots_iterator(setup)
-    screen = unsafe_load(iter.data)
-    println(screen)
+    conn = Connection()
+    screen = current_screen(conn)
 
-    win = XCBWindow(connection, screen; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB", attributes=[XCB.XCB_CW_BACK_PIXEL], values=[screen.black_pixel])
-    println("Window ID: ", win.id)
-    ctx = GraphicsContext(connection, win; attributes=(XCB.XCB_GC_FOREGROUND, XCB.XCB_GC_GRAPHICS_EXPOSURES), values=(screen.black_pixel, 0))
+    win = XCBWindow(conn, screen; x=0, y=1000, border_width=50, window_title="XCB window", icon_title="XCB")
+    set_attributes(win, [XCB.XCB_CW_BACK_PIXEL], [screen.black_pixel])
+
+    ctx = GraphicsContext(win)
+    set_attributes(ctx, [XCB.XCB_GC_FOREGROUND, XCB.XCB_GC_GRAPHICS_EXPOSURES], [screen.black_pixel, 0])
     attach_graphics_context!(win, ctx)
 
-    wm = XWindowManager(connection, [win])
+    wm = XWindowManager(conn, [win])
 
     set_callbacks!(wm, win, WindowCallbacks(;
         on_resize = x -> @info("Window size changed: $(x.data.new_dimensions)"),

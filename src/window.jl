@@ -3,46 +3,62 @@ Window type used with the XCB API.
 """
 mutable struct XCBWindow <: AbstractWindow
     conn::Connection
-    id
-    parent_id
-    visual_id
-    class
-    depth
-    gc
-    delete_request
-    function XCBWindow(conn, parent_id, visual_id; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, attributes=[], values=[], map=true)
-        id = XCB.xcb_generate_id(conn)
-        icon_title = isnothing(icon_title) ? window_title : icon_title
-        win = new(conn, id, parent_id, visual_id, class, depth, nothing, nothing)
-        xcb_create_window(
-            win.conn,
-            depth,
-            win.id,
-            parent_id,
-            x,
-            y,
-            width,
-            height,
-            border_width,
-            class,
-            visual_id,
-            0,
-            C_NULL,
-        )
-
-        set_attributes(win, [XCB_CW_EVENT_MASK], [base_event_mask])
-        set_attributes(win, attributes, values)
-        set_title(win, window_title)
-        set_icon_title(win, icon_title)
-        set_delete_request!(win) # to close window on X11 requests
-        map && map_window(win)
-        Base.finalizer(x -> @check(:error, xcb_destroy_window(x.conn, x.id)), win)
-    end
+    id::xcb_window_t
+    parent_id::xcb_window_t
+    visual_id::xcb_visualid_t
+    delete_request::xcb_atom_t
+    gc::Union{Nothing,GraphicsContext}
 end
+
+"""
+Create a new window whose parent is given by `parent_id` and visual by `visual_id`.
+"""
+function XCBWindow(conn, parent_id, visual_id; depth=XCB_COPY_FROM_PARENT, x=0, y=0, width=512, height=512, border_width=1, class=XCB_WINDOW_CLASS_INPUT_OUTPUT, window_title="", icon_title=nothing, map=true)
+    win_id = xcb_generate_id(conn)
+    xcb_create_window(
+        conn,
+        depth,
+        win_id,
+        parent_id,
+        x,
+        y,
+        width,
+        height,
+        border_width,
+        class,
+        visual_id,
+        0,
+        C_NULL,
+    )
+    win = XCBWindow(conn, win_id, parent_id, visual_id, delete_request(conn, win_id), nothing)
+    Base.finalizer(x -> @check(:error, xcb_destroy_window(x.conn, x.id)), win)
+
+    set_attributes(win, [XCB_CW_EVENT_MASK], [base_event_mask])
+
+    set_title(win, window_title)
+
+    icon_title = something(icon_title, window_title)
+    set_icon_title(win, icon_title)
+
+    map && map_window(win)
+    win
+end
+
+"""
+Create a new window on the provided `screen`.
+"""
+XCBWindow(conn::Connection, screen; kwargs...) = XCBWindow(conn, screen.root, screen.root_visual; kwargs...)
+
+"""
+Create a new window on the current screen.
+"""
+XCBWindow(conn::Connection; kwargs...) = XCBWindow(conn, current_screen(conn); kwargs...)
+
+current_screen(conn) = unsafe_load(xcb_setup_roots_iterator(Setup(conn)).data)
 
 Base.:(==)(x::XCBWindow, y::XCBWindow) = x.id == y.id
 
-Base.hash(win::XCBWindow, h::UInt) = h + hash(win.id)
+Base.hash(win::XCBWindow, h::UInt) = hash(win.id, h)
 
 function set_attributes(win::XCBWindow, attributes, values)
     values = values[sortperm(attributes)]
@@ -51,17 +67,14 @@ function set_attributes(win::XCBWindow, attributes, values)
     @flush @check xcb_change_window_attributes(win.conn, win.id, reduce(|, attributes), list)
 end
 
-function set_delete_request!(win::XCBWindow)
-    @unpack conn, id = win
+function delete_request(conn, win_id)
     wm_protocols_cookie = xcb_intern_atom(conn, 1, length("WM_PROTOCOLS"), "WM_PROTOCOLS")
     wm_protocols_reply = xcb_intern_atom_reply(conn, wm_protocols_cookie, C_NULL)
     wm_delete_cookie = xcb_intern_atom(conn, 0, length("WM_DELETE_WINDOW"), "WM_DELETE_WINDOW")
     wm_delete_reply = xcb_intern_atom_reply(conn, wm_delete_cookie, C_NULL)
-    @check xcb_change_property(conn, XCB_PROP_MODE_REPLACE, id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
-    win.delete_request = unsafe_load(wm_delete_reply).atom
+    @check xcb_change_property(conn, XCB_PROP_MODE_REPLACE, win_id, unsafe_load(wm_protocols_reply).atom, 4, 32, 1, Ref(unsafe_load(wm_delete_reply).atom))
+    unsafe_load(wm_delete_reply).atom
 end
-
-XCBWindow(conn, screen; kwargs...) = XCBWindow(conn, screen.root, screen.root_visual; kwargs...)
 
 function extent(win::XCBWindow)
     geometry_cookie = xcb_get_geometry(win.conn, win.id)
@@ -110,3 +123,7 @@ function set_event_mask(win::XCBWindow, callbacks::WindowCallbacks)
     mask = base_event_mask | event_bits(callbacks)
     set_attributes(win, [XCB_CW_EVENT_MASK], [mask])
 end
+
+attach_graphics_context!(win::XCBWindow, gc::GraphicsContext) = setproperty!(win, :gc, gc)
+
+GraphicsContext(win::XCBWindow) = GraphicsContext(win.conn, win.id)
