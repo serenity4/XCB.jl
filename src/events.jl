@@ -90,7 +90,7 @@ function process_xevent(wm::XWindowManager, event, t)
     end
 end
 
-function listen_for_events(wm::XWindowManager, t0, next_event::Function, execute_callback; on_iter_first=() -> nothing, on_iter_last=() -> nothing, warn_unknown=false, kwargs...)
+function listen_for_events(wm::XWindowManager, t0, next_event::Function, execute_callback; on_iter_first=() -> nothing, on_iter_last=() -> nothing, warn_unknown=false)
     while !isempty(wm.windows)
         try
             on_iter_first()
@@ -98,7 +98,7 @@ function listen_for_events(wm::XWindowManager, t0, next_event::Function, execute
             event = unsafe_load_event(xge; warn_unknown)
             t = time() - t0
             ed = process_xevent(wm, event, t)
-            !isnothing(ed) && execute_callback(ed; kwargs...)
+            !isnothing(ed) && execute_callback(ed)
             on_iter_last()
         catch e
             if e isa WindowException
@@ -116,13 +116,13 @@ end
 """
 Run an `EventLoop` attached to a `XWindowManager` instance.
 """
-function Base.run(wm::XWindowManager, ::Synchronous, execute_callback = (ed; kwargs...) -> execute_callback(wm, ed; kwargs...); poll=false, kwargs...)
+function Base.run(wm::XWindowManager, ::Synchronous, execute_callback = (ed) -> execute_callback(wm, ed); poll=false, warn_unknown=false)
     t0 = time()
     next_event = poll ? poll_for_event : wait_for_event
-    listen_for_events(wm, t0, next_event, execute_callback; kwargs...)
+    listen_for_events(wm, t0, next_event, execute_callback; warn_unknown)
 end
 
-function Base.run(wm::XWindowManager, ::Asynchronous, execute_callback = (ed; kwargs...) -> execute_callback(wm, ed; kwargs...); kwargs...)
+function Base.run(wm::XWindowManager, ::Asynchronous, execute_callback = (ed) -> execute_callback(wm, ed); warn_unknown=false)
     t0 = time()
-    @async listen_for_events(wm, t0, poll_for_event, execute_callback; kwargs...)
+    @async listen_for_events(wm, t0, poll_for_event, execute_callback; warn_unknown)
 end
