@@ -116,13 +116,13 @@ end
 """
 Run an `EventLoop` attached to a `XWindowManager` instance.
 """
-function Base.run(wm::XWindowManager, ::Synchronous, execute_callback = (ed) -> execute_callback(wm, ed); poll=false, warn_unknown=false)
+function Base.run(wm::XWindowManager, ::Synchronous, execute_callback = (ed) -> execute_callback(wm, ed); poll=false, kwargs...)
     t0 = time()
     next_event = poll ? poll_for_event : wait_for_event
-    listen_for_events(wm, t0, next_event, execute_callback; warn_unknown)
+    listen_for_events(wm, t0, next_event, execute_callback; kwargs...)
 end
 
-function Base.run(wm::XWindowManager, ::Asynchronous, execute_callback = (ed) -> execute_callback(wm, ed); warn_unknown=false)
+function Base.run(wm::XWindowManager, ::Asynchronous, execute_callback = (ed) -> execute_callback(wm, ed); kwargs...)
     t0 = time()
-    @async listen_for_events(wm, t0, poll_for_event, execute_callback; warn_unknown)
+    @async listen_for_events(wm, t0, poll_for_event, execute_callback; kwargs...)
 end
