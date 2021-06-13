@@ -144,7 +144,7 @@ macro check(level, request)
     module_prefix = string(@__MODULE__) * "."
     has_module_prefix = startswith(request_fun, module_prefix)
     has_module_prefix && (request_fun = request_fun[5:end])
-    
+
     # get checked version of the request function
     if endswith(request_fun, "_unchecked")
         request_fun_checked = replace(request_fun, "_unchecked" => "")
